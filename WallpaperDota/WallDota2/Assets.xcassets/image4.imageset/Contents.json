@@ -1,0 +1,21 @@
+{
+  "images" : [
+    {
+      "filename" : "coach_heartless_Create_artwork_inspired_by_Dota_2s_Hydra_theme._9bb91ebf-0ab4-496c-a778-6cd1300bdab7.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
