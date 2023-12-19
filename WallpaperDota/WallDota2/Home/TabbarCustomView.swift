@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TabbarCustomView: View {
     @State var selection: Int = 1
-    var fireStoreDB = FireStoreDatabase()
+    @State var fireStoreDB = FireStoreDatabase()
     @State var items: [ImageModel] = []
     @State var itemsSpotlight: [ImageModel] = []
     @State var imagesByID: [ImageModel] = []
@@ -62,6 +62,7 @@ struct TabbarCustomView: View {
                 })
                 .frame(height: 50)
                 .clipped()
+                .background(.white)
                 TabView(selection: $selection) {
                     homeView.onAppear(perform: {
                         Task {
@@ -79,7 +80,9 @@ struct TabbarCustomView: View {
                         }
                         .tag(1)
                     
-                    CollectionView(heroesID: $heroesID, action: { heroID in
+                    CollectionView(heroesID: $heroesID, 
+                                   _firestoreDB: $fireStoreDB,
+                                   action: { heroID in
                         self.imagesByID = fireStoreDB.getImages(by: heroID)
                         self.isShowDetailCollection.toggle()
                     })
@@ -89,23 +92,19 @@ struct TabbarCustomView: View {
                         Image(systemName: "command.circle")
                     }.tag(2)
                     
-                    CollectionView(heroesID: $heroesID, action: { heroID in
+                    CollectionView(heroesID: $heroesID,
+                                   _firestoreDB: $fireStoreDB,
+                                   action: { heroID in
                         self.imagesByID = fireStoreDB.getImages(by: heroID)
                         self.isShowDetailCollection.toggle()
                     })
-                    .tabItem {
-                        
-                        Image(systemName: "command.circle")
-                    }.tag(2)
                     
-                    CollectionView(heroesID: $heroesID, action: { heroID in
-                        self.imagesByID = fireStoreDB.getImages(by: heroID)
-                        self.isShowDetailCollection.toggle()
-                    })
                     .tabItem {
                         
                         Image(systemName: "command.circle")
-                    }.tag(2)
+                    }.tag(3)
+                    
+                   
                     
                 }
                 
@@ -131,7 +130,7 @@ struct TabbarCustomView: View {
                 }
                    
             }
-            if isShowDetailVC == false {
+            if isShowDetailVC == false && isShowDetailCollection == false {
                 SideMenu(isSidebarVisible: $isMenuOpen)
             }
             

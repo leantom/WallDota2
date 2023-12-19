@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct FirstSectionHomeView: View {
     @State var items:[ImageModel]
@@ -25,13 +26,14 @@ struct FirstSectionHomeView: View {
             .padding()
             VStack {
                 if isGetDoneAPI {
-                    AsyncImage(url: URL(string: items.first?.thumbnailFull ?? "")) { image in
-                        image.image?
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: 280)
-                    }.cornerRadius(10)
-                    .clipped()
+                    
+                    AnimatedImage(url: URL(string: items.first?.thumbnailFull ?? ""))
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: 280)
+                        .cornerRadius(10)
+                        .clipped()
+                    
                 } else {
                     ProgressView().frame(height: 280)
                 }

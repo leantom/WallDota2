@@ -23,7 +23,7 @@ struct ContentView: View {
         print("Done")
     }
     var body: some View {
-        TabbarCustomView()
+        LoginView()
         //SplashScreenView(currentIndex: 0)
     }
 

@@ -16,13 +16,16 @@ struct SideMenu: View {
                   green: 70 / 255,
                   blue: 182 / 255,
                   alpha: 1))
-
     
+    let gradient: LinearGradient = LinearGradient(
+        colors: [Color("k886BF6"), Color("k625AF6")],
+        startPoint: .top, endPoint: .bottom
+    )
 
     var MenuChevron: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 18)
-                .fill(bgColor)
+                .fill(Color("k886BF6"))
                 .frame(width: 60, height: 60)
                 .rotationEffect(Angle(degrees: 45))
                 .offset(x: isSidebarVisible ? -18 : -10)
@@ -31,12 +34,12 @@ struct SideMenu: View {
                 }
 
             Image(systemName: "chevron.right")
-                .foregroundColor(secondaryColor)
+                .foregroundColor(.white)
                 .rotationEffect(
                   isSidebarVisible ?
                     Angle(degrees: 180) : Angle(degrees: 0))
                 .offset(x: isSidebarVisible ? -4 : 8)
-                .foregroundColor(.blue)
+                .foregroundColor(Color("k886BF6"))
         }
         .offset(x: sideBarWidth / 2, y: 80)
         .animation(.default, value: isSidebarVisible)
@@ -45,7 +48,7 @@ struct SideMenu: View {
     var body: some View {
         HStack(alignment: .top) {
             ZStack(alignment: .top) {
-                bgColor
+                gradient
                 MenuChevron
                 
                 VStack(alignment: .leading, spacing: 20) {

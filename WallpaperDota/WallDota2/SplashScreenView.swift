@@ -14,31 +14,35 @@ struct SplashScreenView: View {
     @State private var scrollOffset: CGFloat = 0.0
     
     @State private var isLastTab = false
+    let gradient: LinearGradient = LinearGradient(
+        colors: [Color.blue.opacity(0.2), Color.clear],
+        startPoint: .top, endPoint: .bottom
+    )
     
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
+                
                 ZStack {
+                    gradient.edgesIgnoringSafeArea(.all)
                     TabView(selection: $currentIndex) {
                         
                         ForEach(Array(images.enumerated()), id: \.offset) { index, imageWrapper in
                             // Your code
                             VStack {
-                                Text("text")
-                            }
-                            .tag(index)
-                            .frame(width: geometry.size.width, height: geometry.size.height)
-                            .overlay(
                                 imageWrapper
-                                    .clipped()
+                                    .resizable()
                                     .scaledToFill()
                                     .opacity(0.9)
-                                    .ignoresSafeArea()
-                            )
+                                    .frame(width: UIScreen.main.bounds.width)
+                                    .clipped()
+                            }
+                            .frame(width: UIScreen.main.bounds.width)
+                            .edgesIgnoringSafeArea(.all)
+                            .tag(index)
                         }
                         
                     }.tabViewStyle(.page)
-                        .ignoresSafeArea()
                         .onChange(of: currentIndex) { newIndex in
                             print(newIndex)
                             if newIndex == images.count - 1 && !reachedEnd {
@@ -72,15 +76,16 @@ struct SplashScreenView: View {
                                 }.frame(width: 60, height: 60)
                                     
                             }
-                            .padding(.trailing)
+                            .padding()
                         }
                     }
                     
                     if isLastTab == true {
                         LoginView()
+                            .frame(width: UIScreen.main.bounds.width)
                     }
                 }
-                .ignoresSafeArea(.all, edges: .top)
+                .ignoresSafeArea()
             }
             .onAppear {
                 loadImages()
@@ -96,9 +101,8 @@ struct SplashScreenView: View {
         images.removeAll()
         images.append(Image("image1"))
         images.append(Image("image3"))
-        images.append(Image("image2"))
         
-        images.append(Image("image3"))
+        images.append(Image("image2"))
         images.append(Image("image4"))
     }
 }

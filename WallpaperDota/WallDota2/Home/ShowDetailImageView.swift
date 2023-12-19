@@ -12,9 +12,10 @@ struct ShowDetailImageView: View {
     @Binding var model: ImageModel
     @State var imageURL: String = ""
     let gradient: LinearGradient = LinearGradient(
-        colors: [Color.black.opacity(0.2), Color.clear],
+        colors: [Color.blue.opacity(0.2), Color.clear],
         startPoint: .top, endPoint: .bottom
     )
+    @State var isShowOnlyImage: Bool = false
     var body: some View {
         ZStack {
             VStack {
@@ -24,11 +25,12 @@ struct ShowDetailImageView: View {
                     AsyncImage(url: URL(string: imageURL) ) { image in
                         image.image?
                             .resizable()
-                            .scaledToFit()
+                            .scaledToFill()
                             .ignoresSafeArea()
                     }
                     .frame(width: UIScreen.main.bounds.width)
                     .edgesIgnoringSafeArea(.all)
+                    
                 }
             }
             .onAppear(perform: {
@@ -41,21 +43,43 @@ struct ShowDetailImageView: View {
                 }
             })
             gradient.edgesIgnoringSafeArea(.all)
-            VStack {
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        dismissModal()
-                    }, label: {
-                        Image(systemName: "x.circle")
-                            .foregroundColor(.white.opacity(0.8))
-                            .font(.title)
-                    })
-                    .padding()
-                    
+                .onTapGesture {
+                    withAnimation(.smooth) {
+                        self.isShowOnlyImage.toggle()
+                    }
                 }
-                Spacer()
+            if isShowOnlyImage == false {
+                VStack {
+                    HStack {
+                        
+                        Button(action: {
+                            dismissModal()
+                        }, label: {
+                            Image(systemName: "arrow.backward")
+                                .foregroundColor(.black.opacity(0.8))
+                                .font(.title2)
+                        })
+                        .padding()
+                        .frame(width: 48, height: 48)
+                        .background(Color("kC6C2D8"))
+                        .cornerRadius(10)
+                        Spacer()
+                    }.padding()
+                    Spacer()
+                    HStack {
+                        Button(action: {}, label: {
+                            Text("Preview")
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.white)
+                        }).padding()
+                            .frame(width: UIScreen.main.bounds.width - 48, height: 48)
+                            .background(Color("kC6C2D8").opacity(0.5))
+                            .cornerRadius(10)
+                    }
+                }
             }
+            
         }.background(.black.opacity(0.5))
         
     }

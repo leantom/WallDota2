@@ -61,10 +61,11 @@ struct HomeView: View {
         
     }
 }
+import SDWebImageSwiftUI
 
 struct ShowItemView: View {
     let gradient: LinearGradient = LinearGradient(
-        colors: [Color.black.opacity(0.5), Color.clear],
+        colors: [Color.black.opacity(0.2), Color.clear],
         startPoint: .bottom, endPoint: .top
     ) // Your desired gradient
     var show: ImageModel
@@ -77,21 +78,17 @@ struct ShowItemView: View {
     
     var body: some View {
         ZStack {
-            VStack {
-                
-                if self.thumbnail == nil {
-                    Image("image1").resizable()
-                } else {
-                    AsyncImage(url: thumbnail) { image in
-                        
-                        image.image?
-                            .resizable()
-                            .scaledToFill()
-                    }
-                    .frame(width: 160, height: 280)
-                    .clipped()
+            WebImage(url: thumbnail)
+                .onSuccess { image, data, cacheType in
+                    // Success
+                    // Note: Data exist only when queried from disk cache or network. Use `.queryMemoryData` if you really need data
                 }
-            }
+                .resizable() // Resizable like SwiftUI.Image, you must use this modifier or the view will use the image bitmap size
+                .indicator(.activity) // Activity Indicator
+                .transition(.fade(duration: 0.5)) // Fade Transition with duration
+                .scaledToFill()
+                .frame(width: 160, height: 280, alignment: .center)
+                .clipped()
             gradient
             VStack {
                 Spacer()
@@ -168,6 +165,7 @@ struct ShowItemView: View {
         
         
     }
+    
     
     
 }

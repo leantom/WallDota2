@@ -11,6 +11,10 @@
 		F95A916E2B303AFD00AAAE57 /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F95A916D2B303AFD00AAAE57 /* CollectionView.swift */; };
 		F95A91702B304E2F00AAAE57 /* DetailHeroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F95A916F2B304E2F00AAAE57 /* DetailHeroView.swift */; };
 		F974C0422B309B5B0079EABD /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F974C0412B309B5B0079EABD /* MenuView.swift */; };
+		F9B48D462B31A72B00BF1EC5 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = F9B48D452B31A72B00BF1EC5 /* SDWebImageSwiftUI */; };
+		F9B48D482B31AED200BF1EC5 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B48D472B31AED200BF1EC5 /* LoginViewModel.swift */; };
+		F9B48D4A2B31AF0D00BF1EC5 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F9B48D492B31AF0D00BF1EC5 /* FirebaseAuth */; };
+		F9B48D4D2B31B08B00BF1EC5 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F9B48D4C2B31B08B00BF1EC5 /* GoogleSignInSwift */; };
 		F9B69CE12B2AA308004A2D71 /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B69CE02B2AA308004A2D71 /* ImageModel.swift */; };
 		F9BAA5E52B30199B0077BD5B /* ShowToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BAA5E42B30199B0077BD5B /* ShowToast.swift */; };
 		F9BAA5E72B3021CB0077BD5B /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BAA5E62B3021CB0077BD5B /* ProgressBarView.swift */; };
@@ -60,6 +64,7 @@
 		F95A916D2B303AFD00AAAE57 /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
 		F95A916F2B304E2F00AAAE57 /* DetailHeroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailHeroView.swift; sourceTree = "<group>"; };
 		F974C0412B309B5B0079EABD /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
+		F9B48D472B31AED200BF1EC5 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		F9B69CE02B2AA308004A2D71 /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
 		F9BAA5E42B30199B0077BD5B /* ShowToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowToast.swift; sourceTree = "<group>"; };
 		F9BAA5E62B3021CB0077BD5B /* ProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarView.swift; sourceTree = "<group>"; };
@@ -93,6 +98,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9B48D462B31A72B00BF1EC5 /* SDWebImageSwiftUI in Frameworks */,
+				F9B48D4A2B31AF0D00BF1EC5 /* FirebaseAuth in Frameworks */,
+				F9B48D4D2B31B08B00BF1EC5 /* GoogleSignInSwift in Frameworks */,
 				F9C035CB2B284D320049D4B6 /* FirebaseDatabase in Frameworks */,
 				F9C035CF2B284D320049D4B6 /* FirebaseStorage in Frameworks */,
 				F9C035C92B284D320049D4B6 /* FirebaseAnalytics in Frameworks */,
@@ -145,6 +153,7 @@
 				F9C035972B2846A60049D4B6 /* WallDota2App.swift */,
 				F9C035992B2846A60049D4B6 /* ContentView.swift */,
 				F9C035D02B2851340049D4B6 /* LoginView.swift */,
+				F9B48D472B31AED200BF1EC5 /* LoginViewModel.swift */,
 				F95A916F2B304E2F00AAAE57 /* DetailHeroView.swift */,
 				F9DAE1152B2AED7D002BAF3D /* Home */,
 				F9DAE1132B2AEA84002BAF3D /* FireStoreDatabase.swift */,
@@ -222,6 +231,9 @@
 				F9C035CA2B284D320049D4B6 /* FirebaseDatabase */,
 				F9C035CC2B284D320049D4B6 /* FirebaseFirestore */,
 				F9C035CE2B284D320049D4B6 /* FirebaseStorage */,
+				F9B48D452B31A72B00BF1EC5 /* SDWebImageSwiftUI */,
+				F9B48D492B31AF0D00BF1EC5 /* FirebaseAuth */,
+				F9B48D4C2B31B08B00BF1EC5 /* GoogleSignInSwift */,
 			);
 			productName = WallDota2;
 			productReference = F9C035942B2846A60049D4B6 /* WallDota2.app */;
@@ -297,6 +309,8 @@
 			mainGroup = F9C0358B2B2846A60049D4B6;
 			packageReferences = (
 				F9C035C72B284D320049D4B6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				F9B48D442B31A72B00BF1EC5 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				F9B48D4B2B31B08B00BF1EC5 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			productRefGroup = F9C035952B2846A60049D4B6 /* Products */;
 			projectDirPath = "";
@@ -349,6 +363,7 @@
 				F95A60882B28E59C00D96377 /* HomeView.swift in Sources */,
 				F95A91702B304E2F00AAAE57 /* DetailHeroView.swift in Sources */,
 				F9BAA5E72B3021CB0077BD5B /* ProgressBarView.swift in Sources */,
+				F9B48D482B31AED200BF1EC5 /* LoginViewModel.swift in Sources */,
 				F9C035C22B2849F40049D4B6 /* UIImage+Extension.swift in Sources */,
 				F9DAE1172B2AF554002BAF3D /* TabbarCustomView.swift in Sources */,
 				F9C0359A2B2846A60049D4B6 /* ContentView.swift in Sources */,
@@ -528,6 +543,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WallDota2/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "This app allows you to save your creations directly to your photo library.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -560,6 +576,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WallDota2/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "This app allows you to save your creations directly to your photo library.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -697,6 +714,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		F9B48D442B31A72B00BF1EC5 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.6;
+			};
+		};
+		F9B48D4B2B31B08B00BF1EC5 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 		F9C035C72B284D320049D4B6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -708,6 +741,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		F9B48D452B31A72B00BF1EC5 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F9B48D442B31A72B00BF1EC5 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
+		F9B48D492B31AF0D00BF1EC5 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F9C035C72B284D320049D4B6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		F9B48D4C2B31B08B00BF1EC5 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F9B48D4B2B31B08B00BF1EC5 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
 		F9C035C82B284D320049D4B6 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F9C035C72B284D320049D4B6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

@@ -13,6 +13,7 @@ class FireStoreDatabase {
     var listAllImage : [ImageModel] = []
     var spotlightImages : [ImageModel] = []
     var trendingImages : [ImageModel] = []
+    var listCollectionImages : [ImageModel] = []
     var heroesID : [String] = []
     
     public func fetchDataFromFirestore() async {
@@ -37,6 +38,8 @@ class FireStoreDatabase {
             self.getTrendingImages()
             self.getSpotlightImages()
             self.getHeroesID()
+            self.getImagesListCollections()
+            await self.getImageURLForListCollection()
         } catch {
             print("Error getting documents: \(error.localizedDescription)")
         }
@@ -53,6 +56,36 @@ class FireStoreDatabase {
         let uniqueArray = Array(uniqueValues)
         self.heroesID = uniqueArray
         print(self.heroesID.count)
+    }
+    
+    
+    func getImagesListCollections() {
+        for id in self.heroesID {
+            let items = self.listAllImage.filter { image in
+                return image.heroID == id
+            }
+            if items.count > 0 {
+                self.listCollectionImages.append(items.first!)
+            }
+        }
+    }
+    
+    func getImagesInListCollections(id: String) -> String {
+        let items = self.listCollectionImages.filter { image in
+            return image.heroID == id
+        }
+        return items.first?.thumbnailFull ?? ""
+    }
+    
+    
+    func getImageURLForListCollection() async {
+        for item in listCollectionImages {
+            if item.thumbnailFull.isEmpty {
+                let url = await getURL(path: item.thumbnail)
+                item.thumbnailFull = url?.absoluteString ?? ""
+            }
+           
+        }
     }
     
     
@@ -76,6 +109,24 @@ class FireStoreDatabase {
             self.trendingImages = self.listAllImage.suffix(4)
         }
     }
+    
+    func getImageByID(id: String) -> ImageModel? {
+        let items = self.listAllImage.filter { image in
+            return image.heroID == id
+        }
+        return items.first
+    }
+  
+    
+    func getImageURL(id: String) async -> URL? {
+        if let model = getImageByID(id: id) {
+            let url = await getURL(path: model.thumbnail)
+            model.thumbnailFull = url?.absoluteString ?? ""
+            return url
+        }
+        return nil
+    }
+    
     
     func getURL(path: String) async -> URL? {
         let storage = Storage.storage()
