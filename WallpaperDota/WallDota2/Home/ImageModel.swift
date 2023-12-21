@@ -7,6 +7,30 @@
 
 import Foundation
 
+class ImageLikeModel: Codable, Identifiable {
+    var id: String = ""
+    var userid: String
+    var documentid: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case userid
+        case documentid
+    }
+    
+    required init(from decoder: Decoder) throws {
+        // Extract and assign values to each property
+        // Use try decoder.decode(_:) to decode individual properties
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        userid = try container.decode(String.self, forKey: .userid)
+        documentid = try container.decode(String.self, forKey: .documentid)
+        id = UUID().uuidString
+        // Decode other properties similarly
+    }
+    
+}
+
 class ImageModel: Codable, Identifiable {
     var id: String
     
@@ -14,8 +38,10 @@ class ImageModel: Codable, Identifiable {
     var imageName: String
     var imageUrl: String
     var thumbnail: String
+    var priority: String = ""
     var imageUrlFull: String = ""
     var thumbnailFull: String = ""
+    var isReport: Bool = false
     
     enum CodingKeys: String, CodingKey {
         case heroID

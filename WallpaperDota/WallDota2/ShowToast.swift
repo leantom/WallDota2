@@ -19,6 +19,7 @@ struct ToastView: View {
         .foregroundColor(.white)
         .background(Color.blue.opacity(0.7))
         .cornerRadius(10)
+        .fixedSize(horizontal: false, vertical: true)
         .transition(.opacity)
         .onAppear {
           DispatchQueue.main.asyncAfter(deadline: .now() + 3) {

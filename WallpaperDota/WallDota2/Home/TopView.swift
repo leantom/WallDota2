@@ -13,22 +13,32 @@ struct TopView: View {
     @Binding  var progressBarValue: Double
     @Binding  var title: String
     var actionOpenMenu:(()-> Void)
+    
+    @State var gradient: LinearGradient = LinearGradient(
+        colors: [Color.blue.opacity(0.9), Color.clear],
+        startPoint: .top, endPoint: .bottom
+    )
+    
     var body: some View {
         ZStack {
+            
             VStack {
                 HStack {
-                   
-                    Spacer()
-                    Text(title)
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                    Spacer()
-                    Button(action: {}, label: {
-                        Image(systemName: "bell")
-                            .foregroundColor(.black)
+                    ZStack {
+                        HStack {
+                            Spacer()
+                            Button(action: {}, label: {
+                                Image(systemName: "bell")
+                                    .foregroundColor(.black)
+                                    .font(.title3)
+                            })
+                            .padding()
+                        }
+                        Text(title)
                             .font(.title3)
-                    })
-                    .padding()
+                            .fontWeight(.semibold)
+                    }
+                    
                 }
                 .frame(height: 48)
             }
@@ -42,8 +52,7 @@ struct TopView: View {
                 }
             }
             
-            
-            if toastIsVisible{
+            if toastIsVisible {
                 ToastView(message: "Image saved to Photos successfully!", isVisible: $toastIsVisible)
                     .clipped()
             }

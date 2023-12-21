@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct ShowDetailImageView: View {
     let dismissModal: () -> Void
+    
     @Binding var model: ImageModel
     @State var imageURL: String = ""
     let gradient: LinearGradient = LinearGradient(
@@ -16,27 +18,31 @@ struct ShowDetailImageView: View {
         startPoint: .top, endPoint: .bottom
     )
     @State var isShowOnlyImage: Bool = false
+    @State var showAlert: Bool = false
+    @State var toastIsVisible: Bool = false
+    
     var body: some View {
         ZStack {
             VStack {
                 if imageURL.isEmpty {
                     ProgressView()
                 } else {
-                    AsyncImage(url: URL(string: imageURL) ) { image in
-                        image.image?
-                            .resizable()
-                            .scaledToFill()
-                            .ignoresSafeArea()
-                    }
-                    .frame(width: UIScreen.main.bounds.width)
-                    .edgesIgnoringSafeArea(.all)
                     
+                    WebImage(url: URL(string: imageURL))
+                        .resizable()
+                        .placeholder(content: {
+                            ProgressView()
+                        })
+                        .scaledToFill()
+                        .ignoresSafeArea()
+                        .frame(width: UIScreen.main.bounds.width)
+                        .edgesIgnoringSafeArea(.all)
                 }
             }
             .onAppear(perform: {
                 Task
                 {
-                    let firebaseData = FireStoreDatabase()
+                    let firebaseData = FireStoreDatabase.shared
                     if let url = await firebaseData.getURL(path: model.imageUrl) {
                         imageURL = url.absoluteString
                     }
@@ -44,30 +50,66 @@ struct ShowDetailImageView: View {
             })
             gradient.edgesIgnoringSafeArea(.all)
                 .onTapGesture {
-                    withAnimation(.smooth) {
-                        self.isShowOnlyImage.toggle()
+                    withAnimation {
+                        isShowOnlyImage.toggle()
                     }
+                    
                 }
-            if isShowOnlyImage == false {
-                VStack {
-                    HStack {
-                        
-                        Button(action: {
+            VStack {
+                HStack {
+                    
+                    Button(action: {
+                        withAnimation {
                             dismissModal()
+                        }
+                        
+                    }, label: {
+                        Image(systemName: "arrow.backward")
+                            .foregroundColor(.white)
+                            .font(.title2)
+                    })
+                    .frame(width: 40, height: 40)
+                    .background(Color("kC6C2D8").opacity(isShowOnlyImage ? 0.4 : 0.8))
+                    .cornerRadius(10)
+                    Spacer()
+                    if isShowOnlyImage == false {
+                        Button(action: {
+                            // Report this image
+                            showAlert.toggle()
                         }, label: {
-                            Image(systemName: "arrow.backward")
-                                .foregroundColor(.black.opacity(0.8))
+                            Image(systemName: "exclamationmark.triangle")
+                                .foregroundColor(.white)
                                 .font(.title2)
                         })
-                        .padding()
-                        .frame(width: 48, height: 48)
-                        .background(Color("kC6C2D8"))
+                        .alert(isPresented: $showAlert) {
+                            Alert(
+                                        title: Text("Warning"),
+                                        message: Text("Do you really want to report this photo?"),
+                                        primaryButton: .default(
+                                            Text("OK"),
+                                            action: {
+                                                model.isReport = true
+                                                toastIsVisible.toggle()
+                                            }
+                                        ),
+                                        secondaryButton: .destructive(
+                                            Text("Cancel"),
+                                            action: {
+                                                
+                                            }
+                                        )
+                                    )
+                        }
+                        .frame(width: 40, height: 40)
                         .cornerRadius(10)
-                        Spacer()
-                    }.padding()
-                    Spacer()
+                    }
+                }.padding()
+                Spacer()
+                if isShowOnlyImage == false {
                     HStack {
-                        Button(action: {}, label: {
+                        Button(action: {
+                            isShowOnlyImage.toggle()
+                        }, label: {
                             Text("Preview")
                                 .font(.title3)
                                 .fontWeight(.semibold)
@@ -78,6 +120,12 @@ struct ShowDetailImageView: View {
                             .cornerRadius(10)
                     }
                 }
+            }
+            
+            VStack {
+                ToastView(message: "Thank you for reporting this issue to us, we will handle it immediately!", isVisible: $toastIsVisible)
+                    .clipped()
+                Spacer()
             }
             
         }.background(.black.opacity(0.5))

@@ -21,11 +21,13 @@ struct SideMenu: View {
         colors: [Color("k886BF6"), Color("k625AF6")],
         startPoint: .top, endPoint: .bottom
     )
-
+    var actionChooseProfileUser: (()->Void)
+    var actionChooseCollection: (()->Void)
+    
     var MenuChevron: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 18)
-                .fill(Color("k886BF6"))
+                .fill(gradient)
                 .frame(width: 60, height: 60)
                 .rotationEffect(Angle(degrees: 45))
                 .offset(x: isSidebarVisible ? -18 : -10)
@@ -39,7 +41,7 @@ struct SideMenu: View {
                   isSidebarVisible ?
                     Angle(degrees: 180) : Angle(degrees: 0))
                 .offset(x: isSidebarVisible ? -4 : 8)
-                .foregroundColor(Color("k886BF6"))
+
         }
         .offset(x: sideBarWidth / 2, y: 80)
         .animation(.default, value: isSidebarVisible)
@@ -54,10 +56,26 @@ struct SideMenu: View {
                 VStack(alignment: .leading, spacing: 20) {
                     userProfile
                     Divider()
-                    MenuLinks(items: userActions)
+                    MenuLinks(actionTapMenu: {id in
+                        print(id)
+                        switch id {
+                        case 4001:
+                            isSidebarVisible.toggle()
+                        case 4002:
+                            isSidebarVisible.toggle()
+                            self.actionChooseProfileUser()
+                        case 4003:
+                            isSidebarVisible.toggle()
+                            self.actionChooseCollection()
+                        default:return
+                        }
+                    }, items: userActions)
+                    
                     Divider().background(.clear)
                     
-                    MenuLinks(items: logout)
+                    MenuLinks(actionTapMenu: { id in
+                        print(id)
+                    }, items: logout)
                 }
                 .padding(.top, 80)
                 .padding(.horizontal, 20)
@@ -126,11 +144,15 @@ var secondaryColor: Color =
                 alpha: 1))
 
 struct MenuLinks: View {
+    var actionTapMenu:((Int)-> Void)
     var items: [MenuItem]
     var body: some View {
         VStack(alignment: .leading, spacing: 30) {
             ForEach(items) { item in
                 menuLink(icon: item.icon, text: item.text)
+                    .onTapGesture {
+                        self.actionTapMenu(item.id)
+                    }
             }
         }
         .padding(.vertical, 14)
@@ -142,6 +164,7 @@ struct MenuLinks: View {
 struct menuLink: View {
     var icon: String
     var text: String
+    
     var body: some View {
         HStack {
             Image(systemName: icon)
@@ -155,9 +178,6 @@ struct menuLink: View {
                 .font(.body)
                 .fontWeight(.semibold)
         }
-        .onTapGesture {
-            print("Tapped on \(text)")
-        }
     }
 }
 
@@ -170,14 +190,14 @@ struct MenuItem: Identifiable {
 
 var userActions: [MenuItem] = [
     MenuItem(id: 4001, icon: "person.circle.fill", text: "Home"),
-    MenuItem(id: 4002, icon: "bag.fill", text: "Favorites"),
-    MenuItem(id: 4003, icon: "gift.fill", text: "Downloaded"),
-    MenuItem(id: 4004,
-              icon: "wrench.and.screwdriver.fill",
-              text: "Settings"),
-    MenuItem(id: 4005,
-              icon: "exclamationmark.triangle.fill",
-              text: "Reportn an issue")
+    MenuItem(id: 4002, icon: "bag.fill", text: "Liked"),
+    MenuItem(id: 4003, icon: "gift.fill", text: "Collections"),
+//    MenuItem(id: 4004,
+//              icon: "wrench.and.screwdriver.fill",
+//              text: "Settings"),
+//    MenuItem(id: 4005,
+//              icon: "exclamationmark.triangle.fill",
+//              text: "Report an issue")
 ]
 
 var logout: [MenuItem] = [
@@ -192,7 +212,7 @@ var logout: [MenuItem] = [
 struct WrapperMenuView: View {
     @State var isShowing: Bool = true
     var body: some View {
-        SideMenu(isSidebarVisible: $isShowing)
+        SideMenu(isSidebarVisible: $isShowing, actionChooseProfileUser: {}, actionChooseCollection: {})
     }
 }
 

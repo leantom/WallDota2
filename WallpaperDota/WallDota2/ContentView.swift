@@ -6,25 +6,28 @@
 //
 import SwiftUI
 import Firebase
+import FirebaseAuth
 
-class AppDelegate: NSObject, UIApplicationDelegate {
-  func application(_ application: UIApplication,
-                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-    FirebaseApp.configure()
 
-    return true
-  }
-}
 
 struct ContentView: View {
+    @StateObject var notificationManager = NotificationManager()
+    
     @State private var images = [Image]()
     init() {
-        FirebaseApp.configure()
-        print("Done")
+       
     }
     var body: some View {
-        LoginView()
-        //SplashScreenView(currentIndex: 0)
+        if AppSetting.checkisFirstLogined() {
+            SplashScreenView(currentIndex: 0)
+        } else if AppSetting.checkLogined() {
+            TabbarCustomView().onAppear {
+                LoginViewModel.shared.user = Auth.auth().currentUser
+            }
+        } else {
+            LoginView()
+        }
+        
     }
 
     private func loadImages() {

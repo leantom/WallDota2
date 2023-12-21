@@ -36,12 +36,12 @@ class AppleSignInHandler: NSObject, ASAuthorizationControllerDelegate, ASAuthori
 
 struct LoginView: View {
     
-    let backgroundImage = Image("image3")
+    let backgroundImage = Image("image4")
     let gradient: LinearGradient = LinearGradient(
-        colors: [Color.black.opacity(0.4), Color.clear],
+        colors: [Color.black.opacity(0.7), Color.clear],
         startPoint: .bottom, endPoint: .top
     )
-    var loginViewModel = LoginViewModel()
+    var loginViewModel = LoginViewModel.shared
     @State var email: String = "Continue with Email"
     @State var emailIcon: String = "mail.fill"
     @State var googleLoginTitle: String = "Continue with Google"
@@ -64,60 +64,77 @@ struct LoginView: View {
                                     .ignoresSafeArea()
                 
                 VStack(spacing: 40) {
-                    Spacer()
+                    Spacer(minLength: 160)
                     VStack(spacing: 20,content: {
-                        Image("logo-no-background")
+                        Image(uiImage: UIImage(named: "AppIcon") ?? UIImage())
                             .resizable()
-                            .frame(width: 100, height: 100)
+                            .frame(width: 68, height: 68)
+                            .cornerRadius(10)
                         Text("Because your view deserves to be epic.")
                             .font(.subheadline)
+                            .fontWeight(.bold)
                             .foregroundStyle(.white)
                     })
-                    
-                    VStack(spacing: 24) {
-                        ShareCodeButton(title: $email, icon: $emailIcon, action: {
+                    VStack(spacing: 40) {
+                        Spacer()
+                        VStack(spacing: 24) {
+                            ShareCodeButton(title: $email, icon: $emailIcon, action: {
+                                
+                            })
+                                .background(Color(red: 0.324, green: 0.448, blue: 0.7))
+                                .cornerRadius(10)
+                            ShareCodeButton(title: $googleLoginTitle, icon: $googleIcon, action: {
+                                Task {
+                                    isLogined = await loginViewModel.signInWithGoogle()
+                                }
+                                
+                            })
+                                .background(Color(red: 0.167, green: 0.246, blue: 0.386))
+                                .cornerRadius(10)
                             
-                        })
-                            .background(Color(red: 0.324, green: 0.448, blue: 0.7))
+                            ShareCodeButton(title: $appleLoginTitle, icon: $appleIcon, action: {
+                                let appleIDProvider = ASAuthorizationAppleIDProvider()
+                                let request = appleIDProvider.createRequest()
+                                request.requestedScopes = [.fullName, .email]
+                                
+                                let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+                                authorizationController.delegate = appleSignInHandler
+                                authorizationController.presentationContextProvider = appleSignInHandler
+                                authorizationController.performRequests()
+                            })
+                            .background(Color(hue: 0.607, saturation: 0.601, brightness: 0.159))
                             .cornerRadius(10)
-                        ShareCodeButton(title: $googleLoginTitle, icon: $googleIcon, action: {
-                            Task {
-                                isLogined = await loginViewModel.signInWithGoogle()
-                            }
-                            
-                        })
-                            .background(Color(red: 0.167, green: 0.246, blue: 0.386))
-                            .cornerRadius(10)
+                        }
                         
-                        ShareCodeButton(title: $appleLoginTitle, icon: $appleIcon, action: {
-                            let appleIDProvider = ASAuthorizationAppleIDProvider()
-                            let request = appleIDProvider.createRequest()
-                            request.requestedScopes = [.fullName, .email]
+                        HStack(spacing: 0) {
                             
-                            let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-                            authorizationController.delegate = appleSignInHandler
-                            authorizationController.presentationContextProvider = appleSignInHandler
-                            authorizationController.performRequests()
-                        })
-                        .background(Color(hue: 0.607, saturation: 0.601, brightness: 0.159))
-                        .cornerRadius(10)
+                            Button(action: {
+                                // MARK: --skip
+                                Task {
+                                    await loginViewModel.signinWithAnynomous()
+                                    isLogined = true
+                                }
+                                
+                            }, label: {
+                                Text("Skip")
+                                    .font(.title3)
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(.white)
+                            })
+                            .padding()
+                            .frame(height: 48)
+                            .background(
+                              RoundedRectangle(cornerRadius: 10)
+                                .fill(.accent)
+                                .shadow(color: .black, radius: 5) // Shadow applied to background shape
+                            )
+                           
+                            
+                        }
+                        Spacer()
                     }
                     
-                    HStack(spacing: 0) {
-                        
-                        Button(action: {
-                            // MARK: --skip
-                            isLogined = true
-                        }, label: {
-                            Text(isLogined ? "Skip" : "Next")
-                                .font(.title3)
-                                .fontWeight(.bold)
-                                .foregroundStyle(.white)
-                        })
-                        .padding()
-                    }
                     
-                    Spacer()
                 }
                 
                 if isLogined {

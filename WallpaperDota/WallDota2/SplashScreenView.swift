@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SplashScreenView: View {
+    @StateObject var notificationManager = NotificationManager()
+    
     @State private var images = [Image]()
     @State  var currentIndex = 0
     @State private var reachedEnd = false
@@ -48,7 +50,7 @@ struct SplashScreenView: View {
                             if newIndex == images.count - 1 && !reachedEnd {
                                 reachedEnd = true
                                 // Handle reaching the end
-                                
+                                AppSetting.setFirstLogined(value: false)
                             } else {
                                 reachedEnd = false
                             }
@@ -61,22 +63,27 @@ struct SplashScreenView: View {
                                 Button(action: {
                                     withAnimation(.easeInOut) {
                                         isLastTab.toggle()
+                                        Task {
+                                            await notificationManager.request()
+                                        }
+                                        
                                     }
                                     
                                 }) {
                                     HStack {
                                         Image(systemName: "arrow.forward")
-                                            .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                                            .font(.title)
                                             .fontWeight(.bold)
                                             .foregroundColor(.white)
                                     }
                                     .padding()
-                                    .background(Color(red: 0.254, green: 0.279, blue: 0.326))
+                                    .background(Color(red: 0.254, green: 0.279, blue: 0.326).opacity(0.5))
                                     .mask(Circle())
-                                }.frame(width: 60, height: 60)
+                                }.frame(width: 48, height: 48)
                                     
                             }
                             .padding()
+                            Spacer()
                         }
                     }
                     

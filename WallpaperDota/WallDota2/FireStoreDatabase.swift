@@ -6,19 +6,55 @@
 //
 
 import Foundation
+import SwiftUI
 import FirebaseStorage
 import FirebaseFirestore
+import Firebase
 
 class FireStoreDatabase {
     var listAllImage : [ImageModel] = []
     var spotlightImages : [ImageModel] = []
     var trendingImages : [ImageModel] = []
     var listCollectionImages : [ImageModel] = []
+    var listImageLiked : [ImageModel] = []
+    
     var heroesID : [String] = []
+    
+    static let shared = FireStoreDatabase()
     
     public func fetchDataFromFirestore() async {
         let db = Firestore.firestore()
         let collectionRef = db.collection("heroes")
+        let date = Date().timeIntervalSince1970
+        do {
+            let snapshot = try await collectionRef.getDocuments()
+            let _items = snapshot.documents.compactMap { document in
+                do {
+                    let item =  try document.data(as: ImageModel.self)
+                    item.id = document.documentID
+                    return item
+                    
+                } catch {
+                    print("Error decoding item: \(error.localizedDescription)")
+                    return nil
+                }
+            }
+
+            print("total time fetchDataFromFirestore :\(Date().timeIntervalSince1970 - date)")
+            self.listAllImage = _items
+            self.getTrendingImages()
+            self.getSpotlightImages()
+            self.getHeroesID()
+            await fetchDataCollectionFromFirestore()
+            await getImagesLiked()
+        } catch {
+            print("Error getting documents: \(error.localizedDescription)")
+        }
+    }
+    
+    public func fetchDataCollectionFromFirestore() async {
+        let db = Firestore.firestore()
+        let collectionRef = db.collection("collections")
         let date = Date().timeIntervalSince1970
         do {
             let snapshot = try await collectionRef.getDocuments()
@@ -33,15 +69,93 @@ class FireStoreDatabase {
                 }
             }
 
-            print("total time download :\(Date().timeIntervalSince1970 - date)")
-            self.listAllImage = _items
-            self.getTrendingImages()
-            self.getSpotlightImages()
-            self.getHeroesID()
-            self.getImagesListCollections()
+            print("total time fetchDataCollectionFromFirestore :\(Date().timeIntervalSince1970 - date)")
+            self.listCollectionImages = _items
             await self.getImageURLForListCollection()
+            
         } catch {
             print("Error getting documents: \(error.localizedDescription)")
+        }
+    }
+    
+    static public func likeImage(image: ImageModel) async {
+        let db = Firestore.firestore()
+        let collectionRef = db.collection("likes")
+        do {
+            try await collectionRef.addDocument(data: ["documentid": image.id,
+                                                       "userid": LoginViewModel.shared.user?.uid ?? ""])
+        } catch let err{
+            print(err.localizedDescription)
+        }
+    }
+    
+    static public func createUser(image: ImageModel) async {
+        let db = Firestore.firestore()
+        let collectionRef = db.collection("users")
+        do {
+            try await collectionRef.addDocument(data: ["username": image.id,
+                                                       "userid": LoginViewModel.shared.user?.uid ?? ""])
+        } catch let err{
+            print(err.localizedDescription)
+        }
+    }
+    
+    
+    func getImagesLiked() async {
+        let db = Firestore.firestore()
+        let collectionRef = db.collection("likes").whereField("userid", isEqualTo: LoginViewModel.shared.user?.uid ?? "")
+        let date = Date().timeIntervalSince1970
+        do {
+            let snapshot = try await collectionRef.getDocuments()
+            let _items = snapshot.documents.compactMap { document in
+                do {
+                    let item =  try document.data(as: ImageLikeModel.self)
+                    item.id = document.documentID
+                    return item
+                    
+                } catch {
+                    print("Error decoding item: \(error.localizedDescription)")
+                    return nil
+                }
+            }
+
+            print("total time download :\(Date().timeIntervalSince1970 - date)")
+            
+            for item in _items {
+                if let model = await self.getDocument(by: item.documentid) {
+                    model.id = item.documentid
+                    self.listImageLiked.append(model)
+                }
+            }
+            
+        } catch {
+            print("Error getting documents: \(error.localizedDescription)")
+        }
+    }
+    
+    func checkUserLikedExistID(id: String) -> Bool {
+        let docs = listImageLiked.filter { item in
+            return item.id == id
+        }
+        return docs.count > 0
+    }
+    
+    
+    func getDocument(by id: String) async -> ImageModel? {
+        let db = Firestore.firestore()
+        let documentReference = db.collection("heroes").document(id)
+        do {
+            let documentsnap = try await documentReference.getDocument()
+            do {
+                let item =  try documentsnap.data(as: ImageModel.self)
+                return item
+            } catch {
+                print("Error decoding item: \(error.localizedDescription)")
+                return nil
+            }
+        }catch let err{
+            print(err.localizedDescription)
+            return nil
         }
     }
     
@@ -58,17 +172,6 @@ class FireStoreDatabase {
         print(self.heroesID.count)
     }
     
-    
-    func getImagesListCollections() {
-        for id in self.heroesID {
-            let items = self.listAllImage.filter { image in
-                return image.heroID == id
-            }
-            if items.count > 0 {
-                self.listCollectionImages.append(items.first!)
-            }
-        }
-    }
     
     func getImagesInListCollections(id: String) -> String {
         let items = self.listCollectionImages.filter { image in

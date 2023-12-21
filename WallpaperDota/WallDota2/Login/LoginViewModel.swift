@@ -13,7 +13,11 @@ import GoogleSignIn
 import Firebase
 
 class LoginViewModel: NSObject, ObservableObject {
+    static let shared = LoginViewModel()
+
     var isLoggedIn: Bool = false
+    var user:User?
+    
     
     func signInWithGoogle() async -> Bool {
        
@@ -39,6 +43,22 @@ class LoginViewModel: NSObject, ObservableObject {
             
             do {
                 let result = try await Auth.auth().signIn(with: credential)
+                self.user = result.user
+                AppSetting.setLogined(value: true)
+                
+                let now = Date().timeIntervalSince1970
+                let suffix = "\(now)".suffix(6)
+                var username = "anonymous\(suffix)"
+                if let email = result.user.email {
+                    let components = email.components(separatedBy: "@")
+                    if let first = components.first {
+                        username = first
+                    }
+                }
+                
+                let newUser = NewUser(username: username, email: result.user.email ?? "\(username)@walldota2.com", providers: "google", created_at: now, last_login_at: now, id: result.user.uid)
+                await UserViewModel.shared.createUser(user: newUser)
+                
                 if result.credential != nil {
                     return true
                 }
@@ -55,4 +75,24 @@ class LoginViewModel: NSObject, ObservableObject {
         
         
     }
+    
+    func signinWithAnynomous() async {
+        do {
+            let result = try await Auth.auth().signInAnonymously()
+            self.user = result.user
+            print(user?.uid ?? "")
+            AppSetting.setLogined(value: true)
+            
+            let now = Date().timeIntervalSince1970
+            let suffix = "\(now)".suffix(6)
+            let username = "anonymous\(suffix)"
+            
+            let newUser = NewUser(username: username, email: "\(username)@walldota2.com", providers: "anonymous", created_at: now, last_login_at: now, id: result.user.uid)
+            await UserViewModel.shared.createUser(user: newUser)
+        } catch let err{
+            print(err.localizedDescription)
+        }
+        
+    }
+    
 }

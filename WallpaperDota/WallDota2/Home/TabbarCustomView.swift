@@ -9,13 +9,13 @@ import SwiftUI
 
 struct TabbarCustomView: View {
     @State var selection: Int = 1
-    @State var fireStoreDB = FireStoreDatabase()
+    @State var fireStoreDB = FireStoreDatabase.shared
     @State var items: [ImageModel] = []
     @State var itemsSpotlight: [ImageModel] = []
     @State var imagesByID: [ImageModel] = []
     @State var heroesID: [String] = []
     
-    @State var titleTabs: [String] = ["Home", "Collections", "Search", "Saved"]
+    @State var titleTabs: [String] = ["Home", "Collections", "Quickly", "Saved"]
     
     @State private var isShowDetailVC = false
     @State private var isShowDetailCollection = false
@@ -29,10 +29,19 @@ struct TabbarCustomView: View {
     @State var progressBarValue: Double = 0
     @State var title: String = "Home"
     @State private var isMenuOpen = false
+    @State private var isShowMoreSpotlight = false
+    @State private var isShowDetailSpotlight = false
+    @State var gradient: LinearGradient = LinearGradient(
+        colors: [Color.blue.opacity(0.9), Color.clear],
+        startPoint: .top, endPoint: .bottom
+    )
     
     private var homeView: HomeView {
-        HomeView(items: $items, itemsSpotlight: $itemsSpotlight, actionTapDetail: { model in
+        HomeView(items: $items,
+                 itemsSpotlight: $itemsSpotlight,
+                 actionTapDetail: { model in
             withAnimation(.easeInOut) {
+                if isMenuOpen {return}
                 modelSelected = model
                 isShowDetailVC = true
             }
@@ -42,14 +51,17 @@ struct TabbarCustomView: View {
         }, actionDownloadFinished: {
             isLoading = false
             toastIsVisible = true
+        }, actionShowDetailSpotlight:  { model in
+            self.modelSelected = model
+            self.isShowDetailSpotlight.toggle()
+        }, actionShowMoreSpotlight: { list in
+            self.isShowMoreSpotlight.toggle()
         })
     }
     
     var body: some View {
         ZStack {
             
-            Color(red: 0.068, green: 0.099, blue: 0.158)
-                .edgesIgnoringSafeArea(.all)
             NavigationStack {
                 TopView(toastIsVisible: $toastIsVisible,
                         isLoading: $isLoading,
@@ -62,7 +74,7 @@ struct TabbarCustomView: View {
                 })
                 .frame(height: 50)
                 .clipped()
-                .background(.white)
+                
                 TabView(selection: $selection) {
                     homeView.onAppear(perform: {
                         Task {
@@ -80,21 +92,11 @@ struct TabbarCustomView: View {
                         }
                         .tag(1)
                     
-                    CollectionView(heroesID: $heroesID, 
-                                   _firestoreDB: $fireStoreDB,
-                                   action: { heroID in
-                        self.imagesByID = fireStoreDB.getImages(by: heroID)
-                        self.isShowDetailCollection.toggle()
-                    })
                     
-                    .tabItem {
-                        
-                        Image(systemName: "command.circle")
-                    }.tag(2)
                     
-                    CollectionView(heroesID: $heroesID,
-                                   _firestoreDB: $fireStoreDB,
-                                   action: { heroID in
+                    CollectionHeroView(heroesID: $heroesID,
+                                       _firestoreDB: $fireStoreDB,
+                                       action: { heroID in
                         self.imagesByID = fireStoreDB.getImages(by: heroID)
                         self.isShowDetailCollection.toggle()
                     })
@@ -104,8 +106,12 @@ struct TabbarCustomView: View {
                         Image(systemName: "command.circle")
                     }.tag(3)
                     
-                   
-                    
+                    UserProfileView(_firestoreDB: $fireStoreDB)
+                        .tabItem {
+                            
+                            Image(systemName: "person.crop.square")
+                        }.tag(4)
+                        
                 }
                 
                 .onChange(of: selection) { newSelection in
@@ -124,17 +130,35 @@ struct TabbarCustomView: View {
                         self.isShowDetailCollection.toggle()
                     })
                     .navigationBarBackButtonHidden()
+                }.navigationDestination(isPresented: $isShowMoreSpotlight) {
+                    SpotlightView(listImage: $itemsSpotlight, actionBack: {
+                        isShowMoreSpotlight.toggle()
+                    })
+                    .navigationBarBackButtonHidden()
+                    
+                }.navigationDestination(isPresented: $isShowDetailSpotlight) {
+                    ShowDetailImageView(dismissModal: {
+                        isShowDetailSpotlight = false
+                    }, model: $modelSelected)
+                    .navigationBarBackButtonHidden()
                 }
                 .onAppear() {
+                    
                     UITabBar.appearance().backgroundColor = .white
                 }
-                   
+                
             }
-            if isShowDetailVC == false && isShowDetailCollection == false {
-                SideMenu(isSidebarVisible: $isMenuOpen)
+            .background(gradient.ignoresSafeArea())
+            if isShowDetailVC == false &&
+                isShowDetailCollection == false &&
+                isShowMoreSpotlight == false &&
+                isShowDetailSpotlight == false {
+                SideMenu(isSidebarVisible: $isMenuOpen, actionChooseProfileUser: {
+                    
+                }, actionChooseCollection: {
+                    
+                })
             }
-            
-            
         }
         
         

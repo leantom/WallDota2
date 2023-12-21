@@ -8,7 +8,7 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
-struct CollectionView: View {
+struct CollectionHeroView: View {
     @State private var toastIsVisible = false
     @State private var isLoading = false
     @State var progressBarValue: Double = 0
@@ -18,9 +18,11 @@ struct CollectionView: View {
     @State var listCollectionModel:[ImageModel] = []
     
     let gradient: LinearGradient = LinearGradient(
-        colors: [Color.black.opacity(0.5), Color.black.opacity(0.2)],
-        startPoint: .leading, endPoint: .trailing
+        colors: [randomColor().opacity(0.4), randomColor().opacity(0.1)],
+        startPoint: .bottom, endPoint: .top
     )
+    
+    let columns = [GridItem(.flexible(minimum: 50, maximum: 160)), GridItem(.flexible(minimum: 50, maximum: 160)), GridItem(.flexible(minimum: 50, maximum: 160))]
     
     var action:((String) -> Void)
     var body: some View {
@@ -30,13 +32,13 @@ struct CollectionView: View {
                 Text("Collections")
                     .font(.title2)
                     .fontWeight(.bold)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.black)
                     .padding()
                 Spacer()
             }
-            
-            List {
-                VStack(spacing: 10) {
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: 16) {
+                  // Loop through the items and create ItemCell views
                     ForEach(listCollectionModel, id: \.heroID) {item in
                         HStack {
                             ZStack {
@@ -48,31 +50,30 @@ struct CollectionView: View {
                                         }
                                         .aspectRatio(contentMode: .fit)
                                         .cornerRadius(10)
-                                }
-                                gradient
-                                HStack {
                                     Text(item.heroID)
-                                        .font(.title2)
+                                        .font(.caption)
                                         .fontWeight(.bold)
                                         .foregroundStyle(.white)
+                                        .fixedSize(horizontal: false, vertical: true)
                                         .padding()
-                                    Spacer()
-                                }
+                                }.background(randomColor().opacity(0.8))
+                                
+                                
                             }
-                            .frame(height: 100)
                             .clipped()
                             
-                        }.frame(height: 100)
+                        }
                             .cornerRadius(10)
                             .clipped()
                             .onTapGesture {
                                 print(item.heroID)
                                 self.action(item.heroID)
                             }
-                            
                     }
                 }
+                .padding()
             }
+            
             .onAppear(perform: {
                 self.listCollectionModel = _firestoreDB.listCollectionImages
             })
@@ -81,14 +82,13 @@ struct CollectionView: View {
                 self.listCollectionModel = _firestoreDB.listCollectionImages
             }
         }
-        
     }
 }
 
-struct WrapperCollectionView:View {
+struct WrapperCollectionHeroView:View {
     @State var heroids = ["Crystal maiden",
     "Lina", "Templar Assassin"]
-    @State var firestoreDB = FireStoreDatabase.shared
+    @State var firestoreDB = FireStoreDatabase()
     
     var body: some View {
         CollectionView(heroesID: $heroids, _firestoreDB: $firestoreDB, action: { heroID in
@@ -98,5 +98,5 @@ struct WrapperCollectionView:View {
 }
 
 #Preview {
-    WrapperCollectionView()
+    WrapperCollectionHeroView()
 }

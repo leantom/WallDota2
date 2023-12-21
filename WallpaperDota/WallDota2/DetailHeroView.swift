@@ -10,7 +10,7 @@ import SwiftUI
 struct DetailHeroView: View {
     
     @Binding var items: [ImageModel]
-    let columns = [GridItem(.flexible(minimum: 50, maximum: 160)), GridItem(.flexible(minimum: 50, maximum: 160))]
+    let columns = [GridItem(.flexible(minimum: 120, maximum: 180)), GridItem(.flexible(minimum: 120, maximum: 180)), GridItem(.flexible(minimum: 120, maximum: 180))]
     @State var heroName: String = ""
     var actionBack:(()-> Void)
     @State var isShowDetail: Bool = false
@@ -44,7 +44,7 @@ struct DetailHeroView: View {
                             Spacer()
                             
                         }
-                        LazyVGrid(columns: columns, content: {
+                        LazyVGrid(columns: columns, spacing: 5, content: {
                             ForEach(items) { show in
                                 ShowItemView(show: show, actionDownload: {
                                     
@@ -59,10 +59,10 @@ struct DetailHeroView: View {
                                 }
                             }
                         })
-                    }
+                    }.clipped()
                 }.onAppear(perform: {
                     self.heroName = items.first?.heroID ?? ""
-                })
+                }).frame(width: UIScreen.main.bounds.width * 0.98)
             }
         }
         .navigationDestination(isPresented:$isShowDetail) {
