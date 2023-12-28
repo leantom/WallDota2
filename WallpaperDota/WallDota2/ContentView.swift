@@ -17,12 +17,14 @@ struct ContentView: View {
     init() {
        
     }
+    
     var body: some View {
+        
         if AppSetting.checkisFirstLogined() {
             SplashScreenView(currentIndex: 0)
-        } else if AppSetting.checkLogined() {
+        } else if AppSetting.checkLogined() && Auth.auth().currentUser != nil {
             TabbarCustomView().onAppear {
-                LoginViewModel.shared.user = Auth.auth().currentUser
+                
             }
         } else {
             LoginView()

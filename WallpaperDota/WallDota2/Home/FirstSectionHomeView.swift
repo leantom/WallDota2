@@ -31,7 +31,7 @@ struct FirstSectionHomeView: View {
                     
                     AnimatedImage(url: URL(string: items.first?.thumbnailFull ?? ""))
                         .resizable()
-                        .scaledToFill()
+                        .aspectRatio(contentMode: .fill)
                         .frame(height: 280)
                         .cornerRadius(10)
                         .clipped()
@@ -61,6 +61,7 @@ struct FirstSectionHomeView: View {
                                                    )) { image in
                                     image.image?
                                         .resizable()
+                                        .aspectRatio(contentMode: .fill)
                                         .frame(width: 102, height: 92)
                                         .cornerRadius(10)
                                 }.clipped()

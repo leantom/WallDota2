@@ -16,6 +16,7 @@ struct HomeView: View {
     @Binding var items: [ImageModel]
     @Binding var itemsSpotlight: [ImageModel]
     var actionTapDetail: ((ImageModel) -> Void)
+    @State var itemSelected: ImageModel?
     
     var actionDownload: ((Double) -> Void) // dang down
     var actionDownloadFinished: (() -> Void) // down xong
@@ -23,16 +24,15 @@ struct HomeView: View {
     var actionShowDetailSpotlight: ((ImageModel) -> Void)
     var actionShowMoreSpotlight: (([ImageModel]) -> Void)
     
-    @State var isNavigate: Bool = false
-    let columns = [GridItem(.flexible(minimum: 50, maximum: 160)), GridItem(.flexible(minimum: 50, maximum: 160))]
+    let columns = [GridItem(.flexible(minimum: 50, maximum: 180)), GridItem(.flexible(minimum: 50, maximum: 180))]
     @State var gradient: LinearGradient = LinearGradient(
-        colors: [Color.blue.opacity(0.9), Color.clear],
+        colors: [Color.white.opacity(0.9), Color.clear],
         startPoint: .top, endPoint: .bottom
     )
+    @State var isShowPopupComment = false
     
     var body: some View {
-        VStack {
-            
+        ZStack {
             ScrollView(.vertical) {
                 LazyVStack {
                     if itemsSpotlight.count == 0 {
@@ -62,6 +62,13 @@ struct HomeView: View {
                             }, actionDownloadProgressBar: { progress in
                                 self.actionDownload(progress)
                                 
+                            }, actionComment: { model in
+                                withAnimation {
+                                    itemSelected = model
+                                    isShowPopupComment.toggle()
+                                }
+                                
+                                
                             }).onTapGesture {
                                 self.actionTapDetail(show)
                             }
@@ -69,6 +76,19 @@ struct HomeView: View {
                     })
                 }
             }
+            
+//            VStack {
+//                
+//                if isShowPopupComment {
+//                    if let  itemSelected = self.itemSelected {
+//                        CommentsView(imageModel: itemSelected, actionClosePopup: {
+//                            isShowPopupComment.toggle()
+//                        })
+//                            .background(.white)
+//                    }
+//                }
+//                
+//            }
         }
         
     }

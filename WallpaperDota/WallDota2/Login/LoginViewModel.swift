@@ -16,8 +16,8 @@ class LoginViewModel: NSObject, ObservableObject {
     static let shared = LoginViewModel()
 
     var isLoggedIn: Bool = false
-    var user:User?
-    
+    var user:User? // user from authenticantion
+    var userLogin:NewUser? // user from firestore
     
     func signInWithGoogle() async -> Bool {
        
@@ -43,21 +43,10 @@ class LoginViewModel: NSObject, ObservableObject {
             
             do {
                 let result = try await Auth.auth().signIn(with: credential)
-                self.user = result.user
+                LoginViewModel.shared.user = result.user
                 AppSetting.setLogined(value: true)
                 
-                let now = Date().timeIntervalSince1970
-                let suffix = "\(now)".suffix(6)
-                var username = "anonymous\(suffix)"
-                if let email = result.user.email {
-                    let components = email.components(separatedBy: "@")
-                    if let first = components.first {
-                        username = first
-                    }
-                }
-                
-                let newUser = NewUser(username: username, email: result.user.email ?? "\(username)@walldota2.com", providers: "google", created_at: now, last_login_at: now, id: result.user.uid)
-                await UserViewModel.shared.createUser(user: newUser)
+                await createUser(user: result.user, provider: "google")
                 
                 if result.credential != nil {
                     return true
@@ -73,8 +62,61 @@ class LoginViewModel: NSObject, ObservableObject {
         
         return false
         
-        
     }
+    func createUser(user: User, provider: String) async {
+        let now = Date().timeIntervalSince1970
+        let suffix = "\(now)".suffix(6)
+        var username = "anonymous\(suffix)"
+        if let email = user.email {
+            let components = email.components(separatedBy: "@")
+            if let first = components.first {
+                username = first
+            }
+        }
+        
+        let newUser = NewUser(username: username, email: user.email ?? "\(username)@walldota2.com", providers: provider, created_at: now, last_login_at: now, userid: user.uid)
+        
+        LoginViewModel.shared.userLogin = newUser
+        await UserViewModel.shared.createUser(user: newUser)
+    }
+    //MARK: -- Update username
+    func updateUserName(userName: String) async {
+        let db = Firestore.firestore()
+        let collectionRef = db.collection("users").whereField("userid", isEqualTo: user?.uid ?? "")
+        
+        do {
+            let snapshot = try await collectionRef.getDocuments()
+            let query = snapshot.documents.first
+            
+            try await query?.reference.updateData(["username": userName])
+            LoginViewModel.shared.userLogin =  await getUserDetail()
+        } catch let err{
+            print(err.localizedDescription)
+        }
+    }
+    //MARK: -- getUserDetail
+   
+    func getUserDetail() async -> NewUser? {
+        let db = Firestore.firestore()
+        let collectionRef = db.collection("users").whereField("userid", isEqualTo: user?.uid ?? "")
+        do {
+            
+            let results = try await collectionRef.getDocuments()
+            if let result = results.documents.first {
+                let user = try result.data(as: NewUser.self)
+                //MARK: update last login time
+                LoginViewModel.shared.userLogin = user
+                return user
+
+            }
+        } catch let err{
+            print(err.localizedDescription)
+            return nil
+        }
+        
+        return nil
+    }
+    
     
     func signinWithAnynomous() async {
         do {
@@ -87,12 +129,34 @@ class LoginViewModel: NSObject, ObservableObject {
             let suffix = "\(now)".suffix(6)
             let username = "anonymous\(suffix)"
             
-            let newUser = NewUser(username: username, email: "\(username)@walldota2.com", providers: "anonymous", created_at: now, last_login_at: now, id: result.user.uid)
+            let newUser = NewUser(username: username, email: "\(username)@walldota2.com", providers: "anonymous", created_at: now, last_login_at: now, userid: result.user.uid)
+            LoginViewModel.shared.userLogin = newUser
             await UserViewModel.shared.createUser(user: newUser)
         } catch let err{
             print(err.localizedDescription)
         }
         
     }
+    
+    func deleteUser() async {
+        do {
+            AppSetting.setLogined(value: false)
+            guard let currentUser = user else { return  }
+            
+            let db = Firestore.firestore()
+            let collectionRef = db.collection("users").whereField("userid", isEqualTo: user?.uid ?? "")
+            let results = try await collectionRef.getDocuments()
+            
+            for item in results.documents {
+                try await item.reference.delete()
+            }
+            
+            try await currentUser.delete()
+        } catch let err{
+            print(err.localizedDescription)
+        }
+        
+    }
+    
     
 }

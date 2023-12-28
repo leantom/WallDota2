@@ -15,7 +15,7 @@ struct TabbarCustomView: View {
     @State var imagesByID: [ImageModel] = []
     @State var heroesID: [String] = []
     
-    @State var titleTabs: [String] = ["Home", "Collections", "Quickly", "Saved"]
+    @State var titleTabs: [String] = ["Home", "Collections", "Profile", "LeaderBoard"]
     
     @State private var isShowDetailVC = false
     @State private var isShowDetailCollection = false
@@ -28,11 +28,17 @@ struct TabbarCustomView: View {
     @State private var isLoading = false
     @State var progressBarValue: Double = 0
     @State var title: String = "Home"
+    
     @State private var isMenuOpen = false
     @State private var isShowMoreSpotlight = false
     @State private var isShowDetailSpotlight = false
+    @State private var isLogout = false
+    @State var isDeleteAccount: Bool = false
+    
+    @State private var userLogin: NewUser?
+    
     @State var gradient: LinearGradient = LinearGradient(
-        colors: [Color.blue.opacity(0.9), Color.clear],
+        colors: [Color.white.opacity(0.9), Color.clear],
         startPoint: .top, endPoint: .bottom
     )
     
@@ -59,6 +65,33 @@ struct TabbarCustomView: View {
         })
     }
     
+    var sideMenu: SideMenu {
+        SideMenu(isSidebarVisible: $isMenuOpen,
+                 actionChooseProfileUser: { _selection in
+            if selection == _selection {return}
+            selection = 3
+        }, actionChooseCollection: { _selection in
+            if selection == _selection {return}
+            selection = 2
+        }, actionChooseHome: { _selection in
+            if selection == _selection {return}
+            selection = 1
+            
+        }, actionLogout: { _selection in
+            if selection == _selection {return}
+            selection = 4
+            withAnimation {
+                isLogout.toggle()
+            }
+            
+        }, actionDeleteAccount: {
+            withAnimation {
+                
+                isDeleteAccount.toggle()
+            }
+        }, userLogin: $userLogin)
+    }
+    
     var body: some View {
         ZStack {
             
@@ -78,7 +111,10 @@ struct TabbarCustomView: View {
                 TabView(selection: $selection) {
                     homeView.onAppear(perform: {
                         Task {
-                            if fireStoreDB.listAllImage.count > 0 {
+                            if fireStoreDB.listAllImage.count > 0 && fireStoreDB.spotlightImages.count > 0 {
+                                self.items = fireStoreDB.listAllImage
+                                self.itemsSpotlight = fireStoreDB.spotlightImages
+                                self.heroesID = fireStoreDB.heroesID
                                 return
                             }
                             await fireStoreDB.fetchDataFromFirestore()
@@ -91,26 +127,29 @@ struct TabbarCustomView: View {
                             Image(systemName: "house.fill")
                         }
                         .tag(1)
-                    
-                    
-                    
+                    //// ---- Collection view
                     CollectionHeroView(heroesID: $heroesID,
                                        _firestoreDB: $fireStoreDB,
                                        action: { heroID in
                         self.imagesByID = fireStoreDB.getImages(by: heroID)
                         self.isShowDetailCollection.toggle()
                     })
-                    
                     .tabItem {
                         
                         Image(systemName: "command.circle")
-                    }.tag(3)
+                    }.tag(2)
                     
                     UserProfileView(_firestoreDB: $fireStoreDB)
                         .tabItem {
                             
                             Image(systemName: "person.crop.square")
+                        }.tag(3)
+                    
+                    LeaderBoardView()
+                        .tabItem {
+                            Image(systemName: "chart.bar.doc.horizontal")
                         }.tag(4)
+                    
                         
                 }
                 
@@ -120,7 +159,6 @@ struct TabbarCustomView: View {
                     print("Selected item: \(newSelection)")
                 }
                 .navigationDestination(isPresented: $isShowDetailVC) {
-                    
                     ShowDetailImageView(dismissModal: {
                         isShowDetailVC = false
                     }, model: $modelSelected)
@@ -139,12 +177,35 @@ struct TabbarCustomView: View {
                 }.navigationDestination(isPresented: $isShowDetailSpotlight) {
                     ShowDetailImageView(dismissModal: {
                         isShowDetailSpotlight = false
-                    }, model: $modelSelected)
+                    } , model: $modelSelected)
                     .navigationBarBackButtonHidden()
                 }
+                .alert(isPresented: $isDeleteAccount) {
+                    Alert(
+                                title: Text("Warning"),
+                                message: Text("Do you really want to delete your account"),
+                                primaryButton: .default(
+                                    Text("OK"),
+                                    action: {
+                                        Task {
+                                            await LoginViewModel.shared.deleteUser()
+                                            isLogout.toggle()
+                                        }
+                                        
+                                        
+                                    }
+                                ),
+                                secondaryButton: .destructive(
+                                    Text("Cancel"),
+                                    action: {
+                                        
+                                    }
+                                )
+                            )
+                }
                 .onAppear() {
-                    
                     UITabBar.appearance().backgroundColor = .white
+                    
                 }
                 
             }
@@ -153,12 +214,13 @@ struct TabbarCustomView: View {
                 isShowDetailCollection == false &&
                 isShowMoreSpotlight == false &&
                 isShowDetailSpotlight == false {
-                SideMenu(isSidebarVisible: $isMenuOpen, actionChooseProfileUser: {
-                    
-                }, actionChooseCollection: {
-                    
-                })
+               sideMenu
             }
+            
+            if isLogout {
+                LoginView()
+            }
+            
         }
         
         

@@ -20,115 +20,143 @@ struct ShowDetailImageView: View {
     @State var isShowOnlyImage: Bool = false
     @State var showAlert: Bool = false
     @State var toastIsVisible: Bool = false
+    @State private var isShowPreviewImage = false
+    
+    @State var imageDetail: UIImage?
     
     var body: some View {
-        ZStack {
-            VStack {
-                if imageURL.isEmpty {
-                    ProgressView()
-                } else {
-                    
-                    WebImage(url: URL(string: imageURL))
-                        .resizable()
-                        .placeholder(content: {
-                            ProgressView()
-                        })
-                        .scaledToFill()
-                        .ignoresSafeArea()
-                        .frame(width: UIScreen.main.bounds.width)
-                        .edgesIgnoringSafeArea(.all)
-                }
-            }
-            .onAppear(perform: {
-                Task
-                {
-                    let firebaseData = FireStoreDatabase.shared
-                    if let url = await firebaseData.getURL(path: model.imageUrl) {
-                        imageURL = url.absoluteString
+        NavigationStack {
+            ZStack {
+                VStack {
+                    if imageURL.isEmpty {
+                        ProgressView()
+                    } else {
+                        
+                        WebImage(url: URL(string: imageURL))
+                            .resizable()
+                            .placeholder(content: {
+                                ProgressView()
+                            })
+                            .onSuccess(perform: { image, data, type in
+                                imageDetail = image
+                            })
+                            .scaledToFill()
+                            .ignoresSafeArea()
+                            .frame(width: UIScreen.main.bounds.width)
+                            .edgesIgnoringSafeArea(.all)
                     }
                 }
-            })
-            gradient.edgesIgnoringSafeArea(.all)
-                .onTapGesture {
-                    withAnimation {
-                        isShowOnlyImage.toggle()
+                .onAppear(perform: {
+                    Task
+                    {
+                        let firebaseData = FireStoreDatabase.shared
+                        if let url = await firebaseData.getURL(path: model.imageUrl) {
+                            model.imageUrlFull = url.absoluteString
+                            imageURL = url.absoluteString
+                        }
                     }
-                    
-                }
-            VStack {
-                HStack {
-                    
-                    Button(action: {
+                })
+                gradient.edgesIgnoringSafeArea(.all)
+                    .onTapGesture {
                         withAnimation {
-                            dismissModal()
+                            isShowOnlyImage.toggle()
                         }
                         
-                    }, label: {
-                        Image(systemName: "arrow.backward")
-                            .foregroundColor(.white)
-                            .font(.title2)
-                    })
-                    .frame(width: 40, height: 40)
-                    .background(Color("kC6C2D8").opacity(isShowOnlyImage ? 0.4 : 0.8))
-                    .cornerRadius(10)
-                    Spacer()
-                    if isShowOnlyImage == false {
+                    }
+                VStack {
+                    HStack {
+                        
                         Button(action: {
-                            // Report this image
-                            showAlert.toggle()
+                            withAnimation {
+                                dismissModal()
+                            }
+                            
                         }, label: {
-                            Image(systemName: "exclamationmark.triangle")
+                            Image(systemName: "arrow.backward")
                                 .foregroundColor(.white)
                                 .font(.title2)
                         })
-                        .alert(isPresented: $showAlert) {
-                            Alert(
-                                        title: Text("Warning"),
-                                        message: Text("Do you really want to report this photo?"),
-                                        primaryButton: .default(
-                                            Text("OK"),
-                                            action: {
-                                                model.isReport = true
-                                                toastIsVisible.toggle()
-                                            }
-                                        ),
-                                        secondaryButton: .destructive(
-                                            Text("Cancel"),
-                                            action: {
-                                                
-                                            }
-                                        )
-                                    )
-                        }
                         .frame(width: 40, height: 40)
+                        .background(Color("kC6C2D8").opacity(isShowOnlyImage ? 0.4 : 0.8))
                         .cornerRadius(10)
-                    }
-                }.padding()
-                Spacer()
-                if isShowOnlyImage == false {
-                    HStack {
-                        Button(action: {
-                            isShowOnlyImage.toggle()
-                        }, label: {
-                            Text("Preview")
-                                .font(.title3)
-                                .fontWeight(.semibold)
-                                .foregroundStyle(.white)
-                        }).padding()
-                            .frame(width: UIScreen.main.bounds.width - 48, height: 48)
-                            .background(Color("kC6C2D8").opacity(0.5))
+                        Spacer()
+                        if isShowOnlyImage == false {
+                            Button(action: {
+                                // Report this image
+                                showAlert.toggle()
+                            }, label: {
+                                Image(systemName: "exclamationmark.triangle")
+                                    .foregroundColor(.white)
+                                    .font(.title2)
+                            })
+                            .alert(isPresented: $showAlert) {
+                                Alert(
+                                            title: Text("Warning"),
+                                            message: Text("Do you really want to report this photo?"),
+                                            primaryButton: .default(
+                                                Text("OK"),
+                                                action: {
+                                                    model.isReport = true
+                                                    toastIsVisible.toggle()
+                                                    Task {
+                                                        await FireStoreDatabase.reportImage(image: model)
+                                                    }
+                                                    
+                                                }
+                                            ),
+                                            secondaryButton: .destructive(
+                                                Text("Cancel"),
+                                                action: {
+                                                    
+                                                }
+                                            )
+                                        )
+                            }
+                            .frame(width: 40, height: 40)
                             .cornerRadius(10)
+                        }
+                    }.padding()
+                    Spacer()
+                    if isShowOnlyImage == false {
+                        HStack {
+                            Button(action: {
+                                // MARK: Show preview
+                                isShowPreviewImage.toggle()
+                            }, label: {
+                                Text("Preview")
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(.white)
+                            }).padding()
+                                .frame(width: UIScreen.main.bounds.width - 48, height: 48)
+                                .background(Color("kC6C2D8").opacity(0.5))
+                                .cornerRadius(10)
+                        }
+                        .padding()
                     }
                 }
-            }
+                
+                VStack {
+                    ToastView(message: "Thank you for reporting this issue to us, we will handle it immediately!", isVisible: $toastIsVisible)
+                        .clipped()
+                        .cornerRadius(5)
+                    Spacer()
+                }
+                
+            }.background(.black.opacity(0.5))
+        }
+        .navigationDestination(isPresented:$isShowPreviewImage) {
+            PhotoEdittor(inputImage: imageDetail,
+                         actionBack: {
+                isShowPreviewImage.toggle()
+            })
+                .navigationBarBackButtonHidden()
             
-            VStack {
-                ToastView(message: "Thank you for reporting this issue to us, we will handle it immediately!", isVisible: $toastIsVisible)
-                    .clipped()
-                Spacer()
-            }
-            
-        }.background(.black.opacity(0.5))
+//            WrapperImageModifierView(model: $model, dismissModal: {
+//                isShowPreviewImage.toggle()
+//            })
+//            .navigationBarBackButtonHidden()
+        }
         
     }
 }

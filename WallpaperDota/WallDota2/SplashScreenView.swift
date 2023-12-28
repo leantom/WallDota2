@@ -62,9 +62,11 @@ struct SplashScreenView: View {
                                 Spacer()
                                 Button(action: {
                                     withAnimation(.easeInOut) {
+                                        
                                         isLastTab.toggle()
                                         Task {
                                             await notificationManager.request()
+//                                            await LoginViewModel.shared.signinWithAnynomous()
                                         }
                                         
                                     }
@@ -88,6 +90,7 @@ struct SplashScreenView: View {
                     }
                     
                     if isLastTab == true {
+                        
                         LoginView()
                             .frame(width: UIScreen.main.bounds.width)
                     }

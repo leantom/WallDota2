@@ -75,7 +75,11 @@ struct CollectionHeroView: View {
             }
             
             .onAppear(perform: {
-                self.listCollectionModel = _firestoreDB.listCollectionImages
+                Task {
+                    await FireStoreDatabase.shared.fetchDataCollectionFromFirestore()
+                    self.listCollectionModel = _firestoreDB.listCollectionImages
+                }
+                
             })
             .refreshable {
                 await _firestoreDB.fetchDataCollectionFromFirestore()

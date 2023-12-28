@@ -14,6 +14,7 @@ struct DetailHeroView: View {
     @State var heroName: String = ""
     var actionBack:(()-> Void)
     @State var isShowDetail: Bool = false
+    @State var isShowPreviewImage: Bool = false
     @State var modelSelected: ImageModel = ImageModel()
     
     var body: some View {
@@ -52,6 +53,8 @@ struct DetailHeroView: View {
                                 }, actionDownloadProgressBar: { progress in
                                    
                                     
+                                }, actionComment: { model in
+                                    
                                 }).onTapGesture {
                                     modelSelected = show
                                     isShowDetail.toggle()
@@ -70,9 +73,7 @@ struct DetailHeroView: View {
                 isShowDetail = false
             }, model: $modelSelected)
             .navigationBarBackButtonHidden()
-            
         }
-        
     }
 }
 struct WrapperDetailHeroView: View {

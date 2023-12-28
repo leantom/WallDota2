@@ -27,11 +27,17 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
                 UIApplication.shared.registerForRemoteNotifications()
             }
         }
-
+        
+        Task {
+            
+            LoginViewModel.shared.user = Auth.auth().currentUser
+            let _ = await LoginViewModel.shared.getUserDetail()
+        }
         
         
         return true
     }
+    
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         Messaging.messaging().apnsToken = deviceToken
     }
@@ -47,10 +53,12 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 @main
 struct WallDota2App: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    
+    let persistenceController = PersistenceController.shared
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView().environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environmentObject(PECtl.shared)
+                .environmentObject(DataColor.shared)
         }
     }
 }

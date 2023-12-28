@@ -7,8 +7,13 @@
 
 import SwiftUI
 import AuthenticationServices
+import FirebaseAuth
+import CryptoKit
 
 class AppleSignInHandler: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+    var currentNonce: String = ""
+    var actionLoginSuccessfully:(()->Void)?
+    
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
          // Return the first window in the current window scene as the presentation anchor for the ASAuthorizationController
          return UIApplication.shared.connectedScenes
@@ -18,12 +23,82 @@ class AppleSignInHandler: NSObject, ASAuthorizationControllerDelegate, ASAuthori
      }
 
 
+   
+    static func sha256(_ input: String) -> String {
+      let inputData = Data(input.utf8)
+      let hashedData = SHA256.hash(data: inputData)
+      let hashString = hashedData.compactMap {
+        String(format: "%02x", $0)
+      }.joined()
+
+      return hashString
+    }
+    
+    static func randomNonceString(length: Int = 32) -> String {
+      precondition(length > 0)
+      var randomBytes = [UInt8](repeating: 0, count: length)
+      let errorCode = SecRandomCopyBytes(kSecRandomDefault, randomBytes.count, &randomBytes)
+      if errorCode != errSecSuccess {
+        fatalError(
+          "Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)"
+        )
+      }
+
+      let charset: [Character] =
+        Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+
+      let nonce = randomBytes.map { byte in
+        // Pick a random character from the set, wrapping around if needed.
+        charset[Int(byte) % charset.count]
+      }
+
+      return String(nonce)
+    }
+    
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
             // Apple Sign In was successful.
             // You can now use the `appleIDCredential` to authenticate the user in your app.
-            let userFullName = appleIDCredential
-            print("Apple Sign In was successful. User's full name is: \(userFullName)")
+            guard let appleIDToken = appleIDCredential.identityToken else {
+                print("Unable to fetch identity token")
+                return
+            }
+            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+                print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+                return
+            }
+            
+            
+            // Initialize a Firebase credential, including the user's full name.
+            let credential = OAuthProvider.appleCredential(withIDToken: idTokenString,
+                                                           rawNonce: self.currentNonce,
+                                                           fullName: appleIDCredential.fullName)
+            // Exchange Apple ID token for Firebase credential
+            Auth.auth().signIn(with: credential) { [self] (authResult, error) in
+                if let err = error {
+                    // Error. If error.code == .MissingOrInvalidNonce, make sure
+                    // you're sending the SHA256-hashed nonce as a hex string with
+                    // your request to Apple.
+                    print(err.localizedDescription)
+                    return
+                }
+                // User is signed in to Firebase with Apple.
+                // ...
+                
+                if let result = authResult {
+                    Task {
+                        await LoginViewModel.shared.createUser(user: result.user, provider: "apple")
+                        if let actionLoginSuccessfully = actionLoginSuccessfully {
+                            actionLoginSuccessfully()
+                        }
+                        AppSetting.setLogined(value: true)
+                    }
+                    
+                }
+                
+            }
+        
+//             print("Apple Sign In was successful. User's full name is: \(userFullName)")
         }
     }
 
@@ -51,6 +126,7 @@ struct LoginView: View {
     
     @State private var showSignInWithAppleSheet = false
     @State private var isLogined = false
+    @State var currentNonce: String = ""
     
     let appleSignInHandler = AppleSignInHandler()
     
@@ -78,11 +154,12 @@ struct LoginView: View {
                     VStack(spacing: 40) {
                         Spacer()
                         VStack(spacing: 24) {
-                            ShareCodeButton(title: $email, icon: $emailIcon, action: {
-                                
-                            })
-                                .background(Color(red: 0.324, green: 0.448, blue: 0.7))
-                                .cornerRadius(10)
+//                            ShareCodeButton(title: $email, icon: $emailIcon, action: {
+//                                
+//                            })
+//                                .background(Color(red: 0.324, green: 0.448, blue: 0.7))
+//                                .cornerRadius(10)
+                            
                             ShareCodeButton(title: $googleLoginTitle, icon: $googleIcon, action: {
                                 Task {
                                     isLogined = await loginViewModel.signInWithGoogle()
@@ -93,14 +170,22 @@ struct LoginView: View {
                                 .cornerRadius(10)
                             
                             ShareCodeButton(title: $appleLoginTitle, icon: $appleIcon, action: {
+                                let nonce = AppleSignInHandler.randomNonceString()
+                                currentNonce = nonce
+                                appleSignInHandler.currentNonce = currentNonce
                                 let appleIDProvider = ASAuthorizationAppleIDProvider()
                                 let request = appleIDProvider.createRequest()
+                                request.nonce = AppleSignInHandler.sha256(nonce)
                                 request.requestedScopes = [.fullName, .email]
                                 
                                 let authorizationController = ASAuthorizationController(authorizationRequests: [request])
                                 authorizationController.delegate = appleSignInHandler
                                 authorizationController.presentationContextProvider = appleSignInHandler
                                 authorizationController.performRequests()
+                                
+                                appleSignInHandler.actionLoginSuccessfully = {
+                                    isLogined = true
+                                }
                             })
                             .background(Color(hue: 0.607, saturation: 0.601, brightness: 0.159))
                             .cornerRadius(10)
@@ -147,7 +232,6 @@ struct LoginView: View {
         }.navigationDestination(isPresented: $isLogined) {
             TabbarCustomView().navigationBarBackButtonHidden()
         }
-        
     }
 }
 

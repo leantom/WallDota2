@@ -10,6 +10,7 @@ import SwiftUI
 import FirebaseStorage
 import FirebaseFirestore
 import Firebase
+import Algorithms
 
 class FireStoreDatabase {
     var listAllImage : [ImageModel] = []
@@ -17,6 +18,8 @@ class FireStoreDatabase {
     var trendingImages : [ImageModel] = []
     var listCollectionImages : [ImageModel] = []
     var listImageLiked : [ImageModel] = []
+    var listPositionRanking : [ImageModel] = []
+    
     
     var heroesID : [String] = []
     
@@ -26,6 +29,8 @@ class FireStoreDatabase {
         let db = Firestore.firestore()
         let collectionRef = db.collection("heroes")
         let date = Date().timeIntervalSince1970
+        
+        await self.getSpotlightImages()
         do {
             let snapshot = try await collectionRef.getDocuments()
             let _items = snapshot.documents.compactMap { document in
@@ -41,11 +46,13 @@ class FireStoreDatabase {
             }
 
             print("total time fetchDataFromFirestore :\(Date().timeIntervalSince1970 - date)")
-            self.listAllImage = _items
+            self.listAllImage = _items.sorted(by: { item1, item2 in
+                return item1.likeCount > item2.likeCount
+            })
+            
             self.getTrendingImages()
-            self.getSpotlightImages()
             self.getHeroesID()
-            await fetchDataCollectionFromFirestore()
+            self.getListPositionRanking()
             await getImagesLiked()
         } catch {
             print("Error getting documents: \(error.localizedDescription)")
@@ -81,6 +88,31 @@ class FireStoreDatabase {
     static public func likeImage(image: ImageModel) async {
         let db = Firestore.firestore()
         let collectionRef = db.collection("likes")
+        
+        do {
+            
+            let collectionDocumentRef = db.collection("heroes").document(image.id)
+            try await collectionDocumentRef.updateData(["likeCount": image.likeCount + 1])
+            
+        } catch let err{
+            print(err.localizedDescription)
+        }
+        
+        
+        do {
+            
+            try await collectionRef.addDocument(data: ["documentid": image.id,
+                                                       "userid": LoginViewModel.shared.user?.uid ?? ""])
+        } catch let err{
+            print(err.localizedDescription)
+        }
+        
+    }
+    
+    
+    static public func reportImage(image: ImageModel) async {
+        let db = Firestore.firestore()
+        let collectionRef = db.collection("report")
         do {
             try await collectionRef.addDocument(data: ["documentid": image.id,
                                                        "userid": LoginViewModel.shared.user?.uid ?? ""])
@@ -89,16 +121,53 @@ class FireStoreDatabase {
         }
     }
     
-    static public func createUser(image: ImageModel) async {
+    static public func addComment(imageModel: ImageModel,
+                                  newCommentText: String) async -> Bool{
         let db = Firestore.firestore()
-        let collectionRef = db.collection("users")
+        
         do {
-            try await collectionRef.addDocument(data: ["username": image.id,
-                                                       "userid": LoginViewModel.shared.user?.uid ?? ""])
+            
+            let collectionDocumentRef = db.collection("heroes").document(imageModel.id)
+            try await collectionDocumentRef.updateData(["commentCount": imageModel.commentCount + 1])
+            
         } catch let err{
             print(err.localizedDescription)
         }
+        
+        let commentRef = db.collection("posts").document(imageModel.id).collection("comments")
+        do {
+            try await commentRef.addDocument(data: [
+                "id": UUID().uuidString,
+                "author": LoginViewModel.shared.userLogin?.username ?? "Anonymous", // Replace with actual author information
+                "content": newCommentText,
+                "date": Date()
+            ])
+            print("addComment susscess")
+            return true
+        } catch let err{
+            print(err.localizedDescription)
+            print("addComment fail")
+            return false
+        }
     }
+    
+    static public func fetchComments(postId: String,
+                       completation: @escaping([Comment]) -> Void) {
+        let db = Firestore.firestore()
+        
+        db.collection("posts").document(postId).collection("comments")
+            .order(by: "date", descending: true)
+            .addSnapshotListener { snapshot, error in
+                if let error = error {
+                    print("Error fetching comments:", error)
+                } else {
+                    completation(snapshot?.documents.compactMap { doc in
+                        try? doc.data(as: Comment.self)
+                    } ?? [])
+                }
+            }
+    }
+
     
     
     func getImagesLiked() async {
@@ -114,20 +183,20 @@ class FireStoreDatabase {
                     return item
                     
                 } catch {
-                    print("Error decoding item: \(error.localizedDescription)")
+                    print("Error decoding getImagesLiked: \(error.localizedDescription)")
                     return nil
                 }
             }
 
-            print("total time download :\(Date().timeIntervalSince1970 - date)")
-            
-            for item in _items {
+            print("total time getImagesLiked :\(Date().timeIntervalSince1970 - date)")
+            let __items = _items.uniqued(on: \.documentid)
+            for item in __items {
                 if let model = await self.getDocument(by: item.documentid) {
                     model.id = item.documentid
                     self.listImageLiked.append(model)
                 }
             }
-            
+            print(listImageLiked.compactMap({$0.id}))
         } catch {
             print("Error getting documents: \(error.localizedDescription)")
         }
@@ -150,7 +219,7 @@ class FireStoreDatabase {
                 let item =  try documentsnap.data(as: ImageModel.self)
                 return item
             } catch {
-                print("Error decoding item: \(error.localizedDescription)")
+                print("Error decoding getDocument: \(error.localizedDescription)")
                 return nil
             }
         }catch let err{
@@ -187,16 +256,38 @@ class FireStoreDatabase {
                 let url = await getURL(path: item.thumbnail)
                 item.thumbnailFull = url?.absoluteString ?? ""
             }
-           
         }
     }
     
     
-    private func getSpotlightImages() {
-        self.spotlightImages = self.listAllImage.filter { image in
-            return image.heroID == "Spotlight"
+    private func getSpotlightImages() async {
+        let db = Firestore.firestore()
+        let collectionRef = db.collection("spotlights")
+        let date = Date().timeIntervalSince1970
+        do {
+            let snapshot = try await collectionRef.getDocuments()
+            let _items = snapshot.documents.compactMap { document in
+                do {
+                    let item =  try document.data(as: ImageModel.self)
+                    item.id = document.documentID
+                    return item
+                    
+                } catch {
+                    print("Error decoding item: \(error.localizedDescription)")
+                    return nil
+                }
+            }
+
+            print("total time getSpotlightImages :\(Date().timeIntervalSince1970 - date)")
+            self.spotlightImages = _items.sorted(by: { item1, item2 in
+                return item1.likeCount > item2.likeCount
+            })
+            
+            
+        } catch {
+            print("Error getting documents: \(error.localizedDescription)")
         }
-        print(self.spotlightImages.count)
+        
     }
     
     func getImages(by id: String) -> [ImageModel] {
@@ -210,6 +301,18 @@ class FireStoreDatabase {
     private func getTrendingImages() {
         if self.listAllImage.count > 4 {
             self.trendingImages = self.listAllImage.suffix(4)
+        }
+    }
+    
+    private func getListPositionRanking() {
+        if self.listAllImage.count > 10 {
+            let listTop10 = Array(FireStoreDatabase.shared.listAllImage[0..<10])
+            var i = 1
+            for item in listTop10 {
+                item.positionRankings = i
+                i += 1
+            }
+            listPositionRanking = listTop10
         }
     }
     
@@ -276,5 +379,48 @@ class FireStoreDatabase {
         }
     }
     
+    
+    func createItemDownload(item: ItemDownload) async -> Bool {
+        let isValidDownload = await checkNumberDownloadUser()
+        if isValidDownload {
+            let db = Firestore.firestore()
+            let collectionRef = db.collection("downloads")
+            do {
+                try await collectionRef.addDocument(data: ["imageid": item.imageid,
+                                                           "created_at": item.created_at,
+                                                           "userid": item.userid])
+            } catch let err{
+                print(err.localizedDescription)
+            }
+        }
+        return isValidDownload
+    }
+    
+    func checkNumberDownloadUser() async -> Bool {
+        let timestampToday = Date()
+        let calendar = Calendar.current
+        let startTime = calendar.startOfDay(for: timestampToday)
+        guard let endTime = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: timestampToday) else {return false}
+        
+        let db = Firestore.firestore()
+        let collectionRef = db.collection("downloads")
+            .whereField("userid", isEqualTo: LoginViewModel.shared.userLogin?.userid ?? "")
+            .whereField("created_at", isGreaterThanOrEqualTo: startTime.timeIntervalSince1970)
+            .whereField("created_at", isLessThanOrEqualTo: endTime.timeIntervalSince1970)
+            
+        do {
+            let documents = try await collectionRef.getDocuments()
+            if documents.count > 5 {
+                return false
+            }
+            return true
+        } catch let err{
+            print(err.localizedDescription)
+            return false
+            
+        }
+        
+        
+    }
     
 }

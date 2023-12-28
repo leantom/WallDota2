@@ -55,6 +55,7 @@ struct TopView: View {
             if toastIsVisible {
                 ToastView(message: "Image saved to Photos successfully!", isVisible: $toastIsVisible)
                     .clipped()
+                    .cornerRadius(5)
             }
         }
         

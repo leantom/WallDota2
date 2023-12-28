@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SideMenu: View {
     @Binding var isSidebarVisible: Bool
+    @State var isDeleteAccount: Bool = false
+    
     var sideBarWidth = UIScreen.main.bounds.size.width * 0.8
     var bgColor: Color =
           Color(.init(
@@ -21,8 +23,13 @@ struct SideMenu: View {
         colors: [Color("k886BF6"), Color("k625AF6")],
         startPoint: .top, endPoint: .bottom
     )
-    var actionChooseProfileUser: (()->Void)
-    var actionChooseCollection: (()->Void)
+    var actionChooseProfileUser: ((Int)->Void)
+    var actionChooseCollection: ((Int)->Void)
+    var actionChooseHome: ((Int)->Void)
+    var actionLogout: ((Int)->Void)
+    var actionDeleteAccount: (()->Void)
+    @Binding var userLogin: NewUser?
+    @State var username: String = "Anynomous"
     
     var MenuChevron: some View {
         ZStack {
@@ -43,7 +50,7 @@ struct SideMenu: View {
                 .offset(x: isSidebarVisible ? -4 : 8)
 
         }
-        .offset(x: sideBarWidth / 2, y: 80)
+        .offset(x: sideBarWidth / 2, y: 50)
         .animation(.default, value: isSidebarVisible)
     }
     
@@ -61,12 +68,17 @@ struct SideMenu: View {
                         switch id {
                         case 4001:
                             isSidebarVisible.toggle()
+                            self.actionChooseHome(1)
                         case 4002:
                             isSidebarVisible.toggle()
-                            self.actionChooseProfileUser()
+                            self.actionChooseProfileUser(3)
                         case 4003:
                             isSidebarVisible.toggle()
-                            self.actionChooseCollection()
+                            self.actionChooseCollection(2)
+                        case 4004:
+                            isSidebarVisible.toggle()
+                            actionDeleteAccount()
+                        
                         default:return
                         }
                     }, items: userActions)
@@ -74,7 +86,8 @@ struct SideMenu: View {
                     Divider().background(.clear)
                     
                     MenuLinks(actionTapMenu: { id in
-                        print(id)
+                        isSidebarVisible.toggle()
+                        self.actionLogout(4)
                     }, items: logout)
                 }
                 .padding(.top, 80)
@@ -86,6 +99,7 @@ struct SideMenu: View {
             
             Spacer()
         }.ignoresSafeArea()
+           
     }
 
     var content: some View {
@@ -101,6 +115,7 @@ struct SideMenu: View {
     }
     
     var userProfile: some View {
+        
             VStack(alignment: .leading) {
                 HStack {
                     AsyncImage(
@@ -123,15 +138,25 @@ struct SideMenu: View {
                     .padding(.trailing, 18)
 
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("John Doe")
+                        Text(username)
                             .foregroundColor(.white)
                             .bold()
-                            .font(.title3)
-                        
+                            .font(.caption)
+                            .multilineTextAlignment(.leading)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                 }
                 .padding(.bottom, 20)
             }
+            .onAppear(perform: {
+                
+                Task {
+                    sleep(2)
+                    userLogin = await LoginViewModel.shared.getUserDetail()
+                    username = userLogin?.username ?? ""
+                }
+                
+            })
         }
     
 }
@@ -153,6 +178,7 @@ struct MenuLinks: View {
                     .onTapGesture {
                         self.actionTapMenu(item.id)
                     }
+                    
             }
         }
         .padding(.vertical, 14)
@@ -192,9 +218,9 @@ var userActions: [MenuItem] = [
     MenuItem(id: 4001, icon: "person.circle.fill", text: "Home"),
     MenuItem(id: 4002, icon: "bag.fill", text: "Liked"),
     MenuItem(id: 4003, icon: "gift.fill", text: "Collections"),
-//    MenuItem(id: 4004,
-//              icon: "wrench.and.screwdriver.fill",
-//              text: "Settings"),
+    MenuItem(id: 4004,
+              icon: "wrench.and.screwdriver.fill",
+              text: "Delete Account")
 //    MenuItem(id: 4005,
 //              icon: "exclamationmark.triangle.fill",
 //              text: "Report an issue")
@@ -205,14 +231,14 @@ var logout: [MenuItem] = [
     MenuItem(id: 4006,
               icon: "iphone.and.arrow.forward",
               text: "Logout"),
+    
 ]
-
-
 
 struct WrapperMenuView: View {
     @State var isShowing: Bool = true
+    @State var user: NewUser? = NewUser(username: "Anynomous", email: "gam@g.lcom", providers: "none", created_at: 0, last_login_at: 0, userid: UUID().uuidString)
     var body: some View {
-        SideMenu(isSidebarVisible: $isShowing, actionChooseProfileUser: {}, actionChooseCollection: {})
+        SideMenu(isSidebarVisible: $isShowing, actionChooseProfileUser: {_ in }, actionChooseCollection: {_ in }, actionChooseHome: {_ in }, actionLogout: {_ in}, actionDeleteAccount: {}, userLogin: $user)
     }
 }
 

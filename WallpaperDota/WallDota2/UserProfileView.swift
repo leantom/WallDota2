@@ -26,7 +26,6 @@ struct UserProfileView: View {
     @State var isShowingAlert = false
     @State var username = ""
     
-    
     var body: some View {
         VStack {
             VStack {
@@ -38,7 +37,7 @@ struct UserProfileView: View {
             
             VStack {
                 HStack {
-                    Text("Anonymous").font(.title3)
+                    Text(username).font(.title3)
                         .fontWeight(.bold)
                         .foregroundColor(.black)
                     Button {
@@ -50,18 +49,19 @@ struct UserProfileView: View {
                             .foregroundColor(.black)
                     }.alert(alertTitle, isPresented: $isShowingAlert, actions: {
                         // Any view other than Button would be ignored
-                        TextField("Username", text: .constant(""))
+                        TextField("Username", text: $username)
                         Button("OK", action: {
                             // MARK: -- update username
+                            Task {
+                                await LoginViewModel.shared.updateUserName(userName: username)
+                            }
                         })
                         Button("Cancel", role: .cancel, action: {})
                     }, message: {
                         // Any view other than Text would be ignored
                         Text("Please enter your username")
                     })
-
-                    
-                        
+    
                 }
             }
             HStack {
@@ -71,10 +71,19 @@ struct UserProfileView: View {
                     .foregroundColor(.black)
                 Spacer()
             }.padding()
-            ScrollView {
-                like
+            if listCollectionModel.count > 0 {
+                ScrollView {
+                    like
+                }
+            } else {
+                VStack {
+                    Text("You haven't liked any photos yet")
+                }
             }
-            
+        }
+        .onAppear {
+            self.listCollectionModel = _firestoreDB.listImageLiked
+            self.username = LoginViewModel.shared.userLogin?.username ?? "Anynomous"
         }
     }
     
