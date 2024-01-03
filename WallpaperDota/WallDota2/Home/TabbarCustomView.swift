@@ -111,7 +111,9 @@ struct TabbarCustomView: View {
                 TabView(selection: $selection) {
                     homeView.onAppear(perform: {
                         Task {
+                            
                             if fireStoreDB.listAllImage.count > 0 && fireStoreDB.spotlightImages.count > 0 {
+                                
                                 self.items = fireStoreDB.listAllImage
                                 self.itemsSpotlight = fireStoreDB.spotlightImages
                                 self.heroesID = fireStoreDB.heroesID
@@ -133,6 +135,13 @@ struct TabbarCustomView: View {
                                        action: { heroID in
                         self.imagesByID = fireStoreDB.getImages(by: heroID)
                         self.isShowDetailCollection.toggle()
+                    })
+                    .onAppear(perform: {
+                        Task {
+                            await FireStoreDatabase.shared.fetchDataCollectionFromFirestore()
+                          //  self.listCollectionModel = _firestoreDB.listCollectionImages
+                        }
+                        
                     })
                     .tabItem {
                         

@@ -8,11 +8,34 @@
 import SwiftUI
 import FirebaseFirestore // Assuming Firebase integration
 
-struct Comment: Identifiable, Codable {
+class Comment: Identifiable, Codable {
     let id: String
     let author: String
+    let userid: String?
     let content: String
     let date: Date
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case author
+        case userid
+        case content
+        case date
+    }
+    
+    required init(from decoder: Decoder) throws {
+        // Extract and assign values to each property
+        // Use try decoder.decode(_:) to decode individual properties
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        author = try container.decode(String.self, forKey: .author)
+       
+        content = try container.decode(String.self, forKey: .content)
+        date = try container.decode(Date.self, forKey: .date)
+        userid = try container.decodeIfPresent(String.self, forKey: .userid) ?? ""
+    }
+    
+    
 }
 
 struct CommentsView: View {

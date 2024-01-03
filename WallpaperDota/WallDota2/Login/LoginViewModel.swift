@@ -63,6 +63,7 @@ class LoginViewModel: NSObject, ObservableObject {
         return false
         
     }
+    
     func createUser(user: User, provider: String) async {
         let now = Date().timeIntervalSince1970
         let suffix = "\(now)".suffix(6)
@@ -79,20 +80,67 @@ class LoginViewModel: NSObject, ObservableObject {
         LoginViewModel.shared.userLogin = newUser
         await UserViewModel.shared.createUser(user: newUser)
     }
-    //MARK: -- Update username
-    func updateUserName(userName: String) async {
+    
+    func addDevice() async {
         let db = Firestore.firestore()
-        let collectionRef = db.collection("users").whereField("userid", isEqualTo: user?.uid ?? "")
-        
+        // Get the device token from Firebase Authentication or other methods
+        let deviceToken = AppSetting.shared.fcmToken
+
+        // Get the current user's UID
+        guard let userID = Auth.auth().currentUser?.uid else { return }
+
+        // Save the device token under the user's UID
         do {
-            let snapshot = try await collectionRef.getDocuments()
-            let query = snapshot.documents.first
-            
-            try await query?.reference.updateData(["username": userName])
-            LoginViewModel.shared.userLogin =  await getUserDetail()
+                try await db.collection("devices").document(userID).setData(["token": deviceToken])
         } catch let err{
             print(err.localizedDescription)
         }
+
+    }
+    // MARK: -- checkExistUser
+    func checkExistUser(userName: String) async -> Bool{
+        let db = Firestore.firestore()
+        let documentRef = db.collection("users").whereField("username", isEqualTo: userName)
+        do {
+            let snapshot = try await documentRef.getDocuments()
+            if snapshot.documents.count > 0 {
+                return false
+            }
+            return true
+        } catch let err{
+            print(err.localizedDescription)
+            return false
+        }
+    }
+    
+    //MARK: -- Update username
+    func updateUserName(userName: String) async -> Bool {
+        let db = Firestore.firestore()
+        
+        // check username exist yet
+        let isValid = await checkExistUser(userName: userName)
+        
+        if isValid {
+            let collectionRef = db.collection("users").whereField("userid", isEqualTo: user?.uid ?? "")
+            
+            do {
+                let snapshot = try await collectionRef.getDocuments()
+                let query = snapshot.documents.first
+                
+                try await query?.reference.updateData(["username": userName])
+                LoginViewModel.shared.userLogin =  await getUserDetail()
+                return true
+            } catch let err{
+                print(err.localizedDescription)
+                return false
+            }
+            
+        }
+        
+        
+        
+        return isValid
+        
     }
     //MARK: -- getUserDetail
    

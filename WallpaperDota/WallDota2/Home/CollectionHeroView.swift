@@ -10,7 +10,7 @@ import SDWebImageSwiftUI
 
 struct CollectionHeroView: View {
     @State private var toastIsVisible = false
-    @State private var isLoading = false
+    @State private var isLoading = true
     @State var progressBarValue: Double = 0
     
     @Binding var heroesID:[String]
@@ -37,53 +37,61 @@ struct CollectionHeroView: View {
                 Spacer()
             }
             ScrollView {
-                LazyVGrid(columns: columns, spacing: 16) {
-                  // Loop through the items and create ItemCell views
-                    ForEach(listCollectionModel, id: \.heroID) {item in
-                        HStack {
-                            ZStack {
-                                VStack {
-                                    WebImage(url: URL(string: item.thumbnailFull))
-                                        .resizable()
-                                        .placeholder {
-                                            ProgressView()
-                                        }
-                                        .aspectRatio(contentMode: .fit)
-                                        .cornerRadius(10)
-                                    Text(item.heroID)
-                                        .font(.caption)
-                                        .fontWeight(.bold)
-                                        .foregroundStyle(.white)
-                                        .fixedSize(horizontal: false, vertical: true)
-                                        .padding()
-                                }.background(randomColor().opacity(0.8))
-                                
+                if isLoading {
+                    ProgressView().padding()
+                } else {
+                    LazyVGrid(columns: columns, spacing: 16) {
+                      // Loop through the items and create ItemCell views
+                        ForEach(listCollectionModel, id: \.heroID) {item in
+                            HStack {
+                                ZStack {
+                                    VStack {
+                                        WebImage(url: URL(string: item.thumbnailFull))
+                                            .resizable()
+                                            .placeholder {
+                                                ProgressView()
+                                            }
+                                            .aspectRatio(contentMode: .fit)
+                                            .cornerRadius(10)
+                                        Text(item.heroID)
+                                            .font(.caption)
+                                            .fontWeight(.bold)
+                                            .foregroundStyle(.white)
+                                            .fixedSize(horizontal: false, vertical: true)
+                                            .padding()
+                                    }.background(randomColor().opacity(0.8))
+                                }
+                                .clipped()
                                 
                             }
-                            .clipped()
-                            
+                                .cornerRadius(10)
+                                .clipped()
+                                .onTapGesture {
+                                    print(item.heroID)
+                                    self.action(item.heroID)
+                                }
                         }
-                            .cornerRadius(10)
-                            .clipped()
-                            .onTapGesture {
-                                print(item.heroID)
-                                self.action(item.heroID)
-                            }
                     }
+                    .padding()
                 }
-                .padding()
+               
             }
             
             .onAppear(perform: {
                 Task {
-                    await FireStoreDatabase.shared.fetchDataCollectionFromFirestore()
+                    if $_firestoreDB.listCollectionImages.count == 0 {
+                        await FireStoreDatabase.shared.fetchDataCollectionFromFirestore()
+                        isLoading = false
+                    }
                     self.listCollectionModel = _firestoreDB.listCollectionImages
+                    isLoading = false
                 }
                 
             })
             .refreshable {
                 await _firestoreDB.fetchDataCollectionFromFirestore()
                 self.listCollectionModel = _firestoreDB.listCollectionImages
+                isLoading = false
             }
         }
     }

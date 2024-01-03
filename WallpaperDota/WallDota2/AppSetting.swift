@@ -9,7 +9,9 @@ import Foundation
 import FirebaseAuth
 
 class AppSetting {
-    let shared = AppSetting()
+    static let shared = AppSetting()
+    var fcmToken: String = ""
+    
     var isLogined: Bool = false {
         didSet {
             

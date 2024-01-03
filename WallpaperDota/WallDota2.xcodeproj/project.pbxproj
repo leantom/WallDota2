@@ -84,6 +84,10 @@
 		F9692BA52B361F9800F8C1AB /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = F9692BA42B361F9800F8C1AB /* Algorithms */; };
 		F974C0422B309B5B0079EABD /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F974C0412B309B5B0079EABD /* MenuView.swift */; };
 		F978E1C52B36DE03008F422A /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F978E1C42B36DE03008F422A /* CommentView.swift */; };
+		F97F6BFE2B3EA4DD0065F918 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97F6BFD2B3EA4DD0065F918 /* NotificationView.swift */; };
+		F97F6C002B3EA4F30065F918 /* NotificationStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97F6BFF2B3EA4F30065F918 /* NotificationStruct.swift */; };
+		F97F6C032B3EA85C0065F918 /* FirebaseRealtime.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97F6C022B3EA85C0065F918 /* FirebaseRealtime.swift */; };
+		F97F6C052B3EB9610065F918 /* NotificationStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97F6C042B3EB9610065F918 /* NotificationStruct.swift */; };
 		F9B48D462B31A72B00BF1EC5 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = F9B48D452B31A72B00BF1EC5 /* SDWebImageSwiftUI */; };
 		F9B48D482B31AED200BF1EC5 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B48D472B31AED200BF1EC5 /* LoginViewModel.swift */; };
 		F9B48D4A2B31AF0D00BF1EC5 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F9B48D492B31AF0D00BF1EC5 /* FirebaseAuth */; };
@@ -224,6 +228,10 @@
 		F96195C42B3C9DF5000109E1 /* AppContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppContent.swift; sourceTree = "<group>"; };
 		F974C0412B309B5B0079EABD /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		F978E1C42B36DE03008F422A /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
+		F97F6BFD2B3EA4DD0065F918 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
+		F97F6BFF2B3EA4F30065F918 /* NotificationStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NotificationStruct.swift; path = /Users/quangho/Documents/WallDota2/WallpaperDota/WallDota2/NotificationStruct.swift; sourceTree = "<absolute>"; };
+		F97F6C022B3EA85C0065F918 /* FirebaseRealtime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseRealtime.swift; sourceTree = "<group>"; };
+		F97F6C042B3EB9610065F918 /* NotificationStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NotificationStruct.swift; path = /Users/quangho/Documents/WallDota2/WallpaperDota/WallDota2/NotificationStruct.swift; sourceTree = "<absolute>"; };
 		F9B48D472B31AED200BF1EC5 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		F9B69CE02B2AA308004A2D71 /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
 		F9BAA5E42B30199B0077BD5B /* ShowToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowToast.swift; sourceTree = "<group>"; };
@@ -319,6 +327,39 @@
 				51EFE6F5534817B02D5FA8D9 /* Pods_WallDota2Tests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F96082C42B3DDD3A00A724D4 /* Ranking */ = {
+			isa = PBXGroup;
+			children = (
+				F9F0E9F32B3943A700B7F26F /* LeaderBoardView.swift */,
+			);
+			path = Ranking;
+			sourceTree = "<group>";
+		};
+		F96082C52B3DDD4900A724D4 /* UserProfile */ = {
+			isa = PBXGroup;
+			children = (
+				F928051A2B32C778000D53E9 /* UserProfileView.swift */,
+			);
+			path = UserProfile;
+			sourceTree = "<group>";
+		};
+		F96082C62B3DDD6400A724D4 /* SplashScreen */ = {
+			isa = PBXGroup;
+			children = (
+				F9C035C32B284C8F0049D4B6 /* SplashScreenView.swift */,
+			);
+			path = SplashScreen;
+			sourceTree = "<group>";
+		};
+		F96082C72B3DDD7E00A724D4 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				F9BAA5E42B30199B0077BD5B /* ShowToast.swift */,
+				F9BAA5E62B3021CB0077BD5B /* ProgressBarView.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		F96195722B3C9DF5000109E1 /* colorful-room */ = {
@@ -512,6 +553,15 @@
 			path = Utility;
 			sourceTree = "<group>";
 		};
+		F97F6C012B3EA4F80065F918 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				F97F6BFD2B3EA4DD0065F918 /* NotificationView.swift */,
+				F97F6BFF2B3EA4F30065F918 /* NotificationStruct.swift */,
+			);
+			path = Notification;
+			sourceTree = "<group>";
+		};
 		F9C0358B2B2846A60049D4B6 = {
 			isa = PBXGroup;
 			children = (
@@ -541,21 +591,23 @@
 				F9E9C6D12B2AB78E005233DB /* Info.plist */,
 				F9C035D22B28607A0049D4B6 /* WallDota2.entitlements */,
 				F9C035972B2846A60049D4B6 /* WallDota2App.swift */,
+				F97F6C042B3EB9610065F918 /* NotificationStruct.swift */,
 				F9C035992B2846A60049D4B6 /* ContentView.swift */,
-				F9F0E9F32B3943A700B7F26F /* LeaderBoardView.swift */,
+				F97F6C012B3EA4F80065F918 /* Notification */,
+				F96082C42B3DDD3A00A724D4 /* Ranking */,
 				F9FE39A02B33FA3700E4BBA0 /* Login */,
 				F95A916F2B304E2F00AAAE57 /* DetailHeroView.swift */,
 				F928051C2B32E55A000D53E9 /* FileManager.swift */,
-				F928051A2B32C778000D53E9 /* UserProfileView.swift */,
+				F96082C52B3DDD4900A724D4 /* UserProfile */,
 				F9DAE1152B2AED7D002BAF3D /* Home */,
 				F9DAE1132B2AEA84002BAF3D /* FireStoreDatabase.swift */,
+				F97F6C022B3EA85C0065F918 /* FirebaseRealtime.swift */,
 				F9FE399A2B3346F300E4BBA0 /* UserViewModel.swift */,
 				F9F6E07E2B348F480048B957 /* ImageModifier.swift */,
 				F928051E2B32EA23000D53E9 /* AppSetting.swift */,
 				F9C035C52B284CE40049D4B6 /* GoogleService-Info.plist */,
-				F9C035C32B284C8F0049D4B6 /* SplashScreenView.swift */,
-				F9BAA5E42B30199B0077BD5B /* ShowToast.swift */,
-				F9BAA5E62B3021CB0077BD5B /* ProgressBarView.swift */,
+				F96082C62B3DDD6400A724D4 /* SplashScreen */,
+				F96082C72B3DDD7E00A724D4 /* Utils */,
 				F9C035D32B286A530049D4B6 /* TestTabview.swift */,
 				F9C035C12B2849F40049D4B6 /* UIImage+Extension.swift */,
 				F9F6E0802B34AD690048B957 /* UINavigationViewController+Extension.swift */,
@@ -876,6 +928,7 @@
 				F9FE399D2B334F8600E4BBA0 /* ShowItemView.swift in Sources */,
 				F96195F42B3C9DF5000109E1 /* TemperatureControl.swift in Sources */,
 				F96195D22B3C9DF5000109E1 /* CustomCropperView.swift in Sources */,
+				F97F6C002B3EA4F30065F918 /* NotificationStruct.swift in Sources */,
 				F96196012B3C9DF5000109E1 /* RecipeUtils.swift in Sources */,
 				F9BAA5E52B30199B0077BD5B /* ShowToast.swift in Sources */,
 				F96195EF2B3C9DF5000109E1 /* VignetteControl.swift in Sources */,
@@ -907,6 +960,7 @@
 				F96195EE2B3C9DF5000109E1 /* ClarityControl.swift in Sources */,
 				F96195E92B3C9DF5000109E1 /* ExposureControl.swift in Sources */,
 				F96195C62B3C9DF5000109E1 /* ImageBorder.swift in Sources */,
+				F97F6C032B3EA85C0065F918 /* FirebaseRealtime.swift in Sources */,
 				F96195FA2B3C9DF5000109E1 /* FilterMenuUI.swift in Sources */,
 				F95A916E2B303AFD00AAAE57 /* CollectionView.swift in Sources */,
 				F96195EA2B3C9DF5000109E1 /* SharpenControl.swift in Sources */,
@@ -926,6 +980,7 @@
 				F96196002B3C9DF5000109E1 /* Constants.swift in Sources */,
 				F96195D12B3C9DF5000109E1 /* ImageSaver.swift in Sources */,
 				F96195CD2B3C9DF5000109E1 /* colorful_roomApp.swift in Sources */,
+				F97F6BFE2B3EA4DD0065F918 /* NotificationView.swift in Sources */,
 				F9DAE1122B2AE314002BAF3D /* FirstSectionHomeView.swift in Sources */,
 				F9B69CE12B2AA308004A2D71 /* ImageModel.swift in Sources */,
 				F96195EB2B3C9DF5000109E1 /* SaturationControl.swift in Sources */,
@@ -934,6 +989,7 @@
 				F96195E02B3C9DF5000109E1 /* PhotoEditorController.swift in Sources */,
 				F96195D32B3C9DF5000109E1 /* RoadMapView.swift in Sources */,
 				F96196052B3C9DF5000109E1 /* Utils.swift in Sources */,
+				F97F6C052B3EB9610065F918 /* NotificationStruct.swift in Sources */,
 				F96195FD2B3C9DF5000109E1 /* FilterModel.swift in Sources */,
 				F96195E72B3C9DF5000109E1 /* RecipeMenuUI.swift in Sources */,
 				F96196032B3C9DF5000109E1 /* NestedObservableObject.swift in Sources */,

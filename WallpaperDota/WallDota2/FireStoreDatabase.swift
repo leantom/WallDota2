@@ -139,6 +139,7 @@ class FireStoreDatabase {
             try await commentRef.addDocument(data: [
                 "id": UUID().uuidString,
                 "author": LoginViewModel.shared.userLogin?.username ?? "Anonymous", // Replace with actual author information
+                "userid": LoginViewModel.shared.userLogin?.userid ?? "Anonymous",
                 "content": newCommentText,
                 "date": Date()
             ])
@@ -161,15 +162,22 @@ class FireStoreDatabase {
                 if let error = error {
                     print("Error fetching comments:", error)
                 } else {
-                    completation(snapshot?.documents.compactMap { doc in
-                        try? doc.data(as: Comment.self)
-                    } ?? [])
+                    
+                    do {
+                        if let comments = try snapshot?.documents.compactMap({ doc in
+                            try doc.data(as: Comment.self)
+                        }) {
+                            completation(comments)
+                        }
+                    } catch let err{
+                        completation([])
+                        print(err.localizedDescription)
+                    }
                 }
             }
     }
 
-    
-    
+    	
     func getImagesLiked() async {
         let db = Firestore.firestore()
         let collectionRef = db.collection("likes").whereField("userid", isEqualTo: LoginViewModel.shared.user?.uid ?? "")
