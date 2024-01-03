@@ -20,7 +20,6 @@ struct TestTabview: View {
                     withAnimation {
                         isShowPopup.toggle()
                     }
-                    
                 }
             VStack {
                 Spacer()
