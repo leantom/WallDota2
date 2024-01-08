@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import NavigationTransitions
 
 struct TabbarCustomView: View {
     @State var selection: Int = 1
@@ -41,7 +42,7 @@ struct TabbarCustomView: View {
         colors: [Color.white.opacity(0.9), Color.clear],
         startPoint: .top, endPoint: .bottom
     )
-    
+    var sideBarWidth = UIScreen.main.bounds.size.width * 0.65
     private var homeView: HomeView {
         HomeView(items: $items,
                  itemsSpotlight: $itemsSpotlight,
@@ -95,6 +96,13 @@ struct TabbarCustomView: View {
     var body: some View {
         ZStack {
             
+            if isShowDetailVC == false &&
+                isShowDetailCollection == false &&
+                isShowMoreSpotlight == false &&
+                isShowDetailSpotlight == false {
+                sideMenu
+            }
+            
             NavigationStack {
                 TopView(toastIsVisible: $toastIsVisible,
                         isLoading: $isLoading,
@@ -129,6 +137,7 @@ struct TabbarCustomView: View {
                             Image(systemName: "house.fill")
                         }
                         .tag(1)
+                        .disabled(isMenuOpen)
                     //// ---- Collection view
                     CollectionHeroView(heroesID: $heroesID,
                                        _firestoreDB: $fireStoreDB,
@@ -138,7 +147,7 @@ struct TabbarCustomView: View {
                     })
                     .onAppear(perform: {
                         Task {
-                            await FireStoreDatabase.shared.fetchDataCollectionFromFirestore()
+                           // await FireStoreDatabase.shared.fetchDataCollectionFromFirestore()
                           //  self.listCollectionModel = _firestoreDB.listCollectionImages
                         }
                         
@@ -161,7 +170,9 @@ struct TabbarCustomView: View {
                     
                         
                 }
-                
+                .navigationTransition(
+                    .fade(.in).animation(.easeInOut(duration:0.3))
+                )
                 .onChange(of: selection) { newSelection in
                     // Handle selection change (user indirectly interacts with an item)
                     title = titleTabs[newSelection - 1]
@@ -214,24 +225,19 @@ struct TabbarCustomView: View {
                 }
                 .onAppear() {
                     UITabBar.appearance().backgroundColor = .white
-                    
                 }
-                
             }
             .background(gradient.ignoresSafeArea())
-            if isShowDetailVC == false &&
-                isShowDetailCollection == false &&
-                isShowMoreSpotlight == false &&
-                isShowDetailSpotlight == false {
-               sideMenu
-            }
-            
+            .cornerRadius(isMenuOpen ? 20 : 0)
+            .offset(x: isMenuOpen ? sideBarWidth : 0)
+            .scaleEffect(isMenuOpen ? 0.5 : 1)
+            .animation(.bouncy, value: isMenuOpen)
             if isLogout {
                 LoginView()
             }
             
         }
-        
+        .ignoresSafeArea()
         
     }
 }

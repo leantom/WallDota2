@@ -10,6 +10,8 @@
 		1917996D9C967EEEF2613D5F /* Pods_WallDota2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A3582C1CA1F9BE804D6D87E /* Pods_WallDota2.framework */; };
 		1F0C5A02A06F73404B9F9123 /* Pods_WallDota2_WallDota2UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0182B65A09A07F4FEB0F3F46 /* Pods_WallDota2_WallDota2UITests.framework */; };
 		2696BB3707F072515A1E7788 /* Pods_WallDota2Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51EFE6F5534817B02D5FA8D9 /* Pods_WallDota2Tests.framework */; };
+		F91FF7782B4C563F00E5F110 /* DetailHeroViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91FF7772B4C563F00E5F110 /* DetailHeroViewModel.swift */; };
+		F91FF77C2B4C5A1500E5F110 /* NavigationTransitions in Frameworks */ = {isa = PBXBuildFile; productRef = F91FF77B2B4C5A1500E5F110 /* NavigationTransitions */; };
 		F92805192B32BCA1000D53E9 /* CollectionHeroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92805182B32BCA1000D53E9 /* CollectionHeroView.swift */; };
 		F928051B2B32C778000D53E9 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F928051A2B32C778000D53E9 /* UserProfileView.swift */; };
 		F928051D2B32E55A000D53E9 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F928051C2B32E55A000D53E9 /* FileManager.swift */; };
@@ -119,6 +121,8 @@
 		F9DD044C2B2C376500B95097 /* HomeMasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DD044B2B2C376500B95097 /* HomeMasterView.swift */; };
 		F9DD044E2B2C62AD00B95097 /* ShowDetailImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DD044D2B2C62AD00B95097 /* ShowDetailImageView.swift */; };
 		F9F0E9F42B3943A700B7F26F /* LeaderBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F0E9F32B3943A700B7F26F /* LeaderBoardView.swift */; };
+		F9F485252B45AEC600F600BF /* StoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F485242B45AEC600F600BF /* StoryView.swift */; };
+		F9F485272B45C8A900F600BF /* StoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F485262B45C8A900F600BF /* StoryModel.swift */; };
 		F9F6E07F2B348F480048B957 /* ImageModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F6E07E2B348F480048B957 /* ImageModifier.swift */; };
 		F9F6E0812B34AD690048B957 /* UINavigationViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F6E0802B34AD690048B957 /* UINavigationViewController+Extension.swift */; };
 		F9FE39992B3329ED00E4BBA0 /* SpotlightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FE39982B3329ED00E4BBA0 /* SpotlightView.swift */; };
@@ -155,6 +159,7 @@
 		9EC70D9EE57CE2DB03C0F95B /* Pods-WallDota2Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WallDota2Tests.debug.xcconfig"; path = "Target Support Files/Pods-WallDota2Tests/Pods-WallDota2Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		A73EC7A95C359919EB0F6578 /* Pods-WallDota2Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WallDota2Tests.release.xcconfig"; path = "Target Support Files/Pods-WallDota2Tests/Pods-WallDota2Tests.release.xcconfig"; sourceTree = "<group>"; };
 		D48CF773F1FA0B050C024E79 /* Pods-WallDota2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WallDota2.debug.xcconfig"; path = "Target Support Files/Pods-WallDota2/Pods-WallDota2.debug.xcconfig"; sourceTree = "<group>"; };
+		F91FF7772B4C563F00E5F110 /* DetailHeroViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailHeroViewModel.swift; sourceTree = "<group>"; };
 		F92805182B32BCA1000D53E9 /* CollectionHeroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionHeroView.swift; sourceTree = "<group>"; };
 		F928051A2B32C778000D53E9 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		F928051C2B32E55A000D53E9 /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
@@ -260,6 +265,8 @@
 		F9DD044D2B2C62AD00B95097 /* ShowDetailImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDetailImageView.swift; sourceTree = "<group>"; };
 		F9E9C6D12B2AB78E005233DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F9F0E9F32B3943A700B7F26F /* LeaderBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderBoardView.swift; sourceTree = "<group>"; };
+		F9F485242B45AEC600F600BF /* StoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryView.swift; sourceTree = "<group>"; };
+		F9F485262B45C8A900F600BF /* StoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryModel.swift; sourceTree = "<group>"; };
 		F9F6E07E2B348F480048B957 /* ImageModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModifier.swift; sourceTree = "<group>"; };
 		F9F6E0802B34AD690048B957 /* UINavigationViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationViewController+Extension.swift"; sourceTree = "<group>"; };
 		F9FE39982B3329ED00E4BBA0 /* SpotlightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotlightView.swift; sourceTree = "<group>"; };
@@ -280,6 +287,7 @@
 				F9B48D4A2B31AF0D00BF1EC5 /* FirebaseAuth in Frameworks */,
 				F9B48D4D2B31B08B00BF1EC5 /* GoogleSignInSwift in Frameworks */,
 				F9C035CB2B284D320049D4B6 /* FirebaseDatabase in Frameworks */,
+				F91FF77C2B4C5A1500E5F110 /* NavigationTransitions in Frameworks */,
 				F9C035CF2B284D320049D4B6 /* FirebaseStorage in Frameworks */,
 				F9C035C92B284D320049D4B6 /* FirebaseAnalytics in Frameworks */,
 				F9C035CD2B284D320049D4B6 /* FirebaseFirestore in Frameworks */,
@@ -327,6 +335,16 @@
 				51EFE6F5534817B02D5FA8D9 /* Pods_WallDota2Tests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F91FF7792B4C564500E5F110 /* DetailHero */ = {
+			isa = PBXGroup;
+			children = (
+				F9DD044D2B2C62AD00B95097 /* ShowDetailImageView.swift */,
+				F95A916F2B304E2F00AAAE57 /* DetailHeroView.swift */,
+				F91FF7772B4C563F00E5F110 /* DetailHeroViewModel.swift */,
+			);
+			path = DetailHero;
 			sourceTree = "<group>";
 		};
 		F96082C42B3DDD3A00A724D4 /* Ranking */ = {
@@ -593,10 +611,12 @@
 				F9C035972B2846A60049D4B6 /* WallDota2App.swift */,
 				F97F6C042B3EB9610065F918 /* NotificationStruct.swift */,
 				F9C035992B2846A60049D4B6 /* ContentView.swift */,
+				F9F485262B45C8A900F600BF /* StoryModel.swift */,
+				F9F485242B45AEC600F600BF /* StoryView.swift */,
 				F97F6C012B3EA4F80065F918 /* Notification */,
 				F96082C42B3DDD3A00A724D4 /* Ranking */,
 				F9FE39A02B33FA3700E4BBA0 /* Login */,
-				F95A916F2B304E2F00AAAE57 /* DetailHeroView.swift */,
+				F91FF7792B4C564500E5F110 /* DetailHero */,
 				F928051C2B32E55A000D53E9 /* FileManager.swift */,
 				F96082C52B3DDD4900A724D4 /* UserProfile */,
 				F9DAE1152B2AED7D002BAF3D /* Home */,
@@ -652,7 +672,6 @@
 				F9DAE1112B2AE314002BAF3D /* FirstSectionHomeView.swift */,
 				F9B69CE02B2AA308004A2D71 /* ImageModel.swift */,
 				F9DAE1162B2AF554002BAF3D /* TabbarCustomView.swift */,
-				F9DD044D2B2C62AD00B95097 /* ShowDetailImageView.swift */,
 				F9DD044B2B2C376500B95097 /* HomeMasterView.swift */,
 				F95A916D2B303AFD00AAAE57 /* CollectionView.swift */,
 				F92805182B32BCA1000D53E9 /* CollectionHeroView.swift */,
@@ -700,6 +719,7 @@
 				F9FE399E2B33F97A00E4BBA0 /* FirebaseMessaging */,
 				F9692BA42B361F9800F8C1AB /* Algorithms */,
 				F9DA1D992B3CA05000B66616 /* PixelEnginePackage */,
+				F91FF77B2B4C5A1500E5F110 /* NavigationTransitions */,
 			);
 			productName = WallDota2;
 			productReference = F9C035942B2846A60049D4B6 /* WallDota2.app */;
@@ -781,6 +801,7 @@
 				F9B48D4B2B31B08B00BF1EC5 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				F9692BA32B361F9800F8C1AB /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 				F9DA1D982B3CA05000B66616 /* XCRemoteSwiftPackageReference "PixelEnginePackage" */,
+				F91FF77A2B4C5A1500E5F110 /* XCRemoteSwiftPackageReference "swiftui-navigation-transitions" */,
 			);
 			productRefGroup = F9C035952B2846A60049D4B6 /* Products */;
 			projectDirPath = "";
@@ -925,6 +946,7 @@
 				F9FE39992B3329ED00E4BBA0 /* SpotlightView.swift in Sources */,
 				F96195E22B3C9DF5000109E1 /* LUTButton.swift in Sources */,
 				F96195D52B3C9DF5000109E1 /* PhotoEditView.swift in Sources */,
+				F9F485252B45AEC600F600BF /* StoryView.swift in Sources */,
 				F9FE399D2B334F8600E4BBA0 /* ShowItemView.swift in Sources */,
 				F96195F42B3C9DF5000109E1 /* TemperatureControl.swift in Sources */,
 				F96195D22B3C9DF5000109E1 /* CustomCropperView.swift in Sources */,
@@ -942,6 +964,7 @@
 				F96195C92B3C9DF5000109E1 /* TextAlert.swift in Sources */,
 				F96195D82B3C9DF5000109E1 /* PhotoEditorView.swift in Sources */,
 				F928051B2B32C778000D53E9 /* UserProfileView.swift in Sources */,
+				F9F485272B45C8A900F600BF /* StoryModel.swift in Sources */,
 				F95A91702B304E2F00AAAE57 /* DetailHeroView.swift in Sources */,
 				F96195F62B3C9DF5000109E1 /* ShadowsControl.swift in Sources */,
 				F96195C52B3C9DF5000109E1 /* RaiseButton.swift in Sources */,
@@ -992,6 +1015,7 @@
 				F97F6C052B3EB9610065F918 /* NotificationStruct.swift in Sources */,
 				F96195FD2B3C9DF5000109E1 /* FilterModel.swift in Sources */,
 				F96195E72B3C9DF5000109E1 /* RecipeMenuUI.swift in Sources */,
+				F91FF7782B4C563F00E5F110 /* DetailHeroViewModel.swift in Sources */,
 				F96196032B3C9DF5000109E1 /* NestedObservableObject.swift in Sources */,
 				F96195CE2B3C9DF5000109E1 /* Recipe.swift in Sources */,
 			);
@@ -1157,7 +1181,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = WallDota2/WallDota2.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"WallDota2/Preview Content\"";
 				DEVELOPMENT_TEAM = 58JMRW9E5N;
 				ENABLE_PREVIEWS = YES;
@@ -1176,7 +1200,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = vn.cyme.WallDota2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1196,7 +1220,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = WallDota2/WallDota2.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"WallDota2/Preview Content\"";
 				DEVELOPMENT_TEAM = 58JMRW9E5N;
 				ENABLE_PREVIEWS = YES;
@@ -1215,7 +1239,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = vn.cyme.WallDota2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1349,6 +1373,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		F91FF77A2B4C5A1500E5F110 /* XCRemoteSwiftPackageReference "swiftui-navigation-transitions" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/davdroman/swiftui-navigation-transitions";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.13.3;
+			};
+		};
 		F9692BA32B361F9800F8C1AB /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-algorithms.git";
@@ -1392,6 +1424,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		F91FF77B2B4C5A1500E5F110 /* NavigationTransitions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F91FF77A2B4C5A1500E5F110 /* XCRemoteSwiftPackageReference "swiftui-navigation-transitions" */;
+			productName = NavigationTransitions;
+		};
 		F9692BA42B361F9800F8C1AB /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F9692BA32B361F9800F8C1AB /* XCRemoteSwiftPackageReference "swift-algorithms" */;

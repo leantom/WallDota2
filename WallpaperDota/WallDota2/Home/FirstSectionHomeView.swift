@@ -99,8 +99,9 @@ struct FirstSectionHomeView: View {
             {
                 let date = Date().timeIntervalSince1970
                 let firebaseData = FireStoreDatabase.shared
-                for  item in items {
-                    if let thumbnail = await firebaseData.getURL(path: item.thumbnail) {
+                for item in items {
+                    if URL(string:item.thumbnailFull) == nil,
+                       let thumbnail = await firebaseData.getURL(path: item.thumbnail) {
                         item.thumbnailFull = thumbnail.absoluteString
                     }
                     print(item.thumbnail + " thumbnail")

@@ -11,7 +11,7 @@ struct SideMenu: View {
     @Binding var isSidebarVisible: Bool
     @State var isDeleteAccount: Bool = false
     
-    var sideBarWidth = UIScreen.main.bounds.size.width * 0.8
+    var sideBarWidth = UIScreen.main.bounds.size.width * 0.9
     var bgColor: Color =
           Color(.init(
                   red: 52 / 255,

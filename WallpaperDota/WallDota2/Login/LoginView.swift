@@ -142,10 +142,7 @@ struct LoginView: View {
                 VStack(spacing: 40) {
                     Spacer(minLength: 160)
                     VStack(spacing: 20,content: {
-                        Image(uiImage: UIImage(named: "AppIcon") ?? UIImage())
-                            .resizable()
-                            .frame(width: 68, height: 68)
-                            .cornerRadius(10)
+                        Spacer()
                         Text("Because your view deserves to be epic.")
                             .font(.subheadline)
                             .fontWeight(.bold)

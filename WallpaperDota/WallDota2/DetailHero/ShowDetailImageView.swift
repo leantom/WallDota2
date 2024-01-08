@@ -21,6 +21,7 @@ struct ShowDetailImageView: View {
     @State var showAlert: Bool = false
     @State var toastIsVisible: Bool = false
     @State private var isShowPreviewImage = false
+    @State private var ratioImage = 0.0
     
     @State var imageDetail: UIImage?
     
@@ -38,9 +39,10 @@ struct ShowDetailImageView: View {
                                 ProgressView()
                             })
                             .onSuccess(perform: { image, data, type in
+                                ratioImage = image.size.width/image.size.height
                                 imageDetail = image
                             })
-                            .scaledToFill()
+                            .aspectRatio(contentMode: ratioImage >= 1 ? .fit : .fill)
                             .ignoresSafeArea()
                             .frame(width: UIScreen.main.bounds.width)
                             .edgesIgnoringSafeArea(.all)
@@ -144,7 +146,9 @@ struct ShowDetailImageView: View {
                 }
                 
             }.background(.black.opacity(0.5))
+                
         }
+        
         .navigationDestination(isPresented:$isShowPreviewImage) {
             PhotoEdittor(inputImage: imageDetail,
                          actionBack: {
@@ -161,7 +165,7 @@ struct ShowDetailImageView: View {
     }
 }
 struct WrapperShowDetailImageView: View {
-    @State var url: String = "https://firebasestorage.googleapis.com/v0/b/dotadressup.appspot.com/o/images%2FTemplar%20Assassin%2FTemplar%20Assassin11291?alt=media&token=2221a6b5-5876-458c-8cae-ca923a7465eb"
+    @State var url: String = "https://firebasestorage.googleapis.com/v0/b/dotadressup.appspot.com/o/images%2FPhantom%20assassin%2FPhantom%20assassin58931?alt=media&token=33fc2537-481e-42bd-9bd7-4266442c5faa"
     @State var model: ImageModel = ImageModel()
     var body: some View {
         ShowDetailImageView(dismissModal: {

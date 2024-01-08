@@ -14,25 +14,14 @@ struct TestTabview: View {
         startPoint: .bottom, endPoint: .top
     )
     var body: some View {
-        ZStack {
-            gradient
-                .onTapGesture {
-                    withAnimation {
-                        isShowPopup.toggle()
-                    }
-                }
-            VStack {
-                Spacer()
-                if isShowPopup {
-                    VStack {
-                        Text("Content")
-                    }
-                    .frame(height: 400)
-                    .transition(.move(edge: .bottom))
-                }
-                
-            }
-        }
+        Toggle(isOn: $isShowPopup, label: {
+            Text(isShowPopup ? "VN" : "EN")
+                .font(.caption)
+        })
+        .frame(width: 80)
+        Toggle(isShowPopup ? "VN" : "EN", isOn: $isShowPopup)
+            .toggleStyle(.switch)
+            .frame(width: 80)
     }
 }
 

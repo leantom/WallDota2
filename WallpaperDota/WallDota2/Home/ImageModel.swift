@@ -75,8 +75,8 @@ class ImageModel: Codable, Identifiable, ObservableObject {
         id = UUID().uuidString
         heroID = "invoker"
         imageName = "invo"
-        imageUrl = ""
-        thumbnail = "https://firebasestorage.googleapis.com/v0/b/dotadressup.appspot.com/o/thumbnail%2FEnchantress%2FEnchantress15832?alt=media&token=1ec5fd4d-3950-4a79-aa1a-f850285dadf4"
+        imageUrl = "https://firebasestorage.googleapis.com/v0/b/dotadressup.appspot.com/o/images%2FPhantom%20assassin%2FPhantom%20assassin58931?alt=media&token=33fc2537-481e-42bd-9bd7-4266442c5faa"
+        thumbnail = "https://firebasestorage.googleapis.com/v0/b/dotadressup.appspot.com/o/images%2FPhantom%20assassin%2FPhantom%20assassin58931?alt=media&token=33fc2537-481e-42bd-9bd7-4266442c5faa"
         likeCount = 0
     }
 

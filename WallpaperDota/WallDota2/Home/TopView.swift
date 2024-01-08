@@ -26,6 +26,14 @@ struct TopView: View {
                 HStack {
                     ZStack {
                         HStack {
+                            Button(action: {
+                                actionOpenMenu()
+                            }, label: {
+                                Image(systemName: "ellipsis")
+                                    .foregroundColor(.black)
+                                    .font(.title3)
+                            })
+                            .padding()
                             Spacer()
                             Button(action: {}, label: {
                                 Image(systemName: "bell")

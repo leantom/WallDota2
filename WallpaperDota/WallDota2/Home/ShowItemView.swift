@@ -108,10 +108,11 @@ struct ShowItemView: View {
                        
                     }
                     .fixedSize(horizontal: true, vertical: false)
-                    .padding()
+                    .frame(width: 45, height: 150)
                     .background(.black.opacity(0.3))
                     .cornerRadius(10)
-
+                    .padding()
+                    
                     Spacer()
                 }
             }
@@ -164,3 +165,13 @@ struct ShowItemView: View {
     
     
 }
+struct WrapperShowItemView: View {
+    @State var items = ImageModel()
+    var body: some View {
+        ShowItemView(show: items, actionDownload: {}, actionDownloadProgressBar: {progress in}, actionComment: {model in }).frame(width: 180, height: 250)
+    }
+}
+#Preview {
+    WrapperShowItemView()
+}
+

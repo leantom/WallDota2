@@ -85,6 +85,32 @@ class FireStoreDatabase {
         }
     }
     
+    public func fetchDataHeroFromFirestore(id: String) async -> [ImageModel]? {
+        let db = Firestore.firestore()
+        let collectionRef = db.collection("heroes")
+        do {
+            let imagesCollection = collectionRef.whereField("heroID", isEqualTo: id)
+            let snapshot = try await imagesCollection.getDocuments()
+            let _items = snapshot.documents.compactMap { document in
+                do {
+                    let item =  try document.data(as: ImageModel.self)
+                    return item
+                    
+                } catch {
+                    print("Error decoding item: \(error.localizedDescription)")
+                    return nil
+                }
+            }
+            return _items
+        } catch let err{
+            print(err.localizedDescription)
+            return nil
+        }
+        
+    }
+    
+    
+    
     static public func likeImage(image: ImageModel) async {
         let db = Firestore.firestore()
         let collectionRef = db.collection("likes")
