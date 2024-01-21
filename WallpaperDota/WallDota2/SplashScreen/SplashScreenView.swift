@@ -17,34 +17,61 @@ struct SplashScreenView: View {
     
     @State private var isLastTab = false
     let gradient: LinearGradient = LinearGradient(
-        colors: [Color.blue.opacity(0.2), Color.clear],
-        startPoint: .top, endPoint: .bottom
+        colors: [Color.black.opacity(0.6), Color.clear],
+        startPoint: .bottom, endPoint: .top
     )
-    
+    var listText = ["Tired of your phone looking like everyone else's?", "Are you a Dota 2 fan?", "Looking for a way to impress your friends?", "Are you a Dota 2 fan who also loves art?"]
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
-                
                 ZStack {
-                    gradient.edgesIgnoringSafeArea(.all)
+                   
+                    Image("image1").resizable()
+                        .scaledToFill()
+                        .opacity(0.1)
+                        .ignoresSafeArea()
+                        .frame(width: UIScreen.main.bounds.width)
+                    
+                    
                     TabView(selection: $currentIndex) {
                         
                         ForEach(Array(images.enumerated()), id: \.offset) { index, imageWrapper in
                             // Your code
-                            VStack {
+                            ZStack {
                                 imageWrapper
                                     .resizable()
                                     .scaledToFill()
                                     .opacity(0.9)
+                                    .ignoresSafeArea()
                                     .frame(width: UIScreen.main.bounds.width)
                                     .clipped()
+                                    
+                                
+                                
+                                VStack {
+                                    Spacer()
+                                    gradient.frame(width: UIScreen.main.bounds.width, height: 400)
+                                }
+                                
+                                VStack {
+                                    Spacer()
+                                    Text(listText[index])
+                                        .font(.title2)
+                                        .fontWeight(.bold)
+                                        .foregroundStyle(.white)
+                                        .multilineTextAlignment(.center)
+                                }
+                                .padding(.bottom, 150)
                             }
-                            .frame(width: UIScreen.main.bounds.width)
+                            .backgroundStyle(.blue)
                             .edgesIgnoringSafeArea(.all)
                             .tag(index)
                         }
                         
-                    }.tabViewStyle(.page)
+                    }
+                    
+                    .edgesIgnoringSafeArea(.all)
+                    .tabViewStyle(.page)
                         .onChange(of: currentIndex) { newIndex in
                             print(newIndex)
                             if newIndex == images.count - 1 && !reachedEnd {
@@ -55,53 +82,47 @@ struct SplashScreenView: View {
                                 reachedEnd = false
                             }
                         }
-                    if reachedEnd {
-                        VStack(alignment:.trailing) {
-                            Spacer()
+                    
+                    VStack(alignment:.trailing) {
+                        Spacer()
+                        Button(action: {
+                            withAnimation(.easeInOut) {
+                                
+                                isLastTab.toggle()
+                                Task {
+                                    await notificationManager.request()
+                                }
+                                
+                            }
+                            
+                        }) {
                             HStack {
-                                Spacer()
-                                Button(action: {
-                                    withAnimation(.easeInOut) {
-                                        
-                                        isLastTab.toggle()
-                                        Task {
-                                            await notificationManager.request()
-//                                            await LoginViewModel.shared.signinWithAnynomous()
-                                        }
-                                        
-                                    }
-                                    
-                                }) {
-                                    HStack {
-                                        Image(systemName: "arrow.forward")
-                                            .font(.title)
-                                            .fontWeight(.bold)
-                                            .foregroundColor(.white)
-                                    }
-                                    .padding()
-                                    .background(Color(red: 0.254, green: 0.279, blue: 0.326).opacity(0.5))
-                                    .mask(Circle())
-                                }.frame(width: 48, height: 48)
-                                    
+                                Image(systemName: "arrow.forward")
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
                             }
                             .padding()
-                            Spacer()
-                        }
+                            .background(Color(red: 0.254, green: 0.279, blue: 0.326).opacity(0.5))
+                            .mask(Circle())
+                        }.frame(width: 48, height: 48)
                     }
+                    .opacity(reachedEnd ? 1 : 0)
+                    .animation(.easeInOut, value: reachedEnd)
+                    .padding(.bottom, 70)
                     
                     if isLastTab == true {
-                        
                         LoginView()
                             .frame(width: UIScreen.main.bounds.width)
                     }
                 }
-                .ignoresSafeArea()
+                .edgesIgnoringSafeArea(.all)
             }
             .onAppear {
                 loadImages()
             }
             
-        }
+        }.navigationBarBackButtonHidden()
         
         
     }

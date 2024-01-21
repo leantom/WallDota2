@@ -15,6 +15,7 @@ struct FirstSectionHomeView: View {
     @State var thumbnail: URL?
     var actionShowDetailSpotlight:((ImageModel) -> Void)
     var actionShowMoreSpotlight:(([ImageModel]) -> Void)
+    var maximumNumberLoadURL = 4
     
     var body: some View {
         VStack(spacing: 10) {
@@ -97,17 +98,24 @@ struct FirstSectionHomeView: View {
         .onAppear(perform: {
             Task
             {
+                if isGetDoneAPI {return}
                 let date = Date().timeIntervalSince1970
                 let firebaseData = FireStoreDatabase.shared
+                var i = 0
                 for item in items {
+                    if i > 2 {
+                        isGetDoneAPI = true
+                        return
+                    }
                     if URL(string:item.thumbnailFull) == nil,
                        let thumbnail = await firebaseData.getURL(path: item.thumbnail) {
                         item.thumbnailFull = thumbnail.absoluteString
                     }
+                    i += 1
                     print(item.thumbnail + " thumbnail")
                 }
                 print("total time spotlight :\(Date().timeIntervalSince1970 - date)")
-                isGetDoneAPI = true
+                
             }
         })
     }

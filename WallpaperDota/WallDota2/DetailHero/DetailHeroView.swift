@@ -94,7 +94,6 @@ struct DetailHeroView: View {
                     ScrollView(.vertical) {
                         if listStoryModel.count > 0 {
                             listStoryView.padding(.leading, 10)
-                               
                         }
                         
                         HStack {
@@ -150,7 +149,7 @@ struct DetailHeroView: View {
             })
         }
         .navigationTransition(
-            .fade(.cross).combined(with: .slide)
+            .fade(.in).combined(with: .slide)
         )
         .navigationDestination(isPresented:$isShowDetail) {
             ShowDetailImageView(dismissModal: {

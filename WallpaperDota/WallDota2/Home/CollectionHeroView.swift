@@ -22,7 +22,7 @@ struct CollectionHeroView: View {
         startPoint: .bottom, endPoint: .top
     )
     
-    let columns = [GridItem(.flexible(minimum: 50, maximum: 160)), GridItem(.flexible(minimum: 50, maximum: 160)), GridItem(.flexible(minimum: 50, maximum: 160))]
+    let columns = [GridItem(.fixed(120)), GridItem(.fixed(120)), GridItem(.flexible(minimum: 50, maximum: 160))]
     
     var action:((String) -> Void)
     var body: some View {
@@ -43,29 +43,7 @@ struct CollectionHeroView: View {
                     LazyVGrid(columns: columns, spacing: 16) {
                       // Loop through the items and create ItemCell views
                         ForEach(listCollectionModel, id: \.heroID) {item in
-                            HStack {
-                                ZStack {
-                                    VStack {
-                                        WebImage(url: URL(string: item.thumbnailFull))
-                                            .resizable()
-                                            .placeholder {
-                                                ProgressView()
-                                            }
-                                            .aspectRatio(contentMode: .fit)
-                                            .cornerRadius(10)
-                                        Text(item.heroID)
-                                            .font(.caption)
-                                            .fontWeight(.bold)
-                                            .foregroundStyle(.white)
-                                            .fixedSize(horizontal: false, vertical: true)
-                                            .padding()
-                                    }.background(randomColor().opacity(0.8))
-                                }
-                                .clipped()
-                                
-                            }
-                                .cornerRadius(10)
-                                .clipped()
+                            CollectionCellHeroView(item: item)
                                 .onTapGesture {
                                     print(item.heroID)
                                     self.action(item.heroID)
@@ -94,6 +72,59 @@ struct CollectionHeroView: View {
                 isLoading = false
             }
         }
+    }
+    
+    
+    
+}
+
+struct CollectionCellHeroView: View {
+    @StateObject var item: ImageModel
+    let gradient: LinearGradient = LinearGradient(
+        colors: [Color.black.opacity(0.5), Color.black.opacity(0.2)],
+        startPoint: .leading, endPoint: .trailing
+    )
+    @State var isLoadedImage = false
+    var body: some View {
+        HStack {
+            ZStack {
+                VStack {
+                    if item.isLoadedThumbnail {
+                        WebImage(url: URL(string: item.thumbnailFull))
+                            .resizable()
+                            .placeholder {
+                                ProgressView()
+                            }
+                            .frame(minHeight: 60)
+                            .aspectRatio(contentMode: .fit)
+                            .cornerRadius(10)
+                    } else {
+                        ProgressView()
+                    }
+                    
+                    Text(item.heroID)
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.white)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding()
+                }.background(randomColor().opacity(0.8))
+            }
+            .clipped()
+            
+        }
+            .cornerRadius(10)
+            .clipped()
+            .onAppear {
+                Task {
+                    
+                    let url = await FireStoreDatabase.shared.getURL(path: item.thumbnail)
+                    item.isLoadedThumbnail = true
+                    item.thumbnailFull = url?.absoluteString ?? ""
+                    
+                }
+            }
+        
     }
 }
 

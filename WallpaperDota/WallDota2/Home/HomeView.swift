@@ -13,6 +13,7 @@ import Photos
 
 struct HomeView: View {
     
+    @Binding var isMenuOpen: Bool
     @Binding var items: [ImageModel]
     @Binding var itemsSpotlight: [ImageModel]
     var actionTapDetail: ((ImageModel) -> Void)
@@ -67,8 +68,6 @@ struct HomeView: View {
                                     itemSelected = model
                                     isShowPopupComment.toggle()
                                 }
-                                
-                                
                             }).onTapGesture {
                                 self.actionTapDetail(show)
                             }
@@ -76,19 +75,7 @@ struct HomeView: View {
                     })
                 }
             }
-            
-//            VStack {
-//                
-//                if isShowPopupComment {
-//                    if let  itemSelected = self.itemSelected {
-//                        CommentsView(imageModel: itemSelected, actionClosePopup: {
-//                            isShowPopupComment.toggle()
-//                        })
-//                            .background(.white)
-//                    }
-//                }
-//                
-//            }
+            .disabled(isMenuOpen)
         }
         
     }

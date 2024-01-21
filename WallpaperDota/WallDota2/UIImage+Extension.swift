@@ -10,6 +10,7 @@ import UIKit
 import SwiftUI
 
 
+
 struct ImageWrapper: Hashable {
     let image: Image
     let id: UUID
@@ -19,7 +20,6 @@ struct ImageWrapper: Hashable {
         self.id = UUID()
     }
 }
-
 
 extension ImageWrapper {
     public static func == (lhs: ImageWrapper, rhs: ImageWrapper) -> Bool {

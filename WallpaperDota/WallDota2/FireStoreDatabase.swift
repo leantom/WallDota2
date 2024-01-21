@@ -76,10 +76,8 @@ class FireStoreDatabase {
                 }
             }
 
-            print("total time fetchDataCollectionFromFirestore :\(Date().timeIntervalSince1970 - date)")
             self.listCollectionImages = _items
-            await self.getImageURLForListCollection()
-            
+            print("total time fetchDataCollectionFromFirestore :\(Date().timeIntervalSince1970 - date)")
         } catch {
             print("Error getting documents: \(error.localizedDescription)")
         }

@@ -111,7 +111,7 @@ struct ShowItemView: View {
                     .frame(width: 45, height: 150)
                     .background(.black.opacity(0.3))
                     .cornerRadius(10)
-                    .padding()
+                    .padding(.leading, 10)
                     
                     Spacer()
                 }
@@ -124,10 +124,13 @@ struct ShowItemView: View {
             Task {
                 self.likeCount = show.likeCount
                 let firebaseData = FireStoreDatabase.shared
-                if let thumbnail = await firebaseData.getURL(path: show.thumbnail) {
+                if self.show.thumbnailFull.isEmpty, let thumbnail = await firebaseData.getURL(path: show.thumbnail) {
                     self.show.thumbnailFull = thumbnail.absoluteString
                     self.thumbnail = thumbnail
+                } else {
+                    self.thumbnail = URL(string:self.show.thumbnailFull)
                 }
+               
             }
         })
     }

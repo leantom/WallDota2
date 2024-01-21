@@ -44,7 +44,7 @@ struct TabbarCustomView: View {
     )
     var sideBarWidth = UIScreen.main.bounds.size.width * 0.65
     private var homeView: HomeView {
-        HomeView(items: $items,
+        HomeView(isMenuOpen: $isMenuOpen, items: $items,
                  itemsSpotlight: $itemsSpotlight,
                  actionTapDetail: { model in
             withAnimation(.easeInOut) {
@@ -231,13 +231,13 @@ struct TabbarCustomView: View {
             .cornerRadius(isMenuOpen ? 20 : 0)
             .offset(x: isMenuOpen ? sideBarWidth : 0)
             .scaleEffect(isMenuOpen ? 0.5 : 1)
-            .animation(.bouncy, value: isMenuOpen)
+            .animation(.smooth, value: isMenuOpen)
+            .navigationBarBackButtonHidden()
             if isLogout {
                 LoginView()
             }
             
         }
-        .ignoresSafeArea()
         
     }
 }

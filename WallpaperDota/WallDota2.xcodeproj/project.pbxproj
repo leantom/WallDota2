@@ -125,6 +125,7 @@
 		F9F485272B45C8A900F600BF /* StoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F485262B45C8A900F600BF /* StoryModel.swift */; };
 		F9F6E07F2B348F480048B957 /* ImageModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F6E07E2B348F480048B957 /* ImageModifier.swift */; };
 		F9F6E0812B34AD690048B957 /* UINavigationViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F6E0802B34AD690048B957 /* UINavigationViewController+Extension.swift */; };
+		F9FB804B2B59F08F00906818 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = F9FB804A2B59F08F00906818 /* AlertToast */; };
 		F9FE39992B3329ED00E4BBA0 /* SpotlightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FE39982B3329ED00E4BBA0 /* SpotlightView.swift */; };
 		F9FE399B2B3346F300E4BBA0 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FE399A2B3346F300E4BBA0 /* UserViewModel.swift */; };
 		F9FE399D2B334F8600E4BBA0 /* ShowItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FE399C2B334F8600E4BBA0 /* ShowItemView.swift */; };
@@ -283,6 +284,7 @@
 				F9692BA52B361F9800F8C1AB /* Algorithms in Frameworks */,
 				F9DA1D9A2B3CA05000B66616 /* PixelEnginePackage in Frameworks */,
 				F9FE399F2B33F97A00E4BBA0 /* FirebaseMessaging in Frameworks */,
+				F9FB804B2B59F08F00906818 /* AlertToast in Frameworks */,
 				F9B48D462B31A72B00BF1EC5 /* SDWebImageSwiftUI in Frameworks */,
 				F9B48D4A2B31AF0D00BF1EC5 /* FirebaseAuth in Frameworks */,
 				F9B48D4D2B31B08B00BF1EC5 /* GoogleSignInSwift in Frameworks */,
@@ -720,6 +722,7 @@
 				F9692BA42B361F9800F8C1AB /* Algorithms */,
 				F9DA1D992B3CA05000B66616 /* PixelEnginePackage */,
 				F91FF77B2B4C5A1500E5F110 /* NavigationTransitions */,
+				F9FB804A2B59F08F00906818 /* AlertToast */,
 			);
 			productName = WallDota2;
 			productReference = F9C035942B2846A60049D4B6 /* WallDota2.app */;
@@ -802,6 +805,7 @@
 				F9692BA32B361F9800F8C1AB /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 				F9DA1D982B3CA05000B66616 /* XCRemoteSwiftPackageReference "PixelEnginePackage" */,
 				F91FF77A2B4C5A1500E5F110 /* XCRemoteSwiftPackageReference "swiftui-navigation-transitions" */,
+				F9FB80492B59F08F00906818 /* XCRemoteSwiftPackageReference "AlertToast" */,
 			);
 			productRefGroup = F9C035952B2846A60049D4B6 /* Products */;
 			projectDirPath = "";
@@ -1181,7 +1185,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = WallDota2/WallDota2.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"WallDota2/Preview Content\"";
 				DEVELOPMENT_TEAM = 58JMRW9E5N;
 				ENABLE_PREVIEWS = YES;
@@ -1200,7 +1204,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = vn.cyme.WallDota2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1220,7 +1224,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = WallDota2/WallDota2.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"WallDota2/Preview Content\"";
 				DEVELOPMENT_TEAM = 58JMRW9E5N;
 				ENABLE_PREVIEWS = YES;
@@ -1239,7 +1243,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = vn.cyme.WallDota2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1421,6 +1425,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		F9FB80492B59F08F00906818 /* XCRemoteSwiftPackageReference "AlertToast" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elai950/AlertToast";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.9;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1473,6 +1485,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F9DA1D982B3CA05000B66616 /* XCRemoteSwiftPackageReference "PixelEnginePackage" */;
 			productName = PixelEnginePackage;
+		};
+		F9FB804A2B59F08F00906818 /* AlertToast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F9FB80492B59F08F00906818 /* XCRemoteSwiftPackageReference "AlertToast" */;
+			productName = AlertToast;
 		};
 		F9FE399E2B33F97A00E4BBA0 /* FirebaseMessaging */ = {
 			isa = XCSwiftPackageProductDependency;
