@@ -79,5 +79,6 @@ class ImageModel: Codable, Identifiable, ObservableObject {
         thumbnail = "https://firebasestorage.googleapis.com/v0/b/dotadressup.appspot.com/o/images%2FPhantom%20assassin%2FPhantom%20assassin58931?alt=media&token=33fc2537-481e-42bd-9bd7-4266442c5faa"
         likeCount = 0
     }
-
 }
+
+

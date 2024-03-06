@@ -49,7 +49,7 @@ struct TopView: View {
                     
                 }
                 .frame(height: 48)
-            }
+            }.background(.white)
             
             if isLoading {
                 VStack {

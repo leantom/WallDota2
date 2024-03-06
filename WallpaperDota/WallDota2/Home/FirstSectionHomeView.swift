@@ -105,7 +105,6 @@ struct FirstSectionHomeView: View {
                 for item in items {
                     if i > 2 {
                         isGetDoneAPI = true
-                        return
                     }
                     if URL(string:item.thumbnailFull) == nil,
                        let thumbnail = await firebaseData.getURL(path: item.thumbnail) {

@@ -18,6 +18,7 @@ struct Notification: Identifiable, Codable {
     let isRead: Bool
     
     // Computed property for formatted time
+    
     var formattedTime: String {
         let timestamp = 1669651200.0  // Example timestamp
         let date = Date(timeIntervalSince1970: timestamp)

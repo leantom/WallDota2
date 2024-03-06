@@ -181,7 +181,8 @@ struct TabbarCustomView: View {
                 .navigationDestination(isPresented: $isShowDetailVC) {
                     ShowDetailImageView(dismissModal: {
                         isShowDetailVC = false
-                    }, model: $modelSelected)
+                    }, model: $modelSelected,
+                                        models: $items)
                     .navigationBarBackButtonHidden()
                 }.navigationDestination(isPresented: $isShowDetailCollection) {
                     DetailHeroView(items: $imagesByID, actionBack: {
@@ -197,7 +198,7 @@ struct TabbarCustomView: View {
                 }.navigationDestination(isPresented: $isShowDetailSpotlight) {
                     ShowDetailImageView(dismissModal: {
                         isShowDetailSpotlight = false
-                    } , model: $modelSelected)
+                    } , model: $modelSelected, models: $items)
                     .navigationBarBackButtonHidden()
                 }
                 .alert(isPresented: $isDeleteAccount) {
@@ -236,7 +237,6 @@ struct TabbarCustomView: View {
             if isLogout {
                 LoginView()
             }
-            
         }
         
     }

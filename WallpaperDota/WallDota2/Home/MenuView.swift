@@ -41,15 +41,15 @@ struct SideMenu: View {
                 .onTapGesture {
                     isSidebarVisible.toggle()
                 }
-
+            
             Image(systemName: "chevron.right")
                 .foregroundColor(.white)
                 .rotationEffect(
                   isSidebarVisible ?
                     Angle(degrees: 180) : Angle(degrees: 0))
                 .offset(x: isSidebarVisible ? -4 : 8)
-
         }
+        .opacity(isSidebarVisible ? 1 : 0)
         .offset(x: sideBarWidth / 2, y: 50)
         .animation(.default, value: isSidebarVisible)
     }
@@ -59,7 +59,6 @@ struct SideMenu: View {
             ZStack(alignment: .top) {
                 gradient
                 MenuChevron
-                
                 VStack(alignment: .leading, spacing: 20) {
                     userProfile
                     Divider()
@@ -78,7 +77,6 @@ struct SideMenu: View {
                         case 4004:
                             isSidebarVisible.toggle()
                             actionDeleteAccount()
-                        
                         default:return
                         }
                     }, items: userActions)
@@ -96,7 +94,6 @@ struct SideMenu: View {
             .frame(width: sideBarWidth)
             .offset(x: isSidebarVisible ? 0 : -sideBarWidth)
             .animation(.default, value: isSidebarVisible)
-            
             Spacer()
         }.ignoresSafeArea()
            
@@ -178,7 +175,6 @@ struct MenuLinks: View {
                     .onTapGesture {
                         self.actionTapMenu(item.id)
                     }
-                    
             }
         }
         .padding(.vertical, 14)
@@ -221,9 +217,6 @@ var userActions: [MenuItem] = [
     MenuItem(id: 4004,
               icon: "wrench.and.screwdriver.fill",
               text: "Delete Account")
-//    MenuItem(id: 4005,
-//              icon: "exclamationmark.triangle.fill",
-//              text: "Report an issue")
 ]
 
 var logout: [MenuItem] = [
@@ -231,7 +224,6 @@ var logout: [MenuItem] = [
     MenuItem(id: 4006,
               icon: "iphone.and.arrow.forward",
               text: "Logout"),
-    
 ]
 
 struct WrapperMenuView: View {

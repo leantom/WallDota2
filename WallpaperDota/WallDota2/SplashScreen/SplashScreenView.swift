@@ -45,9 +45,6 @@ struct SplashScreenView: View {
                                     .ignoresSafeArea()
                                     .frame(width: UIScreen.main.bounds.width)
                                     .clipped()
-                                    
-                                
-                                
                                 VStack {
                                     Spacer()
                                     gradient.frame(width: UIScreen.main.bounds.width, height: 400)

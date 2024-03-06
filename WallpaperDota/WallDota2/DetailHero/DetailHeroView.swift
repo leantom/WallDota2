@@ -154,7 +154,8 @@ struct DetailHeroView: View {
         .navigationDestination(isPresented:$isShowDetail) {
             ShowDetailImageView(dismissModal: {
                 isShowDetail = false
-            }, model: $modelSelected)
+            }, model: $modelSelected, 
+                                models: $items)
             .navigationBarBackButtonHidden()
         }
         .navigationDestination(isPresented:$isStoryHero) {

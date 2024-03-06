@@ -10,8 +10,10 @@ import SwiftUI
 import SwiftUI
 
 struct NotificationsView: View {
-    @State var notifications: [Notification] = [] // Fetch notifications from Firestore or a local data source
-
+    // Fetch notifications from Firestore or a local data source
+    
+    @State var notifications: [Notification] = []
+    
     var body: some View {
         List {
             ForEach(notifications, id: \.id) { notification in
@@ -24,8 +26,8 @@ struct NotificationsView: View {
 }
 
 struct NotificationRow: View {
+    
     let notification: Notification
-
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -50,8 +52,6 @@ struct NotificationRow: View {
         }
     }
 }
-
-
 
 #Preview {
     NotificationsView()

@@ -372,7 +372,8 @@ class FireStoreDatabase {
         do {
             let url = try await storageRef.downloadURL()
             return url
-        } catch {
+        } catch let err{
+            print(err)
             return nil
         }
     }
