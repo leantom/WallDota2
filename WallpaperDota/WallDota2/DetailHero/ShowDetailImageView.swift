@@ -74,6 +74,9 @@ struct ShowDetailImageView: View {
                                                 }
                                             }
                                             .id(index)
+                                            .onTapGesture {
+                                                isShowOnlyImage.toggle()
+                                            }
                                     }
                                     
                                 } else {
@@ -92,8 +95,6 @@ struct ShowDetailImageView: View {
                                             }
                                         }
                                 }
-                                
-                                
                             }
                             
                         }
@@ -103,11 +104,8 @@ struct ShowDetailImageView: View {
                         sv.isPagingEnabled = true
                     }
                     .onChange(of: currentIndex) { targetIndex in
-                        withAnimation {
-                            // Use the proxy to scroll to the desired index with animation
-                            proxy.scrollTo(targetIndex, anchor: .top)
-                        }
-                           
+                        
+                        proxy.scrollTo(targetIndex, anchor: .top) 
                     }
                 }
                 .onAppear {

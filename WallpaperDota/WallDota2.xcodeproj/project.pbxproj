@@ -95,6 +95,8 @@
 		F97F6C002B3EA4F30065F918 /* NotificationStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97F6BFF2B3EA4F30065F918 /* NotificationStruct.swift */; };
 		F97F6C032B3EA85C0065F918 /* FirebaseRealtime.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97F6C022B3EA85C0065F918 /* FirebaseRealtime.swift */; };
 		F97F6C052B3EB9610065F918 /* NotificationStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97F6C042B3EB9610065F918 /* NotificationStruct.swift */; };
+		F98806782B9965FF008EB540 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F98806772B9965FF008EB540 /* VideoView.swift */; };
+		F988067A2B996C7B008EB540 /* lina.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F98806792B996C7B008EB540 /* lina.mp4 */; };
 		F9B48D462B31A72B00BF1EC5 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = F9B48D452B31A72B00BF1EC5 /* SDWebImageSwiftUI */; };
 		F9B48D482B31AED200BF1EC5 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B48D472B31AED200BF1EC5 /* LoginViewModel.swift */; };
 		F9B48D4A2B31AF0D00BF1EC5 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F9B48D492B31AF0D00BF1EC5 /* FirebaseAuth */; };
@@ -248,6 +250,8 @@
 		F97F6BFF2B3EA4F30065F918 /* NotificationStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NotificationStruct.swift; path = /Users/quangho/Documents/WallDota2/WallpaperDota/WallDota2/NotificationStruct.swift; sourceTree = "<absolute>"; };
 		F97F6C022B3EA85C0065F918 /* FirebaseRealtime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseRealtime.swift; sourceTree = "<group>"; };
 		F97F6C042B3EB9610065F918 /* NotificationStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NotificationStruct.swift; path = /Users/quangho/Documents/WallDota2/WallpaperDota/WallDota2/NotificationStruct.swift; sourceTree = "<absolute>"; };
+		F98806772B9965FF008EB540 /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
+		F98806792B996C7B008EB540 /* lina.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = lina.mp4; sourceTree = "<group>"; };
 		F9B48D472B31AED200BF1EC5 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		F9B69CE02B2AA308004A2D71 /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
 		F9BAA5E42B30199B0077BD5B /* ShowToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowToast.swift; sourceTree = "<group>"; };
@@ -432,6 +436,7 @@
 		F96195722B3C9DF5000109E1 /* colorful-room */ = {
 			isa = PBXGroup;
 			children = (
+				F98806792B996C7B008EB540 /* lina.mp4 */,
 				F96195732B3C9DF5000109E1 /* UI */,
 				F96195772B3C9DF5000109E1 /* Persistence.swift */,
 				F96195782B3C9DF5000109E1 /* TextAlert */,
@@ -629,6 +634,16 @@
 			path = Notification;
 			sourceTree = "<group>";
 		};
+		F98806762B996205008EB540 /* Story */ = {
+			isa = PBXGroup;
+			children = (
+				F9F485262B45C8A900F600BF /* StoryModel.swift */,
+				F9F485242B45AEC600F600BF /* StoryView.swift */,
+				F98806772B9965FF008EB540 /* VideoView.swift */,
+			);
+			path = Story;
+			sourceTree = "<group>";
+		};
 		F9C0358B2B2846A60049D4B6 = {
 			isa = PBXGroup;
 			children = (
@@ -660,8 +675,7 @@
 				F9C035972B2846A60049D4B6 /* WallDota2App.swift */,
 				F97F6C042B3EB9610065F918 /* NotificationStruct.swift */,
 				F9C035992B2846A60049D4B6 /* ContentView.swift */,
-				F9F485262B45C8A900F600BF /* StoryModel.swift */,
-				F9F485242B45AEC600F600BF /* StoryView.swift */,
+				F98806762B996205008EB540 /* Story */,
 				F97F6C012B3EA4F80065F918 /* Notification */,
 				F96082C42B3DDD3A00A724D4 /* Ranking */,
 				F9FE39A02B33FA3700E4BBA0 /* Login */,
@@ -873,6 +887,7 @@
 				F9C0359F2B2846A70049D4B6 /* Preview Assets.xcassets in Resources */,
 				F9C035C62B284CE40049D4B6 /* GoogleService-Info.plist in Resources */,
 				F96195CC2B3C9DF5000109E1 /* Preview Assets.xcassets in Resources */,
+				F988067A2B996C7B008EB540 /* lina.mp4 in Resources */,
 				F9C0359C2B2846A70049D4B6 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1063,6 +1078,7 @@
 				F9B69CE12B2AA308004A2D71 /* ImageModel.swift in Sources */,
 				F96195EB2B3C9DF5000109E1 /* SaturationControl.swift in Sources */,
 				F96195DA2B3C9DF5000109E1 /* CropperController.swift in Sources */,
+				F98806782B9965FF008EB540 /* VideoView.swift in Sources */,
 				F96195F12B3C9DF5000109E1 /* ColorSelectButton.swift in Sources */,
 				F96195E02B3C9DF5000109E1 /* PhotoEditorController.swift in Sources */,
 				F96195D32B3C9DF5000109E1 /* RoadMapView.swift in Sources */,
