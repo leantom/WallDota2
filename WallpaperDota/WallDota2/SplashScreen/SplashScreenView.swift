@@ -57,6 +57,10 @@ struct SplashScreenView: View {
                                         .fontWeight(.bold)
                                         .foregroundStyle(.white)
                                         .multilineTextAlignment(.center)
+                                        .padding()
+                                        .background(.gray.opacity(0.5))
+                                        .cornerRadius(10)
+                                        
                                 }
                                 .padding(.bottom, 150)
                             }
@@ -66,7 +70,6 @@ struct SplashScreenView: View {
                         }
                         
                     }
-                    
                     .edgesIgnoringSafeArea(.all)
                     .tabViewStyle(.page)
                         .onChange(of: currentIndex) { newIndex in
@@ -94,15 +97,16 @@ struct SplashScreenView: View {
                             
                         }) {
                             HStack {
-                                Image(systemName: "arrow.forward")
-                                    .font(.title2)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.white)
+                                Text("Get Started")
+                                    .font(.caption)
+                                    .fontWeight(.regular)
+                                    .foregroundStyle(Color.white)
                             }
                             .padding()
                             .background(Color(red: 0.254, green: 0.279, blue: 0.326).opacity(0.5))
-                            .mask(Circle())
-                        }.frame(width: 48, height: 48)
+                            .cornerRadius(20)
+
+                        }
                     }
                     .opacity(reachedEnd ? 1 : 0)
                     .animation(.easeInOut, value: reachedEnd)

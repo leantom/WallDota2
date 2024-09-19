@@ -15,10 +15,13 @@ import Algorithms
 class FireStoreDatabase {
     var listAllImage : [ImageModel] = []
     var spotlightImages : [ImageModel] = []
+    var spotlightImagesInHome : [ImageModel] = []
     var trendingImages : [ImageModel] = []
     var listCollectionImages : [ImageModel] = []
     var listImageLiked : [ImageModel] = []
     var listPositionRanking : [ImageModel] = []
+    
+    var listVideo : [VideoModel] = []
     
     
     var heroesID : [String] = []
@@ -54,6 +57,7 @@ class FireStoreDatabase {
             self.getHeroesID()
             self.getListPositionRanking()
             await getImagesLiked()
+            await self.fetchVideoFromFirestore()
         } catch {
             print("Error getting documents: \(error.localizedDescription)")
         }
@@ -103,6 +107,29 @@ class FireStoreDatabase {
         } catch let err{
             print(err.localizedDescription)
             return nil
+        }
+        
+    }
+    
+    public func fetchVideoFromFirestore() async{
+        let db = Firestore.firestore()
+        let collectionRef = db.collection("videos")
+        do {
+            
+            let snapshot = try await collectionRef.getDocuments()
+            let _items = snapshot.documents.compactMap { document in
+                do {
+                    let item =  try document.data(as: VideoModel.self)
+                    return item
+                    
+                } catch {
+                    print("Error decoding item: \(error.localizedDescription)")
+                    return nil
+                }
+            }
+            listVideo = _items
+        } catch let err{
+            print(err.localizedDescription)
         }
         
     }
@@ -291,7 +318,6 @@ class FireStoreDatabase {
         }
     }
     
-    
     private func getSpotlightImages() async {
         let db = Firestore.firestore()
         let collectionRef = db.collection("spotlights")
@@ -315,11 +341,26 @@ class FireStoreDatabase {
                 return item1.likeCount > item2.likeCount
             })
             
+            if spotlightImages.count >= 5 {
+                
+                spotlightImagesInHome = Array(spotlightImages.shuffled().prefix(5))
+                Task {
+                    for item in spotlightImagesInHome {
+                        let url = await getImageURL(id: item.thumbnail)
+                        item.thumbnailFull = url?.absoluteString ?? ""
+                    }
+                }
+                
+            } else {
+                print("Array does not have enough elements.")
+            }
+            
+            
+            
             
         } catch {
             print("Error getting documents: \(error.localizedDescription)")
         }
-        
     }
     
     func getImages(by id: String) -> [ImageModel] {

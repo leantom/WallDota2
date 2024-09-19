@@ -23,6 +23,9 @@ struct TabbarCustomView: View {
     @State private var isShowDetailImage = false
     
     @State var modelSelected: ImageModel = ImageModel()
+    @State var storySelected: StoryModel = StoryModel()
+    @State var listStoryModel: [StoryModel] = []
+    
     @State var isDownloadImage = ""
     
     @State private var toastIsVisible = false
@@ -33,6 +36,9 @@ struct TabbarCustomView: View {
     @State private var isMenuOpen = false
     @State private var isShowMoreSpotlight = false
     @State private var isShowDetailSpotlight = false
+    @State private var isShowVideoView = false
+    @State private var isShowVideoViewFullScreen = false
+    
     @State private var isLogout = false
     @State var isDeleteAccount: Bool = false
     
@@ -58,8 +64,9 @@ struct TabbarCustomView: View {
         }, actionDownloadFinished: {
             isLoading = false
             toastIsVisible = true
-        }, actionShowDetailSpotlight:  { model in
-            self.modelSelected = model
+        }, actionShowDetailSpotlight:  { model, items in
+            self.storySelected = model
+            self.listStoryModel = items
             self.isShowDetailSpotlight.toggle()
         }, actionShowMoreSpotlight: { list in
             self.isShowMoreSpotlight.toggle()
@@ -93,6 +100,11 @@ struct TabbarCustomView: View {
         }, userLogin: $userLogin)
     }
     
+    var videoView = VideoView(dismissModal: {
+        
+    })
+    
+    
     var body: some View {
         ZStack {
             
@@ -104,17 +116,19 @@ struct TabbarCustomView: View {
             }
             
             NavigationStack {
-                TopView(toastIsVisible: $toastIsVisible,
-                        isLoading: $isLoading,
-                        progressBarValue: $progressBarValue,
-                        title: $title, actionOpenMenu: {
-                    withAnimation(.easeInOut) {
-                        isMenuOpen.toggle()
-                    }
-                    
-                })
-                .frame(height: 50)
-                .clipped()
+                if self.isShowVideoView == false && isMenuOpen == false {
+                    TopView(toastIsVisible: $toastIsVisible,
+                            isLoading: $isLoading,
+                            progressBarValue: $progressBarValue,
+                            title: $title, actionOpenMenu: {
+                        withAnimation(.easeInOut) {
+                            isMenuOpen.toggle()
+                        }
+                        
+                    })
+                    .frame(height: 50)
+                    .clipped()
+                }
                 
                 TabView(selection: $selection) {
                     homeView.onAppear(perform: {
@@ -127,7 +141,9 @@ struct TabbarCustomView: View {
                                 self.heroesID = fireStoreDB.heroesID
                                 return
                             }
+                            
                             await fireStoreDB.fetchDataFromFirestore()
+                            let stories =  await StoryViewModel.shared.getTop5StoriesByHeroID(language: "en")
                             self.items = fireStoreDB.listAllImage
                             self.itemsSpotlight = fireStoreDB.spotlightImages
                             self.heroesID = fireStoreDB.heroesID
@@ -147,8 +163,8 @@ struct TabbarCustomView: View {
                     })
                     .onAppear(perform: {
                         Task {
-                           // await FireStoreDatabase.shared.fetchDataCollectionFromFirestore()
-                          //  self.listCollectionModel = _firestoreDB.listCollectionImages
+                            // await FireStoreDatabase.shared.fetchDataCollectionFromFirestore()
+                            //  self.listCollectionModel = _firestoreDB.listCollectionImages
                         }
                         
                     })
@@ -156,19 +172,25 @@ struct TabbarCustomView: View {
                         
                         Image(systemName: "command.circle")
                     }.tag(2)
-                    
-                    UserProfileView(_firestoreDB: $fireStoreDB)
-                        .tabItem {
+                    if #available(iOS 17.0, *) {
+                        videoView.tabItem {
                             
-                            Image(systemName: "person.crop.square")
+                            Image(systemName: "video.square")
                         }.tag(3)
+                    } else {
+                        UserProfileView(_firestoreDB: $fireStoreDB)
+                            .tabItem {
+                                
+                                Image(systemName: "person.crop.square")
+                            }.tag(3)
+                    }
                     
                     LeaderBoardView()
                         .tabItem {
                             Image(systemName: "chart.bar.doc.horizontal")
                         }.tag(4)
                     
-                        
+                    
                 }
                 .navigationTransition(
                     .fade(.in).animation(.easeInOut(duration:0.3))
@@ -176,6 +198,8 @@ struct TabbarCustomView: View {
                 .onChange(of: selection) { newSelection in
                     // Handle selection change (user indirectly interacts with an item)
                     title = titleTabs[newSelection - 1]
+                    
+                    self.isShowVideoView = newSelection == 3
                     print("Selected item: \(newSelection)")
                 }
                 .navigationDestination(isPresented: $isShowDetailVC) {
@@ -196,44 +220,52 @@ struct TabbarCustomView: View {
                     .navigationBarBackButtonHidden()
                     
                 }.navigationDestination(isPresented: $isShowDetailSpotlight) {
-                    ShowDetailImageView(dismissModal: {
+                    
+                    StoryView(dismissModal: {
                         isShowDetailSpotlight = false
-                    } , model: $modelSelected, models: $items)
+                    }, model: $storySelected,
+                               actionChooseStory: { item in
+                        self.storySelected = item
+                        isShowDetailSpotlight = true
+                    })
                     .navigationBarBackButtonHidden()
                 }
                 .alert(isPresented: $isDeleteAccount) {
                     Alert(
-                                title: Text("Warning"),
-                                message: Text("Do you really want to delete your account"),
-                                primaryButton: .default(
-                                    Text("OK"),
-                                    action: {
-                                        Task {
-                                            await LoginViewModel.shared.deleteUser()
-                                            isLogout.toggle()
-                                        }
-                                        
-                                        
-                                    }
-                                ),
-                                secondaryButton: .destructive(
-                                    Text("Cancel"),
-                                    action: {
-                                        
-                                    }
-                                )
-                            )
+                        title: Text("Warning"),
+                        message: Text("Do you really want to delete your account"),
+                        primaryButton: .default(
+                            Text("OK"),
+                            action: {
+                                Task {
+                                    await LoginViewModel.shared.deleteUser()
+                                    isLogout.toggle()
+                                }
+                                
+                                
+                            }
+                        ),
+                        secondaryButton: .destructive(
+                            Text("Cancel"),
+                            action: {
+                                
+                            }
+                        )
+                    )
                 }
                 .onAppear() {
                     UITabBar.appearance().backgroundColor = .white
                 }
+                .background(gradient.ignoresSafeArea())
+                .cornerRadius(isMenuOpen ? 20 : 0)
+                .offset(x: isMenuOpen ? sideBarWidth : 0)
+                .scaleEffect(isMenuOpen ? 0.5 : 1)
+                .animation(.smooth, value: isMenuOpen)
+                .navigationBarBackButtonHidden()
+                
+                
             }
-            .background(gradient.ignoresSafeArea())
-            .cornerRadius(isMenuOpen ? 20 : 0)
-            .offset(x: isMenuOpen ? sideBarWidth : 0)
-            .scaleEffect(isMenuOpen ? 0.5 : 1)
-            .animation(.smooth, value: isMenuOpen)
-            .navigationBarBackButtonHidden()
+            
             if isLogout {
                 LoginView()
             }

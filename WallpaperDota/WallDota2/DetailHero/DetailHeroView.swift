@@ -144,7 +144,6 @@ struct DetailHeroView: View {
                 Task {
                     let items = await StoryViewModel.shared.getStoryByHeroID(by: heroName, language: "vn")
                     listStoryModel.append(contentsOf: items)
-                    print(listStoryModel.count)
                 }
             })
         }
@@ -161,7 +160,9 @@ struct DetailHeroView: View {
         .navigationDestination(isPresented:$isStoryHero) {
             StoryView(dismissModal: {
                 isStoryHero = false
-            }, model: $storyModel, isVietnameseLanguage: $isChangeLanguage)
+            }, model: $storyModel, actionChooseStory: { item in
+                isStoryHero = true
+            })
             .navigationBarBackButtonHidden()
         }
     }
@@ -201,7 +202,7 @@ struct ListStoryView: View {
             } else {
                 ProgressView()
             }
-            Text(model.content.title)
+            Text(model.content.titleDescription ?? "")
                 .font(.caption)
                 .fixedSize(horizontal: false, vertical: true)
                 .foregroundColor(.black)

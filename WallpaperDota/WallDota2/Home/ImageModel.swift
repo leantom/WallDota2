@@ -75,9 +75,13 @@ class ImageModel: Codable, Identifiable, ObservableObject {
         id = UUID().uuidString
         heroID = "invoker"
         imageName = "invo"
-        imageUrl = "https://firebasestorage.googleapis.com/v0/b/dotadressup.appspot.com/o/images%2FPhantom%20assassin%2FPhantom%20assassin58931?alt=media&token=33fc2537-481e-42bd-9bd7-4266442c5faa"
-        thumbnail = "https://firebasestorage.googleapis.com/v0/b/dotadressup.appspot.com/o/images%2FPhantom%20assassin%2FPhantom%20assassin58931?alt=media&token=33fc2537-481e-42bd-9bd7-4266442c5faa"
+        imageUrl = "https://firebasestorage.googleapis.com/v0/b/dotadressup.appspot.com/o/thumbnail%2Fspotlights%2Fspotlights00585?alt=media&token=f772fac5-a0e1-469f-abec-d123178fa278"
+        thumbnail = "thumbnail/logo/logo07931"
         likeCount = 0
+    }
+    
+    func getURL(from str: String) async -> URL? {
+        return await FireStoreDatabase.shared.getImageURL(id: str)
     }
 }
 

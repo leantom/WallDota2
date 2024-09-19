@@ -22,7 +22,7 @@ struct HomeView: View {
     var actionDownload: ((Double) -> Void) // dang down
     var actionDownloadFinished: (() -> Void) // down xong
     
-    var actionShowDetailSpotlight: ((ImageModel) -> Void)
+    var actionShowDetailSpotlight: ((StoryModel, [StoryModel]) -> Void)
     var actionShowMoreSpotlight: (([ImageModel]) -> Void)
     
     let columns = [GridItem(.flexible(minimum: 50, maximum: 180)),
@@ -41,10 +41,11 @@ struct HomeView: View {
                     if itemsSpotlight.count == 0 {
                         ProgressView()
                     } else {
-                        FirstSectionHomeView(items: itemsSpotlight, actionShowDetailSpotlight: { model in
-                            self.actionShowDetailSpotlight(model)
-                        }, actionShowMoreSpotlight: { list in
-                            self.actionShowMoreSpotlight(list)
+                        
+                        SpotlightViewV2(actionShowDetailSpotlight: { item,  items in
+                            self.actionShowDetailSpotlight(item, items)
+                        }, actionShowMoreSpotlight: { items in
+                            self.actionShowMoreSpotlight(items)
                         })
                     }
                 }
@@ -57,24 +58,22 @@ struct HomeView: View {
                             .padding()
                         Spacer()
                     }
-                    LazyVGrid(columns: columns, spacing: 5, content: {
-                        ForEach(items) { show in
-                            ShowItemView(show: show, actionDownload: {
-                                
-                                self.actionDownloadFinished()
-                            }, actionDownloadProgressBar: { progress in
-                                self.actionDownload(progress)
-                                
-                            }, actionComment: { model in
-                                withAnimation {
-                                    itemSelected = model
-                                    isShowPopupComment.toggle()
+                    LazyVGrid(columns: columns, spacing: 5) {
+                            ForEach(items.indices, id: \.self) { index in
+                                ShowItemView(show: items[index], actionDownload: {
+                                    self.actionDownloadFinished()
+                                }, actionDownloadProgressBar: { progress in
+                                    self.actionDownload(progress)
+                                }, actionComment: { model in
+                                    withAnimation {
+                                        itemSelected = model
+                                        isShowPopupComment.toggle()
+                                    }
+                                }).onTapGesture {
+                                    self.actionTapDetail(items[index])
                                 }
-                            }).onTapGesture {
-                                self.actionTapDetail(show)
                             }
                         }
-                    })
                 }
             }
             .frame(width: UIScreen.main.bounds.width * 0.98)

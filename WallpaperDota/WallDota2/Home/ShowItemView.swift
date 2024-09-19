@@ -29,10 +29,6 @@ struct ShowItemView: View {
     var body: some View {
         ZStack {
             WebImage(url: thumbnail)
-                .onSuccess { image, data, cacheType in
-                    // Success
-                    // Note: Data exist only when queried from disk cache or network. Use `.queryMemoryData` if you really need data
-                }
                 .resizable() // Resizable like SwiftUI.Image, you must use this modifier or the view will use the image bitmap size
                 .indicator(.activity) // Activity Indicator
                 .transition(.fade(duration: 0.5)) // Fade Transition with duration

@@ -10,6 +10,11 @@
 		1917996D9C967EEEF2613D5F /* Pods_WallDota2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A3582C1CA1F9BE804D6D87E /* Pods_WallDota2.framework */; };
 		1F0C5A02A06F73404B9F9123 /* Pods_WallDota2_WallDota2UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0182B65A09A07F4FEB0F3F46 /* Pods_WallDota2_WallDota2UITests.framework */; };
 		2696BB3707F072515A1E7788 /* Pods_WallDota2Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51EFE6F5534817B02D5FA8D9 /* Pods_WallDota2Tests.framework */; };
+		F914A5462C298ADB00CE1C65 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F914A5452C298ADB00CE1C65 /* FirebaseAuth */; };
+		F914A5482C298AF400CE1C65 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = F914A5472C298AF400CE1C65 /* FirebaseFirestore */; };
+		F914A54A2C298C0D00CE1C65 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = F914A5492C298C0D00CE1C65 /* FirebaseStorage */; };
+		F914A54C2C298C5C00CE1C65 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = F914A54B2C298C5C00CE1C65 /* FirebaseMessaging */; };
+		F914A54E2C298CA900CE1C65 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = F914A54D2C298CA900CE1C65 /* FirebaseDatabase */; };
 		F91FF7782B4C563F00E5F110 /* DetailHeroViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F91FF7772B4C563F00E5F110 /* DetailHeroViewModel.swift */; };
 		F91FF77C2B4C5A1500E5F110 /* NavigationTransitions in Frameworks */ = {isa = PBXBuildFile; productRef = F91FF77B2B4C5A1500E5F110 /* NavigationTransitions */; };
 		F92805192B32BCA1000D53E9 /* CollectionHeroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92805182B32BCA1000D53E9 /* CollectionHeroView.swift */; };
@@ -90,16 +95,21 @@
 		F96196062B3C9DF5000109E1 /* AppContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96195C42B3C9DF5000109E1 /* AppContent.swift */; };
 		F9692BA52B361F9800F8C1AB /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = F9692BA42B361F9800F8C1AB /* Algorithms */; };
 		F974C0422B309B5B0079EABD /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F974C0412B309B5B0079EABD /* MenuView.swift */; };
+		F975B4902BD41165008FA052 /* Test_Animation1.swift in Sources */ = {isa = PBXBuildFile; fileRef = F975B48F2BD41165008FA052 /* Test_Animation1.swift */; };
+		F975B4922BD418F3008FA052 /* Test_Animation2.swift in Sources */ = {isa = PBXBuildFile; fileRef = F975B4912BD418F3008FA052 /* Test_Animation2.swift */; };
 		F978E1C52B36DE03008F422A /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F978E1C42B36DE03008F422A /* CommentView.swift */; };
 		F97F6BFE2B3EA4DD0065F918 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97F6BFD2B3EA4DD0065F918 /* NotificationView.swift */; };
 		F97F6C002B3EA4F30065F918 /* NotificationStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97F6BFF2B3EA4F30065F918 /* NotificationStruct.swift */; };
 		F97F6C032B3EA85C0065F918 /* FirebaseRealtime.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97F6C022B3EA85C0065F918 /* FirebaseRealtime.swift */; };
 		F97F6C052B3EB9610065F918 /* NotificationStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97F6C042B3EB9610065F918 /* NotificationStruct.swift */; };
+		F98266D22C92DC010074DCC5 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F98266D12C92DC010074DCC5 /* CardView.swift */; };
 		F98806782B9965FF008EB540 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F98806772B9965FF008EB540 /* VideoView.swift */; };
 		F988067A2B996C7B008EB540 /* lina.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F98806792B996C7B008EB540 /* lina.mp4 */; };
+		F98BB6972BE371D700DC7215 /* SpotlightViewV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = F98BB6962BE371D700DC7215 /* SpotlightViewV2.swift */; };
+		F9AFFBA92BEB21C40014444C /* VideoPlayer in Frameworks */ = {isa = PBXBuildFile; productRef = F9AFFBA82BEB21C40014444C /* VideoPlayer */; };
+		F9AFFBAB2BEB2FE00014444C /* VideoFullScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AFFBAA2BEB2FE00014444C /* VideoFullScreenView.swift */; };
 		F9B48D462B31A72B00BF1EC5 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = F9B48D452B31A72B00BF1EC5 /* SDWebImageSwiftUI */; };
 		F9B48D482B31AED200BF1EC5 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B48D472B31AED200BF1EC5 /* LoginViewModel.swift */; };
-		F9B48D4A2B31AF0D00BF1EC5 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F9B48D492B31AF0D00BF1EC5 /* FirebaseAuth */; };
 		F9B48D4D2B31B08B00BF1EC5 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F9B48D4C2B31B08B00BF1EC5 /* GoogleSignInSwift */; };
 		F9B69CE12B2AA308004A2D71 /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B69CE02B2AA308004A2D71 /* ImageModel.swift */; };
 		F9BAA5E52B30199B0077BD5B /* ShowToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BAA5E42B30199B0077BD5B /* ShowToast.swift */; };
@@ -114,17 +124,18 @@
 		F9C035C22B2849F40049D4B6 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C035C12B2849F40049D4B6 /* UIImage+Extension.swift */; };
 		F9C035C42B284C8F0049D4B6 /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C035C32B284C8F0049D4B6 /* SplashScreenView.swift */; };
 		F9C035C62B284CE40049D4B6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F9C035C52B284CE40049D4B6 /* GoogleService-Info.plist */; };
-		F9C035C92B284D320049D4B6 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = F9C035C82B284D320049D4B6 /* FirebaseAnalytics */; };
-		F9C035CB2B284D320049D4B6 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = F9C035CA2B284D320049D4B6 /* FirebaseDatabase */; };
-		F9C035CD2B284D320049D4B6 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = F9C035CC2B284D320049D4B6 /* FirebaseFirestore */; };
-		F9C035CF2B284D320049D4B6 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = F9C035CE2B284D320049D4B6 /* FirebaseStorage */; };
 		F9C035D12B2851340049D4B6 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C035D02B2851340049D4B6 /* LoginView.swift */; };
 		F9C035D42B286A530049D4B6 /* TestTabview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C035D32B286A530049D4B6 /* TestTabview.swift */; };
+		F9CFC99E2C920C8800632E76 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = F9CFC99D2C920C8800632E76 /* GoogleMobileAds */; };
+		F9CFC9A02C920E7F00632E76 /* AdMobBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CFC99F2C920E7F00632E76 /* AdMobBannerView.swift */; };
 		F9DA1D9A2B3CA05000B66616 /* PixelEnginePackage in Frameworks */ = {isa = PBXBuildFile; productRef = F9DA1D992B3CA05000B66616 /* PixelEnginePackage */; };
 		F9DAE1102B2AD808002BAF3D /* TopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DAE10F2B2AD808002BAF3D /* TopView.swift */; };
 		F9DAE1122B2AE314002BAF3D /* FirstSectionHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DAE1112B2AE314002BAF3D /* FirstSectionHomeView.swift */; };
 		F9DAE1142B2AEA84002BAF3D /* FireStoreDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DAE1132B2AEA84002BAF3D /* FireStoreDatabase.swift */; };
 		F9DAE1172B2AF554002BAF3D /* TabbarCustomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DAE1162B2AF554002BAF3D /* TabbarCustomView.swift */; };
+		F9DC3FB02C9BD1BC00E59DEB /* StoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DC3FAF2C9BD1BC00E59DEB /* StoryListView.swift */; };
+		F9DC3FB22C9BDEA900E59DEB /* Utils_app.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DC3FB12C9BDEA900E59DEB /* Utils_app.swift */; };
+		F9DC3FB62C9C175A00E59DEB /* LanguageSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DC3FB52C9C175A00E59DEB /* LanguageSwitchView.swift */; };
 		F9DD044C2B2C376500B95097 /* HomeMasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DD044B2B2C376500B95097 /* HomeMasterView.swift */; };
 		F9DD044E2B2C62AD00B95097 /* ShowDetailImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DD044D2B2C62AD00B95097 /* ShowDetailImageView.swift */; };
 		F9F0E9F42B3943A700B7F26F /* LeaderBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F0E9F32B3943A700B7F26F /* LeaderBoardView.swift */; };
@@ -136,7 +147,6 @@
 		F9FE39992B3329ED00E4BBA0 /* SpotlightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FE39982B3329ED00E4BBA0 /* SpotlightView.swift */; };
 		F9FE399B2B3346F300E4BBA0 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FE399A2B3346F300E4BBA0 /* UserViewModel.swift */; };
 		F9FE399D2B334F8600E4BBA0 /* ShowItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FE399C2B334F8600E4BBA0 /* ShowItemView.swift */; };
-		F9FE399F2B33F97A00E4BBA0 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = F9FE399E2B33F97A00E4BBA0 /* FirebaseMessaging */; };
 		F9FE39A22B33FA4700E4BBA0 /* UserNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9FE39A12B33FA4700E4BBA0 /* UserNotificationManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -245,13 +255,18 @@
 		F96195C32B3C9DF5000109E1 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		F96195C42B3C9DF5000109E1 /* AppContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppContent.swift; sourceTree = "<group>"; };
 		F974C0412B309B5B0079EABD /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
+		F975B48F2BD41165008FA052 /* Test_Animation1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test_Animation1.swift; sourceTree = "<group>"; };
+		F975B4912BD418F3008FA052 /* Test_Animation2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test_Animation2.swift; sourceTree = "<group>"; };
 		F978E1C42B36DE03008F422A /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		F97F6BFD2B3EA4DD0065F918 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		F97F6BFF2B3EA4F30065F918 /* NotificationStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NotificationStruct.swift; path = /Users/quangho/Documents/WallDota2/WallpaperDota/WallDota2/NotificationStruct.swift; sourceTree = "<absolute>"; };
 		F97F6C022B3EA85C0065F918 /* FirebaseRealtime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseRealtime.swift; sourceTree = "<group>"; };
 		F97F6C042B3EB9610065F918 /* NotificationStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NotificationStruct.swift; path = /Users/quangho/Documents/WallDota2/WallpaperDota/WallDota2/NotificationStruct.swift; sourceTree = "<absolute>"; };
+		F98266D12C92DC010074DCC5 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		F98806772B9965FF008EB540 /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		F98806792B996C7B008EB540 /* lina.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = lina.mp4; sourceTree = "<group>"; };
+		F98BB6962BE371D700DC7215 /* SpotlightViewV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotlightViewV2.swift; sourceTree = "<group>"; };
+		F9AFFBAA2BEB2FE00014444C /* VideoFullScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoFullScreenView.swift; sourceTree = "<group>"; };
 		F9B48D472B31AED200BF1EC5 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		F9B69CE02B2AA308004A2D71 /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
 		F9BAA5E42B30199B0077BD5B /* ShowToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowToast.swift; sourceTree = "<group>"; };
@@ -272,10 +287,14 @@
 		F9C035D02B2851340049D4B6 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		F9C035D22B28607A0049D4B6 /* WallDota2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WallDota2.entitlements; sourceTree = "<group>"; };
 		F9C035D32B286A530049D4B6 /* TestTabview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTabview.swift; sourceTree = "<group>"; };
+		F9CFC99F2C920E7F00632E76 /* AdMobBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdMobBannerView.swift; sourceTree = "<group>"; };
 		F9DAE10F2B2AD808002BAF3D /* TopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopView.swift; sourceTree = "<group>"; };
 		F9DAE1112B2AE314002BAF3D /* FirstSectionHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstSectionHomeView.swift; sourceTree = "<group>"; };
 		F9DAE1132B2AEA84002BAF3D /* FireStoreDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStoreDatabase.swift; sourceTree = "<group>"; };
 		F9DAE1162B2AF554002BAF3D /* TabbarCustomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarCustomView.swift; sourceTree = "<group>"; };
+		F9DC3FAF2C9BD1BC00E59DEB /* StoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryListView.swift; sourceTree = "<group>"; };
+		F9DC3FB12C9BDEA900E59DEB /* Utils_app.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils_app.swift; sourceTree = "<group>"; };
+		F9DC3FB52C9C175A00E59DEB /* LanguageSwitchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSwitchView.swift; sourceTree = "<group>"; };
 		F9DD044B2B2C376500B95097 /* HomeMasterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMasterView.swift; sourceTree = "<group>"; };
 		F9DD044D2B2C62AD00B95097 /* ShowDetailImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDetailImageView.swift; sourceTree = "<group>"; };
 		F9E9C6D12B2AB78E005233DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -295,18 +314,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F914A54E2C298CA900CE1C65 /* FirebaseDatabase in Frameworks */,
+				F914A54C2C298C5C00CE1C65 /* FirebaseMessaging in Frameworks */,
 				F9692BA52B361F9800F8C1AB /* Algorithms in Frameworks */,
 				F9DA1D9A2B3CA05000B66616 /* PixelEnginePackage in Frameworks */,
-				F9FE399F2B33F97A00E4BBA0 /* FirebaseMessaging in Frameworks */,
 				F9FB804B2B59F08F00906818 /* AlertToast in Frameworks */,
+				F914A5482C298AF400CE1C65 /* FirebaseFirestore in Frameworks */,
+				F9CFC99E2C920C8800632E76 /* GoogleMobileAds in Frameworks */,
 				F9B48D462B31A72B00BF1EC5 /* SDWebImageSwiftUI in Frameworks */,
-				F9B48D4A2B31AF0D00BF1EC5 /* FirebaseAuth in Frameworks */,
+				F914A5462C298ADB00CE1C65 /* FirebaseAuth in Frameworks */,
 				F9B48D4D2B31B08B00BF1EC5 /* GoogleSignInSwift in Frameworks */,
-				F9C035CB2B284D320049D4B6 /* FirebaseDatabase in Frameworks */,
+				F9AFFBA92BEB21C40014444C /* VideoPlayer in Frameworks */,
+				F914A54A2C298C0D00CE1C65 /* FirebaseStorage in Frameworks */,
 				F91FF77C2B4C5A1500E5F110 /* NavigationTransitions in Frameworks */,
-				F9C035CF2B284D320049D4B6 /* FirebaseStorage in Frameworks */,
-				F9C035C92B284D320049D4B6 /* FirebaseAnalytics in Frameworks */,
-				F9C035CD2B284D320049D4B6 /* FirebaseFirestore in Frameworks */,
 				1917996D9C967EEEF2613D5F /* Pods_WallDota2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -429,6 +449,7 @@
 			children = (
 				F9BAA5E42B30199B0077BD5B /* ShowToast.swift */,
 				F9BAA5E62B3021CB0077BD5B /* ProgressBarView.swift */,
+				F9DC3FB12C9BDEA900E59DEB /* Utils_app.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -639,7 +660,10 @@
 			children = (
 				F9F485262B45C8A900F600BF /* StoryModel.swift */,
 				F9F485242B45AEC600F600BF /* StoryView.swift */,
+				F9DC3FB52C9C175A00E59DEB /* LanguageSwitchView.swift */,
+				F9DC3FAF2C9BD1BC00E59DEB /* StoryListView.swift */,
 				F98806772B9965FF008EB540 /* VideoView.swift */,
+				F9AFFBAA2BEB2FE00014444C /* VideoFullScreenView.swift */,
 			);
 			path = Story;
 			sourceTree = "<group>";
@@ -692,6 +716,10 @@
 				F96082C62B3DDD6400A724D4 /* SplashScreen */,
 				F96082C72B3DDD7E00A724D4 /* Utils */,
 				F9C035D32B286A530049D4B6 /* TestTabview.swift */,
+				F975B48F2BD41165008FA052 /* Test_Animation1.swift */,
+				F975B4912BD418F3008FA052 /* Test_Animation2.swift */,
+				F98BB6962BE371D700DC7215 /* SpotlightViewV2.swift */,
+				F98266D12C92DC010074DCC5 /* CardView.swift */,
 				F9C035C12B2849F40049D4B6 /* UIImage+Extension.swift */,
 				F9F6E0802B34AD690048B957 /* UINavigationViewController+Extension.swift */,
 				F9C0359B2B2846A70049D4B6 /* Assets.xcassets */,
@@ -739,6 +767,7 @@
 				F95A916D2B303AFD00AAAE57 /* CollectionView.swift */,
 				F92805182B32BCA1000D53E9 /* CollectionHeroView.swift */,
 				F974C0412B309B5B0079EABD /* MenuView.swift */,
+				F9CFC99F2C920E7F00632E76 /* AdMobBannerView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -772,18 +801,19 @@
 			);
 			name = WallDota2;
 			packageProductDependencies = (
-				F9C035C82B284D320049D4B6 /* FirebaseAnalytics */,
-				F9C035CA2B284D320049D4B6 /* FirebaseDatabase */,
-				F9C035CC2B284D320049D4B6 /* FirebaseFirestore */,
-				F9C035CE2B284D320049D4B6 /* FirebaseStorage */,
 				F9B48D452B31A72B00BF1EC5 /* SDWebImageSwiftUI */,
-				F9B48D492B31AF0D00BF1EC5 /* FirebaseAuth */,
 				F9B48D4C2B31B08B00BF1EC5 /* GoogleSignInSwift */,
-				F9FE399E2B33F97A00E4BBA0 /* FirebaseMessaging */,
 				F9692BA42B361F9800F8C1AB /* Algorithms */,
 				F9DA1D992B3CA05000B66616 /* PixelEnginePackage */,
 				F91FF77B2B4C5A1500E5F110 /* NavigationTransitions */,
 				F9FB804A2B59F08F00906818 /* AlertToast */,
+				F9AFFBA82BEB21C40014444C /* VideoPlayer */,
+				F914A5452C298ADB00CE1C65 /* FirebaseAuth */,
+				F914A5472C298AF400CE1C65 /* FirebaseFirestore */,
+				F914A5492C298C0D00CE1C65 /* FirebaseStorage */,
+				F914A54B2C298C5C00CE1C65 /* FirebaseMessaging */,
+				F914A54D2C298CA900CE1C65 /* FirebaseDatabase */,
+				F9CFC99D2C920C8800632E76 /* GoogleMobileAds */,
 			);
 			productName = WallDota2;
 			productReference = F9C035942B2846A60049D4B6 /* WallDota2.app */;
@@ -860,13 +890,15 @@
 			);
 			mainGroup = F9C0358B2B2846A60049D4B6;
 			packageReferences = (
-				F9C035C72B284D320049D4B6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				F9B48D442B31A72B00BF1EC5 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				F9B48D4B2B31B08B00BF1EC5 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				F9692BA32B361F9800F8C1AB /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 				F9DA1D982B3CA05000B66616 /* XCRemoteSwiftPackageReference "PixelEnginePackage" */,
 				F91FF77A2B4C5A1500E5F110 /* XCRemoteSwiftPackageReference "swiftui-navigation-transitions" */,
 				F9FB80492B59F08F00906818 /* XCRemoteSwiftPackageReference "AlertToast" */,
+				F9AFFBA72BEB21C40014444C /* XCRemoteSwiftPackageReference "VideoPlayer" */,
+				F914A5442C298ADB00CE1C65 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				F9CFC99C2C920C8800632E76 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 			);
 			productRefGroup = F9C035952B2846A60049D4B6 /* Products */;
 			projectDirPath = "";
@@ -987,15 +1019,19 @@
 				F96195E62B3C9DF5000109E1 /* ButtonView.swift in Sources */,
 				F92805192B32BCA1000D53E9 /* CollectionHeroView.swift in Sources */,
 				F9DD044E2B2C62AD00B95097 /* ShowDetailImageView.swift in Sources */,
+				F98BB6972BE371D700DC7215 /* SpotlightViewV2.swift in Sources */,
 				F96195F02B3C9DF5000109E1 /* ToneControl.swift in Sources */,
 				F96195E32B3C9DF5000109E1 /* IconButton.swift in Sources */,
 				F96196062B3C9DF5000109E1 /* AppContent.swift in Sources */,
+				F9AFFBAB2BEB2FE00014444C /* VideoFullScreenView.swift in Sources */,
 				F928051F2B32EA23000D53E9 /* AppSetting.swift in Sources */,
 				F9F6E07F2B348F480048B957 /* ImageModifier.swift in Sources */,
 				F96195DC2B3C9DF5000109E1 /* LutsController.swift in Sources */,
 				F9DD044C2B2C376500B95097 /* HomeMasterView.swift in Sources */,
+				F975B4902BD41165008FA052 /* Test_Animation1.swift in Sources */,
 				F96195E52B3C9DF5000109E1 /* CollectionButton.swift in Sources */,
 				F9C035D42B286A530049D4B6 /* TestTabview.swift in Sources */,
+				F9DC3FB02C9BD1BC00E59DEB /* StoryListView.swift in Sources */,
 				F96195D02B3C9DF5000109E1 /* Data.swift in Sources */,
 				F96196022B3C9DF5000109E1 /* StorageUtils.swift in Sources */,
 				F96195D62B3C9DF5000109E1 /* ExportView.swift in Sources */,
@@ -1043,6 +1079,7 @@
 				F9B48D482B31AED200BF1EC5 /* LoginViewModel.swift in Sources */,
 				F9C035C22B2849F40049D4B6 /* UIImage+Extension.swift in Sources */,
 				F9FE39A22B33FA4700E4BBA0 /* UserNotificationManager.swift in Sources */,
+				F98266D22C92DC010074DCC5 /* CardView.swift in Sources */,
 				F96195ED2B3C9DF5000109E1 /* HighlightsControl.swift in Sources */,
 				F96195DE2B3C9DF5000109E1 /* RecipeController.swift in Sources */,
 				F96195FC2B3C9DF5000109E1 /* Utility.swift in Sources */,
@@ -1068,8 +1105,11 @@
 				F96195E42B3C9DF5000109E1 /* RecipeButton.swift in Sources */,
 				F9DAE1142B2AEA84002BAF3D /* FireStoreDatabase.swift in Sources */,
 				F933874C2B6F891A004F6048 /* Home.swift in Sources */,
+				F975B4922BD418F3008FA052 /* Test_Animation2.swift in Sources */,
 				F96195F32B3C9DF5000109E1 /* GaussianBlurControl.swift in Sources */,
 				F9DAE1102B2AD808002BAF3D /* TopView.swift in Sources */,
+				F9CFC9A02C920E7F00632E76 /* AdMobBannerView.swift in Sources */,
+				F9DC3FB22C9BDEA900E59DEB /* Utils_app.swift in Sources */,
 				F96196002B3C9DF5000109E1 /* Constants.swift in Sources */,
 				F96195D12B3C9DF5000109E1 /* ImageSaver.swift in Sources */,
 				F96195CD2B3C9DF5000109E1 /* colorful_roomApp.swift in Sources */,
@@ -1082,6 +1122,7 @@
 				F96195F12B3C9DF5000109E1 /* ColorSelectButton.swift in Sources */,
 				F96195E02B3C9DF5000109E1 /* PhotoEditorController.swift in Sources */,
 				F96195D32B3C9DF5000109E1 /* RoadMapView.swift in Sources */,
+				F9DC3FB62C9C175A00E59DEB /* LanguageSwitchView.swift in Sources */,
 				F96196052B3C9DF5000109E1 /* Utils.swift in Sources */,
 				F97F6C052B3EB9610065F918 /* NotificationStruct.swift in Sources */,
 				F96195FD2B3C9DF5000109E1 /* FilterModel.swift in Sources */,
@@ -1259,6 +1300,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WallDota2/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "MythArt - Wallpaper dota 4K";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "This app allows you to save your creations directly to your photo library.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -1272,7 +1314,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.6;
 				PRODUCT_BUNDLE_IDENTIFIER = vn.cyme.WallDota2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1298,6 +1340,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WallDota2/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "MythArt - Wallpaper dota 4K";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "This app allows you to save your creations directly to your photo library.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -1311,7 +1354,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.6;
 				PRODUCT_BUNDLE_IDENTIFIER = vn.cyme.WallDota2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1445,6 +1488,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		F914A5442C298ADB00CE1C65 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.28.0;
+			};
+		};
 		F91FF77A2B4C5A1500E5F110 /* XCRemoteSwiftPackageReference "swiftui-navigation-transitions" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/davdroman/swiftui-navigation-transitions";
@@ -1459,6 +1510,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.2.0;
+			};
+		};
+		F9AFFBA72BEB21C40014444C /* XCRemoteSwiftPackageReference "VideoPlayer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/wxxsw/VideoPlayer";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.4;
 			};
 		};
 		F9B48D442B31A72B00BF1EC5 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
@@ -1477,12 +1536,12 @@
 				minimumVersion = 7.0.0;
 			};
 		};
-		F9C035C72B284D320049D4B6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		F9CFC99C2C920C8800632E76 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 10.19.0;
+				minimumVersion = 11.8.0;
 			};
 		};
 		F9DA1D982B3CA05000B66616 /* XCRemoteSwiftPackageReference "PixelEnginePackage" */ = {
@@ -1504,6 +1563,31 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		F914A5452C298ADB00CE1C65 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F914A5442C298ADB00CE1C65 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		F914A5472C298AF400CE1C65 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F914A5442C298ADB00CE1C65 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		F914A5492C298C0D00CE1C65 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F914A5442C298ADB00CE1C65 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+		F914A54B2C298C5C00CE1C65 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F914A5442C298ADB00CE1C65 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		F914A54D2C298CA900CE1C65 /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F914A5442C298ADB00CE1C65 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
 		F91FF77B2B4C5A1500E5F110 /* NavigationTransitions */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F91FF77A2B4C5A1500E5F110 /* XCRemoteSwiftPackageReference "swiftui-navigation-transitions" */;
@@ -1514,40 +1598,25 @@
 			package = F9692BA32B361F9800F8C1AB /* XCRemoteSwiftPackageReference "swift-algorithms" */;
 			productName = Algorithms;
 		};
+		F9AFFBA82BEB21C40014444C /* VideoPlayer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F9AFFBA72BEB21C40014444C /* XCRemoteSwiftPackageReference "VideoPlayer" */;
+			productName = VideoPlayer;
+		};
 		F9B48D452B31A72B00BF1EC5 /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F9B48D442B31A72B00BF1EC5 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
 			productName = SDWebImageSwiftUI;
-		};
-		F9B48D492B31AF0D00BF1EC5 /* FirebaseAuth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F9C035C72B284D320049D4B6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAuth;
 		};
 		F9B48D4C2B31B08B00BF1EC5 /* GoogleSignInSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F9B48D4B2B31B08B00BF1EC5 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
 		};
-		F9C035C82B284D320049D4B6 /* FirebaseAnalytics */ = {
+		F9CFC99D2C920C8800632E76 /* GoogleMobileAds */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F9C035C72B284D320049D4B6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalytics;
-		};
-		F9C035CA2B284D320049D4B6 /* FirebaseDatabase */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F9C035C72B284D320049D4B6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseDatabase;
-		};
-		F9C035CC2B284D320049D4B6 /* FirebaseFirestore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F9C035C72B284D320049D4B6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseFirestore;
-		};
-		F9C035CE2B284D320049D4B6 /* FirebaseStorage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F9C035C72B284D320049D4B6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseStorage;
+			package = F9CFC99C2C920C8800632E76 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
 		};
 		F9DA1D992B3CA05000B66616 /* PixelEnginePackage */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1558,11 +1627,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F9FB80492B59F08F00906818 /* XCRemoteSwiftPackageReference "AlertToast" */;
 			productName = AlertToast;
-		};
-		F9FE399E2B33F97A00E4BBA0 /* FirebaseMessaging */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F9C035C72B284D320049D4B6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseMessaging;
 		};
 /* End XCSwiftPackageProductDependency section */
 

@@ -39,7 +39,7 @@ struct SpotlightView: View {
                             .padding()
                             Spacer()
                         }
-                        Text("Spotlight")
+                        Text("Stories")
                             .font(.title3)
                             .fontWeight(.semibold).padding()
                         ToastView(message: "Image saved to Photos successfully!", isVisible: $isDownloaded)

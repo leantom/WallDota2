@@ -8,13 +8,14 @@
 import SwiftUI
 import Firebase
 import FirebaseMessaging
-
+import GoogleMobileAds
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
     
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         FirebaseApp.configure()
-        
+        GADMobileAds.sharedInstance().start(completionHandler: nil)
+        GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = [ "e38f02b4d17112280901c642fea17950" ]
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
         

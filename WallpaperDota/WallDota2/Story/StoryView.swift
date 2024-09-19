@@ -1,10 +1,3 @@
-//
-//  StoryView.swift
-//  WallDota2
-//
-//  Created by QuangHo on 03/01/2024.
-//
-
 import SwiftUI
 import SDWebImageSwiftUI
 
@@ -12,99 +5,109 @@ struct StoryView: View {
     let dismissModal: () -> Void
     @Binding var model: StoryModel
     @State var isGetDoneAPI: Bool = false
-    @State private var scrollPosition: CGFloat = 0
     @State private var alphaButtonClose: CGFloat = 0.5
     
-    @Binding var isVietnameseLanguage: Bool
+    @State var isVietnameseLanguage: Bool = false
+    @State var listStoryModel: [StoryModel] = []
+    
+    var actionChooseStory: (StoryModel) -> ()
+    @State var contentStory: String = ""
+    @State var isLike: Bool = false
+    
+    
     var body: some View {
         NavigationStack {
             ZStack {
-                
-                ScrollView {
-                    VStack {
+                ScrollViewReader { scrollProxy in
+                    ScrollView {
                         VStack {
-                            // image
-                            ZStack {
-                                if isGetDoneAPI {
-                                    AnimatedImage(url: URL(string: model.thumbnail))
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .scaledToFill()
-                                        .frame(height: 250)
-                                        .clipped()
-                                        .clipShape(
-                                            .rect(
-                                                topLeadingRadius: 20,
-                                                bottomLeadingRadius: 0,
-                                                bottomTrailingRadius: 0,
-                                                topTrailingRadius: 20
+                            VStack {
+                                // image
+                                ZStack {
+                                    if isGetDoneAPI {
+                                        AnimatedImage(url: URL(string: model.thumbnail))
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .scaledToFill()
+                                            .frame(height: 250)
+                                            .clipped()
+                                            .clipShape(
+                                                .rect(
+                                                    topLeadingRadius: 20,
+                                                    bottomLeadingRadius: 0,
+                                                    bottomTrailingRadius: 0,
+                                                    topTrailingRadius: 20
+                                                )
                                             )
-                                        )
-                                } else {
-                                    ProgressView()
-                                }
-                                
-                                
-                                VStack {
-                                    Spacer()
-                                    HStack {
-                                        avatar
+                                    } else {
+                                        ProgressView()
+                                    }
+                                    
+                                    VStack {
                                         Spacer()
+                                        HStack {
+                                            avatar
+                                            Spacer()
+                                        }
                                     }
                                 }
                             }
+                            VStack(spacing: 10) {
+                                HStack {
+                                    Text(isVietnameseLanguage ? "Câu chuyện dưới đây hoàn toàn là hư cấu..." : "The story below is purely fictional...")
+                                        .fontWeight(.light)
+                                        .font(.caption)
+                                        .padding(.leading, 15)
+                                    
+                                    Spacer()
+                                    
+                                    LanguageSwitchView (isVietnamese: $isVietnameseLanguage)
+                                        .onChange(of: isVietnameseLanguage) { newValue in
+                                            contentStory = model.content.storyContent
+                                        }
+                                }
+                                
+                                HStack {
+                                    Text(model.content.titleDescription ?? "")
+                                        .fontWeight(.bold)
+                                        .font(.title2)
+                                        .padding(.leading, 15)
+                                    Spacer()
+                                }
+                                
+                                VStack {
+                                    Text(model.content.storyContent)
+                                        .font(.system(size: 13, weight: .regular, design: .default))
+                                        .lineSpacing(10)
+                                        .padding()
+                                }
+
+                            }
+                            
+                            // Get related articles
+                            StoryListView(stories: $listStoryModel, actionChoose: { item in
+                                self.model = item
+                                withAnimation {
+                                    scrollProxy.scrollTo("top", anchor: .top)
+                                }
+                            })
                         }
-                        VStack(spacing: 10) {
-                            HStack {
-                                
-                                Text(isVietnameseLanguage ? "The story below is purely fictional...":"Câu chuyện dưới đây hoàn toàn là hư cấu..."  )
-                                    .fontWeight(.light)
-                                    .font(.caption)
-                                    .padding(.leading, 15)
-                                
-                                Spacer()
-                            }
-                            
-                            HStack {
-                                
-                                Text(model.content.title)
-                                    .fontWeight(.bold)
-                                    .font(.title2)
-                                    .padding(.leading, 15)
-                                Spacer()
-                            }
-                            
-                            VStack {
-                                Text(model.content.story)
-                                    .font(.caption)
-                                    .fontWeight(.regular)
-                                    .lineSpacing(10)
-                                    .padding()
-                            }
-                            
-                            // text and
-                        }
+                        .id("top") // Assign an ID to the top of the ScrollView content
                     }
-                    .background(GeometryReader { geometry in
-                        Color.clear
-                            .preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .named("scroll")).origin)
-                    })
-                    .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
-                       
-                        self.scrollPosition = value.y
-                        // alpha header view will from 1->0
-                //        // also increase
-                        var maxValue = CGFloat(0.8)
-                        var minValue = CGFloat(0.5)
-                        var offset = abs((value.y) * (maxValue - minValue))
-                        var offsetAlpha = maxValue - offset / 250
-                
-                        let alpha = max(min(offsetAlpha, maxValue), minValue)
-                        alphaButtonClose = alpha
-                        print(alpha)
+                    .onAppear {
+                        Task {
+                            let firebaseData = FireStoreDatabase.shared
+                            let url = await firebaseData.getURL(path: model.thumbnail)
+                            if let _url = url, !_url.absoluteString.isEmpty {
+                                model.thumbnail = _url.absoluteString
+                            }
+                            isGetDoneAPI = true
+                        }
+                        contentStory = model.content.storyContent
+                        isVietnameseLanguage = getCurrentLanguage() == "vi"
                     }
                 }
-                .coordinateSpace(name: "scroll")
+                
                 VStack {
                     HStack {
                         Button {
@@ -128,10 +131,29 @@ struct StoryView: View {
                         }) {
                             Image(systemName: "heart")
                                 .frame(width: 35, height: 35)
-                                .foregroundColor(Color.white)
+                                .foregroundColor(isLike ? .red : .white) // Change color to red when liked
                                 .background(Color(red: 0.104, green: 0.082, blue: 0.243))
                                 .clipShape(Circle())
                                 .shadow(color: .gray, radius: 5, x: 2, y: 2)
+                                .onTapGesture {
+                                    withAnimation {
+                                        isLike.toggle() // Toggle the like state
+                                        Task {
+                                            let viewModel = StoryViewModel()
+                                            
+                                            let isSuccess =  await viewModel.likeStory(by: model.id)
+                                            
+                                            if isSuccess {
+                                                // Handle success, e.g., increase like count locally if needed
+                                                print("Successfully liked story")
+                                            } else {
+                                                // Handle failure, revert the like state if needed
+                                                isLike.toggle() // Revert like state on failure
+                                                print("Failed to like story")
+                                            }
+                                        }
+                                    }
+                                }
                         }
                         Button(action: {
                             print("Round Action")
@@ -143,18 +165,15 @@ struct StoryView: View {
                                 .clipShape(Circle())
                                 .shadow(color: .gray, radius: 5, x: 2, y: 2)
                         }.padding(.trailing, 15)
-                        
                     }
                 }
             }
             .onAppear(perform: {
+                let viewModel = StoryViewModel()
                 Task {
-                    let firebaseData = FireStoreDatabase.shared
-                    let url = await firebaseData.getURL(path: model.thumbnail)
-                    if let _url = url,  _url.absoluteString.isEmpty == false {
-                        model.thumbnail = url?.absoluteString ?? ""
-                    }
-                    isGetDoneAPI = true
+                    
+                    listStoryModel = await viewModel.gettoriesByHeroID(by:model.heroid)
+
                 }
             })
         }
@@ -163,14 +182,10 @@ struct StoryView: View {
     var avatar: some View {
         VStack(alignment: .leading) {
             HStack {
-                AsyncImage(
-                  url: URL(
-                      string: "https://picsum.photos/100")) { image in
+                AsyncImage(url: URL(string: "https://picsum.photos/100")) { image in
                     image
                         .resizable()
-                        .frame(width: 35,
-                                height: 35,
-                                alignment: .center)
+                        .frame(width: 35, height: 35, alignment: .center)
                         .clipShape(Circle())
                         .overlay {
                             Circle().stroke(.blue, lineWidth: 2)
@@ -181,9 +196,9 @@ struct StoryView: View {
                 .aspectRatio(3 / 2, contentMode: .fill)
                 .shadow(radius: 4)
                 .padding(.trailing, 18)
-
+                
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Anynomous")
+                    Text(model.author)
                         .foregroundColor(.white)
                         .bold()
                         .font(.caption)
@@ -194,15 +209,15 @@ struct StoryView: View {
             .padding()
         }
     }
-    
-    
 }
 
 struct WrappedStoryView: View {
     @State var model = StoryModel()
     @State var islanguage: Bool = true
     var body: some View {
-        StoryView(dismissModal: {}, model: $model, isVietnameseLanguage: $islanguage)
+        StoryView(dismissModal: {}, model: $model, actionChooseStory: { item in
+            print(item.heroid)
+        })
     }
 }
 

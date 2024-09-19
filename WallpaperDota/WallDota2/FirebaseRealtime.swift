@@ -7,6 +7,7 @@
 
 import Foundation
 import Firebase
+import FirebaseDatabaseInternal
 
 class FirebaseRealtime: NSObject {
 

@@ -19,14 +19,7 @@ struct FirstSectionHomeView: View {
     
     var body: some View {
         VStack(spacing: 10) {
-            HStack {
-                Text("Spotlight")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .foregroundStyle(.black)
-                Spacer()
-            }
-            .padding()
+            
             VStack {
                 if isGetDoneAPI {
                     

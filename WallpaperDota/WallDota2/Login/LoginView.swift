@@ -196,7 +196,6 @@ struct LoginView: View {
                                     await loginViewModel.signinWithAnynomous()
                                     isLogined = true
                                 }
-                                
                             }, label: {
                                 Text("Skip")
                                     .font(.title3)

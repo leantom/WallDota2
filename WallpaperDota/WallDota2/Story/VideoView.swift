@@ -9,64 +9,152 @@ import SwiftUI
 
 import SwiftUI
 import AVKit
+import VideoPlayer
 
-// Step 2: Create a SwiftUI view that wraps AVPlayerViewController
-struct VideoPlayerView: UIViewRepresentable {
+struct VideoPlayerView: View {
     var videoURL: URL
+    @State private var player = AVPlayer()
+    @State private var loading: Bool = true
+    
+    @State private var autoReplay: Bool = true
+    @State private var mute: Bool = false
+    @State private var play: Bool = true
+    @State private var time: CMTime = .zero
+    let gradient = LinearGradient(
+        gradient: Gradient(colors: [.black.opacity(0.6), .white]),
+               startPoint: .top,
+               endPoint: .bottom
+           )
 
-        func makeUIView(context: Context) -> UIView {
-            // Initialize the UIView container
-            let view = UIView(frame: .zero)
-
-            // Step 4: Set up the AVPlayer
-            let player = AVPlayer(url: videoURL)
-            let playerLayer = AVPlayerLayer(player: player)
-            
-            // Configure AVPlayerLayer properties if needed, such as videoGravity
-            playerLayer.videoGravity = .resizeAspectFill
-
-            // Add the player layer to the UIView
-            view.layer.addSublayer(playerLayer)
-            playerLayer.frame = view.bounds
-            
-            // Start playing the video
-            player.play()
-            
-            return view
+    
+    var body: some View {
+        VStack {
+            VideoPlayer(url: videoURL, play: $play)
+                .autoReplay(true)
+                .contentMode(.scaleAspectFill)
+                .onBufferChanged { progress in
+                                // Network loading buffer progress changed
+                    print(progress)
+                            }
+                .onStateChanged({ stage in
+                    switch stage {
+                    case .loading:
+                        loading = true
+                        print("loading")
+                    case .playing(let totalDuration):
+                        loading = false
+                    case .paused(let playProgress, let bufferProgress):
+                        loading = false
+                    case .error(let nSError):
+                        loading = false
+                    }
+                })
+                .clipped()
+           
         }
-
-        func updateUIView(_ uiView: UIView, context: Context) {
-            // Find the AVPlayerLayer in the UIView's layers and adjust its frame
-            if let layer = uiView.layer.sublayers?.first as? AVPlayerLayer {
-                layer.frame = UIScreen.main.bounds
-            }
+        .background(gradient)
+       
+    }
+    
+    private func setupLooping() {
+        NotificationCenter.default.addObserver(
+            forName: .AVPlayerItemDidPlayToEndTime,
+            object: nil,
+            queue: .main
+        ) {  _ in
+            self.player.seek(to: .zero)
+            self.player.play()
         }
+    }
 }
 
+
+struct VideoModel: Codable, Identifiable {
+    var url: String
+    var id: String
+    var duration: Int
+    var type: String
+    var heroid: String
+    var size: Int64
+    init() {
+        url = "https://firebasestorage.googleapis.com/v0/b/dotadressup.appspot.com/o/videos%2FBB74D14B-3723-461F-B335-BB809175FD66.mp4?alt=media&token=e364c142-1d06-41f6-a6c8-d30923c1c3a5"
+        id = UUID().uuidString
+        duration = 120
+        type = "mp4"
+        heroid = "Crystal Maiden"
+        size = 22705
+    }
+    
+}
 // Step 5: Use the VideoPlayerView in your SwiftUI layout
 struct VideoView: View {
+    let dismissModal: () -> Void
+    
+    @State var videos: [VideoModel] = []
     
     @State var player = AVPlayer()
     
-    var body: some View {
-        // Replace "videoURL" with your actual video URL
-        
-        VideoPlayer(player: player)
-            .onAppear() {
-                player = AVPlayer(url:  Bundle.main.url(forResource: "lina", withExtension: "mp4")!)
-            }
-            .ignoresSafeArea(.all)
-        
-    }
-}
-
-struct WrappedVideoView: View {
+    @State var isShowFullScreen: Bool = false
+    
+    
+    @State var currentIndex = 0
+    @State var objectSelected: VideoModel?
+    @State var firebaseData = FireStoreDatabase.shared
     
     var body: some View {
-        VideoView()
+        // Replace "videoURL" with your actual video URL
+        NavigationStack {
+            ZStack {
+                if #available(iOS 17.0, *) {
+                    GeometryReader {geo in
+                        ScrollView(showsIndicators: false) {
+                            LazyVStack(spacing: 50) {
+                                ForEach(videos, id: \.id) { video in
+                                    
+                                    VideoPlayerView(videoURL: URL(string: video.url)!)
+                                        .frame(width: geo.size.width, height: geo.size.height)
+                                        .clipped()
+                                        .onTapGesture {
+                                            withAnimation {
+                                                
+                                                objectSelected = video
+                                                
+                                                self.isShowFullScreen.toggle()
+                                            }
+                                        }
+                                }
+                            }
+                            
+                        }
+                        .scrollTargetBehavior(.paging)
+                    }
+                    
+                } else {
+                    
+                }
+                
+            }
+            .onAppear(perform: {
+                self.videos = FireStoreDatabase.shared.listVideo
+                let urls_str = self.videos.compactMap({ video in
+                    return video.url
+                })
+                var urls = [URL]()
+                for url in urls_str {
+                    urls.append(URL(string: url)!)
+                }
+                
+                VideoPlayer.preload(urls: urls)
+            })
+            
+        }
+        .navigationDestination(isPresented: $isShowFullScreen) {
+            
+            VideoFullScreenView(dismissModal: {
+                self.isShowFullScreen.toggle()
+            }, videos: $firebaseData.listVideo, object: objectSelected)
+            .navigationBarBackButtonHidden()
+        }
+        
     }
-}
-
-#Preview {
-    WrappedVideoView()
 }
