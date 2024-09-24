@@ -21,6 +21,8 @@
 		F928051B2B32C778000D53E9 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F928051A2B32C778000D53E9 /* UserProfileView.swift */; };
 		F928051D2B32E55A000D53E9 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F928051C2B32E55A000D53E9 /* FileManager.swift */; };
 		F928051F2B32EA23000D53E9 /* AppSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = F928051E2B32EA23000D53E9 /* AppSetting.swift */; };
+		F92EDC4D2CA1B4920019A054 /* GoogleMobileAdsConsentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92EDC4C2CA1B4910019A054 /* GoogleMobileAdsConsentManager.swift */; };
+		F92EDC522CA1D8C70019A054 /* InterstitialViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92EDC512CA1D8C70019A054 /* InterstitialViewModel.swift */; };
 		F93387482B6F891A004F6048 /* ContextModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93387422B6F891A004F6048 /* ContextModifier.swift */; };
 		F93387492B6F891A004F6048 /* Layout2.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93387442B6F891A004F6048 /* Layout2.swift */; };
 		F933874A2B6F891A004F6048 /* Layout3.swift in Sources */ = {isa = PBXBuildFile; fileRef = F93387452B6F891A004F6048 /* Layout3.swift */; };
@@ -182,6 +184,8 @@
 		F928051A2B32C778000D53E9 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		F928051C2B32E55A000D53E9 /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
 		F928051E2B32EA23000D53E9 /* AppSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSetting.swift; sourceTree = "<group>"; };
+		F92EDC4C2CA1B4910019A054 /* GoogleMobileAdsConsentManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMobileAdsConsentManager.swift; sourceTree = "<group>"; };
+		F92EDC512CA1D8C70019A054 /* InterstitialViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InterstitialViewModel.swift; path = "../../../../../../Downloads/googleads-mobile-ios-examples-main/Swift/advanced/SwiftUIDemo/SwiftUIDemo/Interstitial/InterstitialViewModel.swift"; sourceTree = "<group>"; };
 		F93387422B6F891A004F6048 /* ContextModifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContextModifier.swift; sourceTree = "<group>"; };
 		F93387442B6F891A004F6048 /* Layout2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Layout2.swift; sourceTree = "<group>"; };
 		F93387452B6F891A004F6048 /* Layout3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Layout3.swift; sourceTree = "<group>"; };
@@ -381,6 +385,15 @@
 				F91FF7772B4C563F00E5F110 /* DetailHeroViewModel.swift */,
 			);
 			path = DetailHero;
+			sourceTree = "<group>";
+		};
+		F92EDC502CA1D7E90019A054 /* Ads */ = {
+			isa = PBXGroup;
+			children = (
+				F92EDC512CA1D8C70019A054 /* InterstitialViewModel.swift */,
+				F9CFC99F2C920E7F00632E76 /* AdMobBannerView.swift */,
+			);
+			path = Ads;
 			sourceTree = "<group>";
 		};
 		F93387402B6F891A004F6048 /* View */ = {
@@ -756,6 +769,7 @@
 		F9DAE1152B2AED7D002BAF3D /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				F92EDC4C2CA1B4910019A054 /* GoogleMobileAdsConsentManager.swift */,
 				F9DAE10F2B2AD808002BAF3D /* TopView.swift */,
 				F95A60872B28E59C00D96377 /* HomeView.swift */,
 				F9FE399C2B334F8600E4BBA0 /* ShowItemView.swift */,
@@ -767,7 +781,7 @@
 				F95A916D2B303AFD00AAAE57 /* CollectionView.swift */,
 				F92805182B32BCA1000D53E9 /* CollectionHeroView.swift */,
 				F974C0412B309B5B0079EABD /* MenuView.swift */,
-				F9CFC99F2C920E7F00632E76 /* AdMobBannerView.swift */,
+				F92EDC502CA1D7E90019A054 /* Ads */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -1094,6 +1108,7 @@
 				F95A916E2B303AFD00AAAE57 /* CollectionView.swift in Sources */,
 				F96195EA2B3C9DF5000109E1 /* SharpenControl.swift in Sources */,
 				F96196042B3C9DF5000109E1 /* AppTheme.swift in Sources */,
+				F92EDC4D2CA1B4920019A054 /* GoogleMobileAdsConsentManager.swift in Sources */,
 				F96195CB2B3C9DF5000109E1 /* colorful_room.xcdatamodeld in Sources */,
 				F9C035982B2846A60049D4B6 /* WallDota2App.swift in Sources */,
 				F96195E82B3C9DF5000109E1 /* LutMenuUI.swift in Sources */,
@@ -1128,6 +1143,7 @@
 				F96195FD2B3C9DF5000109E1 /* FilterModel.swift in Sources */,
 				F96195E72B3C9DF5000109E1 /* RecipeMenuUI.swift in Sources */,
 				F91FF7782B4C563F00E5F110 /* DetailHeroViewModel.swift in Sources */,
+				F92EDC522CA1D8C70019A054 /* InterstitialViewModel.swift in Sources */,
 				F933874A2B6F891A004F6048 /* Layout3.swift in Sources */,
 				F96196032B3C9DF5000109E1 /* NestedObservableObject.swift in Sources */,
 				F96195CE2B3C9DF5000109E1 /* Recipe.swift in Sources */,
@@ -1314,7 +1330,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.6;
+				MARKETING_VERSION = 1.0.7;
 				PRODUCT_BUNDLE_IDENTIFIER = vn.cyme.WallDota2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1354,7 +1370,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.6;
+				MARKETING_VERSION = 1.0.7;
 				PRODUCT_BUNDLE_IDENTIFIER = vn.cyme.WallDota2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

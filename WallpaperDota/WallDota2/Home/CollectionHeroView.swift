@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
+import GoogleMobileAds
 
 struct CollectionHeroView: View {
     @State private var toastIsVisible = false
@@ -22,56 +23,85 @@ struct CollectionHeroView: View {
         startPoint: .bottom, endPoint: .top
     )
     
-    let columns = [GridItem(.fixed(120)), GridItem(.fixed(120)), GridItem(.flexible(minimum: 50, maximum: 160))]
-    
+    let columns = [
+        GridItem(.flexible(), spacing: 16),
+        GridItem(.flexible(), spacing: 16),
+        GridItem(.flexible(), spacing: 16)
+    ]
+    @State private  var isShowAds: Bool = false
     var action:((String) -> Void)
     var body: some View {
-        VStack {
-            
-            HStack {
-                Text("Collections")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundStyle(.black)
-                    .padding()
-                Spacer()
-            }
-            ScrollView {
-                if isLoading {
-                    ProgressView().padding()
-                } else {
-                    LazyVGrid(columns: columns, spacing: 16) {
-                      // Loop through the items and create ItemCell views
-                        ForEach(listCollectionModel, id: \.heroID) {item in
-                            CollectionCellHeroView(item: item)
-                                .onTapGesture {
-                                    print(item.heroID)
-                                    self.action(item.heroID)
-                                }
-                        }
-                    }
-                    .padding()
+        GeometryReader { geometry in
+            let adSize = GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(geometry.size.width)
+            VStack {
+                
+                HStack {
+                    Text("Collections")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.black)
+                        .padding()
+                    Spacer()
                 }
-               
-            }
-            
-            .onAppear(perform: {
-                Task {
-                    if $_firestoreDB.listCollectionImages.count == 0 {
-                        await FireStoreDatabase.shared.fetchDataCollectionFromFirestore()
+                ScrollView {
+                    if isLoading {
+                        ProgressView().padding()
+                    } else {
+                        LazyVGrid(columns: columns, spacing: 16) {
+                            // Loop through the items and create ItemCell views
+                            ForEach(listCollectionModel, id: \.heroID) {item in
+                                CollectionCellHeroView(item: item)
+                                    .onTapGesture {
+                                        print(item.heroID)
+                                        self.action(item.heroID)
+                                    }
+                                
+                            }
+                        }
+                        .padding()
+                    }
+                    
+                }
+                .onAppear(perform: {
+                    Task {
+                        if $_firestoreDB.listCollectionImages.count == 0 {
+                            await FireStoreDatabase.shared.fetchDataCollectionFromFirestore()
+                            isLoading = false
+                        }
+                        self.listCollectionModel = _firestoreDB.listCollectionImages
                         isLoading = false
                     }
+//                    if isShowAds == false{
+//                        GoogleMobileAdsConsentManager.shared.gatherConsent { consentError in
+//                          if let consentError {
+//                            // Consent gathering failed.
+//                            print("Error: \(consentError.localizedDescription)")
+//                          }
+//                          GoogleMobileAdsConsentManager.shared.startGoogleMobileAdsSDK()
+//                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//                                self.isShowAds.toggle()
+//                            }
+//                        }
+//
+//                        // This sample attempts to load ads using consent obtained in the previous session.
+//                        GoogleMobileAdsConsentManager.shared.startGoogleMobileAdsSDK()
+//                    }
+                    adSizeGlobal = adSize
+                    
+                })
+                .refreshable {
+                    await _firestoreDB.fetchDataCollectionFromFirestore()
                     self.listCollectionModel = _firestoreDB.listCollectionImages
                     isLoading = false
                 }
                 
-            })
-            .refreshable {
-                await _firestoreDB.fetchDataCollectionFromFirestore()
-                self.listCollectionModel = _firestoreDB.listCollectionImages
-                isLoading = false
+                if isShowAds {
+                    BannerView(adSize)
+                      .frame(height: 50)
+                }
             }
         }
+        
     }
     
     
@@ -85,6 +115,7 @@ struct CollectionCellHeroView: View {
         startPoint: .leading, endPoint: .trailing
     )
     @State var isLoadedImage = false
+    @State var isLike = false
     var body: some View {
         HStack {
             ZStack {
@@ -95,42 +126,66 @@ struct CollectionCellHeroView: View {
                             .placeholder {
                                 ProgressView()
                             }
-                            .frame(minHeight: 60)
-                            .aspectRatio(contentMode: .fit)
-                            .cornerRadius(10)
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 100, height: 100)
+                            .clipped()
+                        .cornerRadius(10)
+                        
                     } else {
                         ProgressView()
                     }
                     
-                    Text(item.heroID)
-                        .font(.caption)
-                        .fontWeight(.bold)
-                        .foregroundStyle(.white)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding()
-                }.background(randomColor().opacity(0.8))
-            }
-            .clipped()
-            
-        }
-            .cornerRadius(10)
-            .clipped()
-            .onAppear {
-                Task {
-                    
-                    let url = await FireStoreDatabase.shared.getURL(path: item.thumbnail)
-                    item.isLoadedThumbnail = true
-                    item.thumbnailFull = url?.absoluteString ?? ""
+                    VStack (alignment: .leading){
+                        Text(item.heroID)
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.black)
+                        .padding([.leading, .trailing], 10)
+                        HStack {
+                            Image(systemName:"heart.fill")
+                                .foregroundColor( isLike ? .red : .gray)
+                                .padding([.leading, .bottom], 10)
+                                .onTapGesture {
+                                    withAnimation {
+                                        isLike.toggle()
+                                    }
+                                    Task {
+                                        await FireStoreDatabase.likeCollectionImage(image: item)
+                                    }
+                                }
+                            Text("\(item.likeCount)")
+                                .font(.caption)
+                                .foregroundStyle(.black.opacity(0.8))
+                                .padding([.trailing, .bottom], 10)
+                            Spacer()
+                        }
+                        .padding(.top, 5)
+                    }
                     
                 }
+                .background(Color(.systemBackground))
+                .cornerRadius(15)
+                .shadow(radius: 5)
             }
+            
+        }
+        
+        .onAppear {
+            Task {
+                
+                let url = await FireStoreDatabase.shared.getURL(path: item.thumbnail)
+                item.isLoadedThumbnail = true
+                item.thumbnailFull = url?.absoluteString ?? ""
+                
+            }
+        }
         
     }
 }
 
 struct WrapperCollectionHeroView:View {
     @State var heroids = ["Crystal maiden",
-    "Lina", "Templar Assassin"]
+                          "Lina", "Templar Assassin"]
     @State var firestoreDB = FireStoreDatabase()
     
     var body: some View {

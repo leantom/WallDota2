@@ -161,6 +161,31 @@ class FireStoreDatabase {
     }
     
     
+    static public func likeCollectionImage(image: ImageModel) async {
+        let db = Firestore.firestore()
+        let collectionRef = db.collection("likes")
+        
+        do {
+            
+            let collectionDocumentRef = db.collection("collections").document(image.id)
+            try await collectionDocumentRef.updateData(["likeCount": image.likeCount + 1])
+            
+        } catch let err{
+            print(err.localizedDescription)
+        }
+        
+        
+        do {
+            
+            try await collectionRef.addDocument(data: ["documentid": image.id,
+                                                       "userid": LoginViewModel.shared.user?.uid ?? ""])
+        } catch let err{
+            print(err.localizedDescription)
+        }
+        
+    }
+    
+    
     static public func reportImage(image: ImageModel) async {
         let db = Firestore.firestore()
         let collectionRef = db.collection("report")
@@ -493,8 +518,6 @@ class FireStoreDatabase {
             return false
             
         }
-        
-        
     }
     
 }

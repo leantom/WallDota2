@@ -48,7 +48,9 @@ struct TabbarCustomView: View {
         colors: [Color.white.opacity(0.9), Color.clear],
         startPoint: .top, endPoint: .bottom
     )
+    private let viewAdsModel = InterstitialViewModel.shared
     var sideBarWidth = UIScreen.main.bounds.size.width * 0.65
+    
     private var homeView: HomeView {
         HomeView(isMenuOpen: $isMenuOpen, items: $items,
                  itemsSpotlight: $itemsSpotlight,
@@ -62,6 +64,9 @@ struct TabbarCustomView: View {
             isLoading = true
             progressBarValue = progress
         }, actionDownloadFinished: {
+            DispatchQueue.main.async {
+                   viewAdsModel.showAd()
+               }
             isLoading = false
             toastIsVisible = true
         }, actionShowDetailSpotlight:  { model, items in

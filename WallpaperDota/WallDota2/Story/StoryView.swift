@@ -84,6 +84,9 @@ struct StoryView: View {
 
                             }
                             
+                            BannerView(adSizeGlobal)
+                              .frame(height: 50)
+                            
                             // Get related articles
                             StoryListView(stories: $listStoryModel, actionChoose: { item in
                                 self.model = item

@@ -10,7 +10,7 @@ import UIKit
 import SwiftUI
 import WebKit
 import RegexBuilder
-
+import GoogleMobileAds
 
 extension String {
     func htmlToMarkDown() -> String {
@@ -213,3 +213,5 @@ func getCurrentLanguage() -> String {
     // Default to English if no language is found
     return "en"
 }
+
+var adSizeGlobal : GADAdSize = GADAdSize(size: CGSize(width: UIScreen.main.bounds.width, height: 60), flags: 1)

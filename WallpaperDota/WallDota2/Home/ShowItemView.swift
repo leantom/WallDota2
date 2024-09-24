@@ -42,6 +42,7 @@ struct ShowItemView: View {
                         VStack {
                             Button(action: {
                                 Task {
+                                    await InterstitialViewModel.shared.loadAd()
                                     await saveImage()
                                 }
                                 
@@ -132,37 +133,33 @@ struct ShowItemView: View {
     }
     
     func saveImage() async {
-       let isValidDownLoad = await FireStoreDatabase.shared.createItemDownload(item: ItemDownload(imageid: show.id, created_at: Date().timeIntervalSince1970, userid: LoginViewModel.shared.userLogin?.userid ?? ""))
-        if isValidDownLoad {
-            FireStoreDatabase().getImageOriginal(path: show.imageUrl) { data, err, progress  in
-                if let data = data,
-                   let image = UIImage(data: data) {
-                    PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
-                        if status == .authorized {
-                            PHPhotoLibrary.shared().performChanges {
-                                PHAssetCreationRequest.creationRequestForAsset(from: image)
-                            } completionHandler: { success, error in
-                                if success {
-                                    print("Image saved to Photos successfully!")
-                                    self.actionDownload()
-                                } else {
-                                    print("Error saving image to Photos: \(String(describing: error))")
-                                }
+        FireStoreDatabase().getImageOriginal(path: show.imageUrl) { data, err, progress  in
+            if let data = data,
+               let image = UIImage(data: data) {
+                PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
+                    if status == .authorized {
+                        PHPhotoLibrary.shared().performChanges {
+                            PHAssetCreationRequest.creationRequestForAsset(from: image)
+                        } completionHandler: { success, error in
+                            if success {
+                                print("Image saved to Photos successfully!")
+                                self.actionDownload()
+                            } else {
+                                print("Error saving image to Photos: \(String(describing: error))")
                             }
-                        } else {
-                            print("Photos access permission needed!")
                         }
+                    } else {
+                        print("Photos access permission needed!")
                     }
                 }
-                actionDownloadProgressBar(progress)
-                print("Progress value: \(progress)")
             }
+            actionDownloadProgressBar(progress)
+           
+            print("Progress value: \(progress)")
         }
         
     }
-    
-    
-    
+
 }
 struct WrapperShowItemView: View {
     @State var items = ImageModel()

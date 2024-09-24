@@ -30,6 +30,8 @@ struct DetailHeroView: View {
     @State  var toastIsVisible: Bool = false
     @State  var isChangeLanguage: Bool = false
     
+    private let viewAdsModel = InterstitialViewModel.shared
+    
     var body: some View {
         
         NavigationStack {
@@ -62,22 +64,7 @@ struct DetailHeroView: View {
                                     .padding()
                             }
                             Spacer()
-                            Toggle(isOn: $isChangeLanguage, label: {
-                                Text(isChangeLanguage ? "EN" : "VN")
-                                    .font(.caption)
-                            }).frame(width:80)
-                                .padding(.trailing, 10)
-                                .onChange(of: isChangeLanguage) { newValue in
-                                    print("Toggle is now", newValue ? "on" : "off")
-                                    
-                                    let language = isChangeLanguage ? "en" : "vn"
-                                    Task {
-                                        let items = await StoryViewModel.shared.getStoryByHeroID(by: heroName, language: language)
-                                        listStoryModel = items
-                                        print(listStoryModel.count)
-                                    }
-                                    
-                                  }
+                            
                         }
                     }
                     if listStoryModel.count > 0{
@@ -109,6 +96,9 @@ struct DetailHeroView: View {
                                 ForEach(items) { show in
                                     ShowItemView(show: show,
                                                  actionDownload: {
+                                        DispatchQueue.main.async {
+                                               viewAdsModel.showAd()
+                                           }
                                         isLoading = false
                                         toastIsVisible = true
                                     }, actionDownloadProgressBar: { progress in
@@ -119,7 +109,6 @@ struct DetailHeroView: View {
                                     }).onTapGesture {
                                         modelSelected = show
                                         isShowDetail.toggle()
-                                        
                                     }
                                 }
                             })
@@ -145,6 +134,7 @@ struct DetailHeroView: View {
                     let items = await StoryViewModel.shared.getStoryByHeroID(by: heroName, language: "vn")
                     listStoryModel.append(contentsOf: items)
                 }
+                isChangeLanguage = getCurrentLanguage() == "vi"
             })
         }
         .navigationTransition(

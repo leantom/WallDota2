@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
+import Photos
 
 struct ShowDetailImageView: View {
     let dismissModal: () -> Void
@@ -22,6 +23,7 @@ struct ShowDetailImageView: View {
     @State var isShowOnlyImage: Bool = false
     @State var showAlert: Bool = false
     @State var toastIsVisible: Bool = false
+    @State var toastIsDownloadSuccess: Bool = false
     @State private var isShowPreviewImage = false
     @State private var ratioImage = 0.0
     
@@ -33,6 +35,7 @@ struct ShowDetailImageView: View {
     let columns = [
             GridItem(.fixed(UIScreen.main.bounds.height)),
         ]
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -127,12 +130,12 @@ struct ShowDetailImageView: View {
                         }) {
                             currentIndex = index
                         }
+                        await InterstitialViewModel.shared.loadAd()
                     }
                 }
 
                 VStack {
                     HStack {
-                        
                         Button(action: {
                             withAnimation {
                                 dismissModal()
@@ -148,42 +151,67 @@ struct ShowDetailImageView: View {
                         .cornerRadius(10)
                         Spacer()
                         if isShowOnlyImage == false {
-                            Button(action: {
-                                // Report this image
-                                showAlert.toggle()
-                            }, label: {
-                                Image(systemName: "exclamationmark.triangle")
-                                    .foregroundColor(.white)
-                                    .font(.title2)
-                            })
-                            .alert(isPresented: $showAlert) {
-                                Alert(
-                                            title: Text("Warning"),
-                                            message: Text("Do you really want to report this photo?"),
-                                            primaryButton: .default(
-                                                Text("OK"),
-                                                action: {
-                                                    model.isReport = true
-                                                    toastIsVisible.toggle()
-                                                    Task {
-                                                        await FireStoreDatabase.reportImage(image: model)
-                                                    }
-                                                    
-                                                }
-                                            ),
-                                            secondaryButton: .destructive(
-                                                Text("Cancel"),
-                                                action: {
-                                                    
-                                                }
-                                            )
-                                        )
+                            HStack {
+                                Spacer()
+                                HStack {
+                                    Button(action: {
+                                        Task {
+                                            await saveImage()
+                                        }
+                                        
+                                    }, label: {
+                                        Image(systemName: "arrow.down.square")
+                                            .foregroundColor(.white)
+                                            .font(.title2)
+                                        
+                                    })
+                                    
+                                    Button(action: {
+                                        // Report this image
+                                        showAlert.toggle()
+                                    }, label: {
+                                        Image(systemName: "exclamationmark.triangle")
+                                            .foregroundColor(.white)
+                                            .font(.title2)
+                                    })
+                                    .alert(isPresented: $showAlert) {
+                                        Alert(
+                                                    title: Text("Warning"),
+                                                    message: Text("Do you really want to report this photo?"),
+                                                    primaryButton: .default(
+                                                        Text("OK"),
+                                                        action: {
+                                                            model.isReport = true
+                                                            toastIsVisible.toggle()
+                                                            Task {
+                                                                await FireStoreDatabase.reportImage(image: model)
+                                                            }
+                                                            
+                                                        }
+                                                    ),
+                                                    secondaryButton: .destructive(
+                                                        Text("Cancel"),
+                                                        action: {
+                                                            
+                                                        }
+                                                    )
+                                                )
+                                    }
+                                    .frame(width: 40, height: 40)
+                                    .cornerRadius(10)
+                                }
+                                .padding([.leading, .trailing], 10)
+                                .background(.black.opacity(0.3))
+                                .cornerRadius(10)
+                                
+                               
+                               
                             }
-                            .frame(width: 40, height: 40)
-                            .cornerRadius(10)
+                           
                         }
                     }.padding()
                         .frame(width: UIScreen.main.bounds.width)
+                        
                         Spacer()
                     
                     if isShowOnlyImage == false {
@@ -211,6 +239,13 @@ struct ShowDetailImageView: View {
                     Spacer()
                 }
                 
+                if toastIsDownloadSuccess {
+                    ToastView(message: "Image saved to Photos successfully!", isVisible: $toastIsDownloadSuccess)
+                        .clipped()
+                        .cornerRadius(5)
+                    Spacer()
+                }
+                
             }.background(.black.opacity(0.5))
             
         }
@@ -222,6 +257,35 @@ struct ShowDetailImageView: View {
         .navigationBarBackButtonHidden()
         }
         
+    }
+    
+    func saveImage() async {
+        if let image = imageDetail {
+            PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
+                if status == .authorized {
+                    PHPhotoLibrary.shared().performChanges {
+                        PHAssetCreationRequest.creationRequestForAsset(from: image)
+                    } completionHandler: { success, error in
+                        if success {
+                            print("Image saved to Photos successfully!")
+                            
+                            DispatchQueue.main.async {
+                                InterstitialViewModel.shared.showAd()
+                            }
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                                toastIsDownloadSuccess.toggle()
+                            }
+                            
+                        } else {
+                            print("Error saving image to Photos: \(String(describing: error))")
+                        }
+                    }
+                } else {
+                    print("Photos access permission needed!")
+                }
+            }
+        }
     }
     
     func getImageURL() {
