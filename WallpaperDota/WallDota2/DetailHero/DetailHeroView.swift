@@ -136,7 +136,7 @@ struct DetailHeroView: View {
             if listStoryModel.count > 0 {return}
             listStoryModel.removeAll()
             Task {
-                let items = await StoryViewModel.shared.getStoryByHeroID(by: heroName, language: "vn")
+                let items = await StoryViewModel.shared.getStoryByHeroID(by: heroName)
                 listStoryModel.append(contentsOf: items)
             }
             isChangeLanguage = getCurrentLanguage() == "vi"

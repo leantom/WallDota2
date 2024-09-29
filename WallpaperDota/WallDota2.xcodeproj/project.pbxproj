@@ -103,6 +103,8 @@
 		F97C145F2CA823E200EF72BB /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97C145E2CA823DD00EF72BB /* WebView.swift */; };
 		F97C14612CA82ADE00EF72BB /* TestContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97C14602CA82ADE00EF72BB /* TestContent.swift */; };
 		F97C14632CA8863300EF72BB /* SpinningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97C14622CA8863300EF72BB /* SpinningView.swift */; };
+		F97C14652CA9759000EF72BB /* CommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97C14642CA9758C00EF72BB /* CommentModel.swift */; };
+		F97C14672CA9769700EF72BB /* ComentStoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97C14662CA9769300EF72BB /* ComentStoryView.swift */; };
 		F97F6BFE2B3EA4DD0065F918 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97F6BFD2B3EA4DD0065F918 /* NotificationView.swift */; };
 		F97F6C002B3EA4F30065F918 /* NotificationStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97F6BFF2B3EA4F30065F918 /* NotificationStruct.swift */; };
 		F97F6C032B3EA85C0065F918 /* FirebaseRealtime.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97F6C022B3EA85C0065F918 /* FirebaseRealtime.swift */; };
@@ -280,6 +282,8 @@
 		F97C145E2CA823DD00EF72BB /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		F97C14602CA82ADE00EF72BB /* TestContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestContent.swift; sourceTree = "<group>"; };
 		F97C14622CA8863300EF72BB /* SpinningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinningView.swift; sourceTree = "<group>"; };
+		F97C14642CA9758C00EF72BB /* CommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentModel.swift; sourceTree = "<group>"; };
+		F97C14662CA9769300EF72BB /* ComentStoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComentStoryView.swift; sourceTree = "<group>"; };
 		F97F6BFD2B3EA4DD0065F918 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		F97F6BFF2B3EA4F30065F918 /* NotificationStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NotificationStruct.swift; path = /Users/quangho/Documents/WallDota2/WallpaperDota/WallDota2/NotificationStruct.swift; sourceTree = "<absolute>"; };
 		F97F6C022B3EA85C0065F918 /* FirebaseRealtime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseRealtime.swift; sourceTree = "<group>"; };
@@ -703,6 +707,8 @@
 		F98806762B996205008EB540 /* Story */ = {
 			isa = PBXGroup;
 			children = (
+				F97C14662CA9769300EF72BB /* ComentStoryView.swift */,
+				F97C14642CA9758C00EF72BB /* CommentModel.swift */,
 				F97C145E2CA823DD00EF72BB /* WebView.swift */,
 				F9F485262B45C8A900F600BF /* StoryModel.swift */,
 				F9F485242B45AEC600F600BF /* StoryView.swift */,
@@ -1155,6 +1161,7 @@
 				F9CA843B2CA3F0B600720C23 /* Tabbar+Extention.swift in Sources */,
 				F96195F92B3C9DF5000109E1 /* ColorControl.swift in Sources */,
 				F96195DD2B3C9DF5000109E1 /* ExportController.swift in Sources */,
+				F97C14672CA9769700EF72BB /* ComentStoryView.swift in Sources */,
 				F95A60882B28E59C00D96377 /* HomeView.swift in Sources */,
 				F96195DB2B3C9DF5000109E1 /* FiltersController.swift in Sources */,
 				F9FE399B2B3346F300E4BBA0 /* UserViewModel.swift in Sources */,
@@ -1194,6 +1201,7 @@
 				F9D9907C2CA51D2200375601 /* ComicBookView.swift in Sources */,
 				F9C035982B2846A60049D4B6 /* WallDota2App.swift in Sources */,
 				F96195E82B3C9DF5000109E1 /* LutMenuUI.swift in Sources */,
+				F97C14652CA9759000EF72BB /* CommentModel.swift in Sources */,
 				F9D9907E2CA51DE000375601 /* ComicPage.swift in Sources */,
 				F96195D92B3C9DF5000109E1 /* ImagePreviewView.swift in Sources */,
 				F96195F72B3C9DF5000109E1 /* FadeControl.swift in Sources */,

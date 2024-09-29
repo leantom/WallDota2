@@ -231,3 +231,36 @@ extension Float {
         return formattedString
     }
 }
+extension Date {
+    func timeAgoDisplay() -> String {
+        let now = Date()
+        let secondsAgo = Int(now.timeIntervalSince(self))
+        
+        let minute = 60
+        let hour = 60 * minute
+        let day = 24 * hour
+        let week = 7 * day
+        
+        if secondsAgo < minute {
+            return "Now"
+        } else if secondsAgo < 2 * minute {
+            return "A minute ago"
+        } else if secondsAgo < hour {
+            return "\(secondsAgo / minute) minutes ago"
+        } else if secondsAgo < 2 * hour {
+            return "An hour ago"
+        } else if secondsAgo < day {
+            return "\(secondsAgo / hour) hours ago"
+        } else if secondsAgo < 2 * day {
+            return "Yesterday"
+        } else if secondsAgo < week {
+            return "\(secondsAgo / day) days ago"
+        } else if secondsAgo < 4 * week {
+            return "\(secondsAgo / week) weeks ago"
+        } else {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium
+            return formatter.string(from: self)
+        }
+    }
+}

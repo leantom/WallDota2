@@ -18,6 +18,7 @@ class StoryModel: Codable, Identifiable, ObservableObject {
     var likeCount: Int?
     var created_at: Double?
     let author: String
+    var documentId: String?
     let publicationDate: Date
     var relatedArticles: [String]
     var chapterNumber: Int? // Thêm biến chapterNumber
@@ -34,7 +35,7 @@ class StoryModel: Codable, Identifiable, ObservableObject {
         case author
         case publicationDate
         case relatedArticles
-        case chapterNumber // Thêm vào CodingKeys
+        case chapterNumber
     }
 
     required init(from decoder: Decoder) throws {
@@ -199,7 +200,7 @@ class StoryViewModel {
     let firebaseDB = FireStoreDatabase.shared
     static let shared = StoryViewModel()
     var topStory:[StoryModel] = []
-    func getStoryByHeroID(by heroID: String, language: String) async -> [StoryModel] {
+    func getStoryByHeroID(by heroID: String) async -> [StoryModel] {
         let db = Firestore.firestore()
         let collectionRef = db.collection("stories").whereField("heroid", isEqualTo: heroID)
         let date = Date().timeIntervalSince1970
@@ -210,6 +211,7 @@ class StoryViewModel {
             let _items = documentsnap.documents.compactMap { document in
                 do {
                     let item =  try document.data(as: StoryModel.self)
+                    item.documentId = document.documentID
                     return item
                     
                 } catch {
@@ -236,28 +238,6 @@ class StoryViewModel {
      - likesCount: 10
      - likedBy: [userId1, userId3]
      */
-    func commentStory(by id: String,
-                      newCommentText: String) async {
-        let db = Firestore.firestore()
-        
-        let commentRef = db.collection("posts").document(id).collection("comments")
-        do {
-            try await commentRef.addDocument(data: [
-                "id": UUID().uuidString,
-                "author": LoginViewModel.shared.userLogin?.username ?? "Anonymous", // Replace with actual author information
-                "userid": LoginViewModel.shared.userLogin?.userid ?? "Anonymous",
-                "content": newCommentText,
-                "date": Date()
-            ])
-            print("addComment susscess")
-            
-        } catch let err{
-            print(err.localizedDescription)
-            print("addComment fail")
-            
-        }
-    }
-    
     
     func getTop5StoriesByHeroID(language: String) async -> [StoryModel] {
         let db = Firestore.firestore()
@@ -271,7 +251,7 @@ class StoryViewModel {
             var _items = documentsnap.documents.compactMap { document in
                 do {
                     let item =  try document.data(as: StoryModel.self)
-                    
+                    item.documentId = document.documentID
                     return item
                     
                 } catch {
@@ -298,97 +278,62 @@ class StoryViewModel {
 }
 
 extension StoryViewModel {
-    func likeStory(by storyID: String) async -> Bool {
+    func likeComment(by storyID: String, commentID: String) async -> Bool {
         let db = Firestore.firestore()
-        
-        // Query to find the document where the "storyID" field matches the provided storyID
+        let commentRef = db.collection("stories").document(storyID).collection("comments").document(commentID)
+        let likesRef = commentRef.collection("likes")
+        let userId = LoginViewModel.shared.userLogin?.userid ?? "Anonymous"
+
         do {
-            let querySnapshot = try await db.collection("stories").whereField("id", isEqualTo: storyID).getDocuments()
-            
-            guard let document = querySnapshot.documents.first else {
-                print("No story found with the given storyID.")
+            // Check if the user has already liked the comment
+            let likeDoc = likesRef.document(userId)
+            let docSnapshot = try await likeDoc.getDocument()
+            if docSnapshot.exists {
+                print("User has already liked this comment.")
                 return false
             }
-            
-            let storyRef = document.reference
-            
-            // Run a transaction to update the likeCount safely
-            do {
-                let newLikeCount = try await db.runTransaction { (transaction, errorPointer) -> Any? in
-                    do {
-                        let storyDocument = try transaction.getDocument(storyRef)
-                        
-                        // Check if the document exists and fetch the likeCount
-                        guard let likeCount = storyDocument.data()?["likeCount"] as? Int else {
-                            return nil
-                        }
-                        
-                        // Increment the like count
-                        let newLikeCount = likeCount + 1
-                        transaction.updateData(["likeCount": newLikeCount], forDocument: storyRef)
-                        
-                        return newLikeCount
-                    } catch {
-                        print("Error during transaction: \(error.localizedDescription)")
-                        return nil
-                    }
-                }
-                
-                // Success, update the local model asynchronously
-                if let newLikeCount = newLikeCount as? Int {
-                    DispatchQueue.main.async {
-                        if let index = self.topStory.firstIndex(where: { $0.id == storyID }) {
-                            self.topStory[index].likeCount = newLikeCount
-                        }
-                    }
-                    return true
-                } else {
-                    print("Transaction did not return a valid like count.")
-                    return false
-                }
-            } catch {
-                print("Failed to like story during transaction: \(error.localizedDescription)")
-                return false
-            }
-            
+
+            // Add a like document for the user
+            try await likeDoc.setData([
+                "likedAt": Timestamp(date: Date())
+            ])
+
+            // Increment the like count atomically
+            try await commentRef.updateData([
+                "likeCount": FieldValue.increment(Int64(1))
+            ])
+
+            print("Comment liked successfully.")
+            return true
         } catch {
-            print("Failed to find story: \(error.localizedDescription)")
+            print("Failed to like comment: \(error.localizedDescription)")
             return false
         }
     }
-    
-    func gettoriesByHeroID(by storyID: String) async -> [StoryModel] {
+}
+
+extension StoryViewModel {
+    func didUserLikeComment(by storyID: String, commentID: String) async -> Bool {
         let db = Firestore.firestore()
-        
-        // Query to find the document where the "storyID" field matches the provided storyID
-        
+        let commentRef = db.collection("stories").document(storyID).collection("comments").document(commentID)
+        let likesRef = commentRef.collection("likes")
+        let userId = LoginViewModel.shared.userLogin?.userid ?? "Anonymous"
+
         do {
-            let querySnapshot = try await db.collection("stories").whereField("heroid", isEqualTo: storyID).getDocuments()
-            
-            var _items = querySnapshot.documents.compactMap { document in
-                do {
-                    let item =  try document.data(as: StoryModel.self)
-                    
-                    return item
-                    
-                } catch {
-                    print("Error decoding getTop5StoriesByHeroID: \(error.localizedDescription)")
-                    return nil
-                }
-            }
-            _items.sort { item1, item2 in
-                if let chap1 = item1.chapterNumber,
-                   let chap2 = item2.chapterNumber {
-                    return chap1 > chap2
-                }
+            // Check if the user has liked the comment
+            let likeDoc = likesRef.document(userId)
+            let docSnapshot = try await likeDoc.getDocument()
+
+            if docSnapshot.exists {
+                print("User has liked this comment.")
                 return true
+            } else {
+                print("User has not liked this comment.")
+                return false
             }
-            return _items
-            
         } catch {
-            print("Failed to find story: \(error.localizedDescription)")
-            return []
+            print("Error checking if user liked comment: \(error.localizedDescription)")
+            return false
         }
     }
-    
 }

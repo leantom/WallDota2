@@ -6,8 +6,6 @@ struct ComicRowView: View {
     let imageHeight = UIScreen.main.bounds.height * 0.12
     
     
-    
-    
     var body: some View {
         HStack {
             // Comic Cover Image

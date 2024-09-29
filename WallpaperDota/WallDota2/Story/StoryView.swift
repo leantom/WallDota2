@@ -13,7 +13,8 @@ struct StoryView: View {
     var actionChooseStory: (StoryModel) -> ()
     @State var contentStory: LocalizedStringKey = ""
     @State var isLike: Bool = false
-    
+    @State var isShowCommentView: Bool = false
+    @Binding var path: NavigationPath
     
     var body: some View {
         ZStack {
@@ -118,7 +119,10 @@ struct StoryView: View {
                     } label: {
                         Image(systemName: "x.circle.fill")
                             .foregroundColor(.black.opacity(alphaButtonClose))
-                            .font(.title)
+                            .foregroundColor(.white)
+                            .background(Color(red: 0.104, green: 0.082, blue: 0.243))
+                            .clipShape(Circle())
+                            .shadow(color: .gray, radius: 5, x: 2, y: 2)
                     }
                     Spacer()
                 }
@@ -159,9 +163,10 @@ struct StoryView: View {
                             }
                     }
                     Button(action: {
-                        print("Round Action")
+                        isShowCommentView.toggle()
+                        //path.append(Screen.commentScreen.rawValue)
                     }) {
-                        Image(systemName: "ellipsis")
+                        Image(systemName: "message.badge")
                             .frame(width: 35, height: 35)
                             .foregroundColor(Color.white)
                             .background(Color(red: 0.104, green: 0.082, blue: 0.243))
@@ -175,10 +180,13 @@ struct StoryView: View {
             let viewModel = StoryViewModel()
             Task {
                 
-                listStoryModel = await viewModel.gettoriesByHeroID(by:model.heroid)
+                listStoryModel = await viewModel.getStoryByHeroID(by:model.heroid)
 
             }
         })
+        .sheet(isPresented: $isShowCommentView) {
+            ComentStoryView(storyId: model.documentId ?? "")
+        }
     }
     
     var avatar: some View {
@@ -216,10 +224,11 @@ struct StoryView: View {
 struct WrappedStoryView: View {
     @State var model = StoryModel()
     @State var islanguage: Bool = true
+    @State var path = NavigationPath()
     var body: some View {
         StoryView(model: model, actionChooseStory: { item in
             print(item.heroid)
-        })
+        }, path: $path)
     }
 }
 

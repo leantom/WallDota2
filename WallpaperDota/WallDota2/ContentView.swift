@@ -20,6 +20,7 @@ enum Screen: String {
     case story = "story"
     case detailHero = "detailHero"
     case splashScreen = "splashScreen"
+    case commentScreen = "commentScreen"
     case unknown
     
     init(rawValue: String) {
@@ -33,6 +34,7 @@ enum Screen: String {
             case "detailHero": self = .detailHero
             case "home": self = .home
             case "splashScreen": self = .splashScreen
+            case "commentScreen": self = .commentScreen
             default: self = .unknown
             }
         }
@@ -89,7 +91,7 @@ struct ContentView: View {
                         
                         StoryView(model: story, actionChooseStory: { model in
                             
-                        }).navigationBarBackButtonHidden()
+                        }, path: $path).navigationBarBackButtonHidden()
                     }
                 case .splashScreen:
                     SplashScreenView(path: $path).navigationBarBackButtonHidden()
