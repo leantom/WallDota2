@@ -12,7 +12,7 @@ struct HomeMasterView: View {
     
     var body: some View {
         NavigationStack {
-            TabbarCustomView()
+            Text("ac")
         }
     }
 }

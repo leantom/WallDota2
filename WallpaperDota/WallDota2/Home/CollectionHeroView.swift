@@ -71,21 +71,22 @@ struct CollectionHeroView: View {
                         self.listCollectionModel = _firestoreDB.listCollectionImages
                         isLoading = false
                     }
-//                    if isShowAds == false{
-//                        GoogleMobileAdsConsentManager.shared.gatherConsent { consentError in
-//                          if let consentError {
-//                            // Consent gathering failed.
-//                            print("Error: \(consentError.localizedDescription)")
-//                          }
-//                          GoogleMobileAdsConsentManager.shared.startGoogleMobileAdsSDK()
-//                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-//                                self.isShowAds.toggle()
-//                            }
-//                        }
-//
-//                        // This sample attempts to load ads using consent obtained in the previous session.
-//                        GoogleMobileAdsConsentManager.shared.startGoogleMobileAdsSDK()
-//                    }
+                    if isShowAds == false{
+                        GoogleMobileAdsConsentManager.shared.gatherConsent { consentError in
+                          if let consentError {
+                            // Consent gathering failed.
+                            print("Error: \(consentError.localizedDescription)")
+                              self.isShowAds = false
+                          }
+                          GoogleMobileAdsConsentManager.shared.startGoogleMobileAdsSDK()
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                self.isShowAds = true
+                            }
+                        }
+
+                        // This sample attempts to load ads using consent obtained in the previous session.
+                        GoogleMobileAdsConsentManager.shared.startGoogleMobileAdsSDK()
+                    }
                     adSizeGlobal = adSize
                     
                 })

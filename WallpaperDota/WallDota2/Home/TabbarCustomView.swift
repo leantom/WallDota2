@@ -6,6 +6,10 @@
 //
 
 import SwiftUI
+import Firebase
+import FirebaseAuth
+import AlertToast
+import Network
 import NavigationTransitions
 
 struct TabbarCustomView: View {
@@ -23,7 +27,6 @@ struct TabbarCustomView: View {
     @State private var isShowDetailImage = false
     
     @State var modelSelected: ImageModel = ImageModel()
-    @State var storySelected: StoryModel = StoryModel()
     @State var listStoryModel: [StoryModel] = []
     
     @State var isDownloadImage = ""
@@ -35,9 +38,11 @@ struct TabbarCustomView: View {
     
     @State private var isMenuOpen = false
     @State private var isShowMoreSpotlight = false
-    @State private var isShowDetailSpotlight = false
+    
     @State private var isShowVideoView = false
     @State private var isShowVideoViewFullScreen = false
+    @State private var isShowChapterView = false
+    
     
     @State private var isLogout = false
     @State var isDeleteAccount: Bool = false
@@ -50,31 +55,37 @@ struct TabbarCustomView: View {
     )
     private let viewAdsModel = InterstitialViewModel.shared
     var sideBarWidth = UIScreen.main.bounds.size.width * 0.65
+    @Binding var path: NavigationPath
     
     private var homeView: HomeView {
         HomeView(isMenuOpen: $isMenuOpen, items: $items,
-                 itemsSpotlight: $itemsSpotlight,
+                 itemsSpotlight: $listStoryModel,
                  actionTapDetail: { model in
             withAnimation(.easeInOut) {
                 if isMenuOpen {return}
                 modelSelected = model
-                isShowDetailVC = true
+                AppSetting.shared.imageDetail = model
+                AppSetting.shared.listImages = items
+                path.append(Screen.detailImage.rawValue)
             }
         }, actionDownload: { progress in
             isLoading = true
             progressBarValue = progress
         }, actionDownloadFinished: {
             DispatchQueue.main.async {
-                   viewAdsModel.showAd()
-               }
+                viewAdsModel.showAd()
+            }
             isLoading = false
             toastIsVisible = true
         }, actionShowDetailSpotlight:  { model, items in
-            self.storySelected = model
-            self.listStoryModel = items
-            self.isShowDetailSpotlight.toggle()
+            AppSetting.shared.storySelected = model
+            AppSetting.shared.listStoryModel = items
+            path.append(Screen.story.rawValue)
         }, actionShowMoreSpotlight: { list in
             self.isShowMoreSpotlight.toggle()
+        }, actionChooseShowComic: { comic in
+            AppSetting.shared.comicSelected = comic
+            path.append(Screen.comic.rawValue)
         })
     }
     
@@ -91,16 +102,31 @@ struct TabbarCustomView: View {
             selection = 1
             
         }, actionLogout: { _selection in
-            if selection == _selection {return}
-            selection = 4
+            AppSetting.setLogined(value: false)
+            Task {
+                
+                try Auth.auth().signOut()
+            }
+            
             withAnimation {
-                isLogout.toggle()
+                if path.isEmpty {
+                    return
+                }
+                path.removeLast()
             }
             
         }, actionDeleteAccount: {
+            AppSetting.setLogined(value: false)
+            Task {
+                
+                try Auth.auth().signOut()
+            }
             withAnimation {
                 
-                isDeleteAccount.toggle()
+                if path.isEmpty {
+                    return
+                }
+                path.removeLast()
             }
         }, userLogin: $userLogin)
     }
@@ -109,18 +135,15 @@ struct TabbarCustomView: View {
         
     })
     
-    
     var body: some View {
         ZStack {
             
             if isShowDetailVC == false &&
                 isShowDetailCollection == false &&
-                isShowMoreSpotlight == false &&
-                isShowDetailSpotlight == false {
+                isShowMoreSpotlight == false {
                 sideMenu
             }
-            
-            NavigationStack {
+            VStack {
                 if self.isShowVideoView == false && isMenuOpen == false {
                     TopView(toastIsVisible: $toastIsVisible,
                             isLoading: $isLoading,
@@ -134,23 +157,24 @@ struct TabbarCustomView: View {
                     .frame(height: 50)
                     .clipped()
                 }
-                
                 TabView(selection: $selection) {
                     homeView.onAppear(perform: {
                         Task {
+                            if self.listStoryModel.count == 0 {
+                                self.listStoryModel =  await StoryViewModel.shared.getTop5StoriesByHeroID(language: "en")
+                            }
                             
-                            if fireStoreDB.listAllImage.count > 0 && fireStoreDB.spotlightImages.count > 0 {
+                            if fireStoreDB.listAllImage.count > 0 {
                                 
                                 self.items = fireStoreDB.listAllImage
-                                self.itemsSpotlight = fireStoreDB.spotlightImages
                                 self.heroesID = fireStoreDB.heroesID
                                 return
                             }
                             
                             await fireStoreDB.fetchDataFromFirestore()
-                            let stories =  await StoryViewModel.shared.getTop5StoriesByHeroID(language: "en")
+                            
                             self.items = fireStoreDB.listAllImage
-                            self.itemsSpotlight = fireStoreDB.spotlightImages
+                            // MARK: ---
                             self.heroesID = fireStoreDB.heroesID
                         }
                     }).font(.system(size: 30, weight: .bold, design: .rounded))
@@ -163,33 +187,22 @@ struct TabbarCustomView: View {
                     CollectionHeroView(heroesID: $heroesID,
                                        _firestoreDB: $fireStoreDB,
                                        action: { heroID in
-                        self.imagesByID = fireStoreDB.getImages(by: heroID)
-                        self.isShowDetailCollection.toggle()
-                    })
-                    .onAppear(perform: {
-                        Task {
-                            // await FireStoreDatabase.shared.fetchDataCollectionFromFirestore()
-                            //  self.listCollectionModel = _firestoreDB.listCollectionImages
-                        }
                         
+                        AppSetting.shared.imagesHero = fireStoreDB.getImages(by: heroID)
+                        path.append(Screen.detailHero.rawValue)
                     })
                     .tabItem {
                         
                         Image(systemName: "command.circle")
                     }.tag(2)
-                    if #available(iOS 17.0, *) {
-                        videoView.tabItem {
-                            
-                            Image(systemName: "video.square")
-                        }.tag(3)
-                    } else {
-                        UserProfileView(_firestoreDB: $fireStoreDB)
-                            .tabItem {
-                                
-                                Image(systemName: "person.crop.square")
-                            }.tag(3)
-                    }
-                    
+                    ComicListView(actionChooseShowComic: { comic in
+                        AppSetting.shared.comicSelected = comic
+                        path.append(Screen.comic.rawValue)
+                        
+                    })
+                    .tabItem {
+                        Image(systemName: "book.fill")
+                    }.tag(3)
                     LeaderBoardView()
                         .tabItem {
                             Image(systemName: "chart.bar.doc.horizontal")
@@ -197,9 +210,6 @@ struct TabbarCustomView: View {
                     
                     
                 }
-                .navigationTransition(
-                    .fade(.in).animation(.easeInOut(duration:0.3))
-                )
                 .onChange(of: selection) { newSelection in
                     // Handle selection change (user indirectly interacts with an item)
                     title = titleTabs[newSelection - 1]
@@ -207,33 +217,12 @@ struct TabbarCustomView: View {
                     self.isShowVideoView = newSelection == 3
                     print("Selected item: \(newSelection)")
                 }
-                .navigationDestination(isPresented: $isShowDetailVC) {
-                    ShowDetailImageView(dismissModal: {
-                        isShowDetailVC = false
-                    }, model: $modelSelected,
-                                        models: $items)
-                    .navigationBarBackButtonHidden()
-                }.navigationDestination(isPresented: $isShowDetailCollection) {
-                    DetailHeroView(items: $imagesByID, actionBack: {
-                        self.isShowDetailCollection.toggle()
-                    })
-                    .navigationBarBackButtonHidden()
-                }.navigationDestination(isPresented: $isShowMoreSpotlight) {
+                .navigationDestination(isPresented: $isShowMoreSpotlight) {
                     SpotlightView(listImage: $itemsSpotlight, actionBack: {
                         isShowMoreSpotlight.toggle()
                     })
                     .navigationBarBackButtonHidden()
                     
-                }.navigationDestination(isPresented: $isShowDetailSpotlight) {
-                    
-                    StoryView(dismissModal: {
-                        isShowDetailSpotlight = false
-                    }, model: $storySelected,
-                               actionChooseStory: { item in
-                        self.storySelected = item
-                        isShowDetailSpotlight = true
-                    })
-                    .navigationBarBackButtonHidden()
                 }
                 .alert(isPresented: $isDeleteAccount) {
                     Alert(
@@ -267,13 +256,10 @@ struct TabbarCustomView: View {
                 .scaleEffect(isMenuOpen ? 0.5 : 1)
                 .animation(.smooth, value: isMenuOpen)
                 .navigationBarBackButtonHidden()
-                
-                
             }
+
             
-            if isLogout {
-                LoginView()
-            }
+            
         }
         
     }
@@ -334,9 +320,9 @@ class TabBarItem: Identifiable, ObservableObject {
 }
 
 struct WrapperTabbarCustomView: View {
-    
+    @State var path = NavigationPath()
     var body: some View {
-        TabbarCustomView()
+        TabbarCustomView(path: $path)
     }
 }
 

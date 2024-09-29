@@ -16,51 +16,42 @@ struct LeaderBoardView: View {
     @State var modelSelected: ImageModel = ImageModel()
     
     var body: some View {
-        NavigationStack {
-            ScrollView {
+        ScrollView {
+            VStack {
+                HStack {
+                    // MARK: -- show top 3
+                    ForEach(listImageTop3, id: \.id) { item in
+                        LeaderBoardItemHeaderView(imageModel: item)
+                            .onTapGesture {
+                            modelSelected = item
+                            isShowDetailVC.toggle()
+                        }
+                    }
+                }
+                Spacer()
                 VStack {
-                    HStack {
-                        // MARK: -- show top 3
-                        ForEach(listImageTop3, id: \.id) { item in
-                            LeaderBoardItemHeaderView(imageModel: item)
-                                .onTapGesture {
+                    // MARK: -- show list 7
+                    ForEach(listImage, id: \.id) { item in
+                        LeaderBoardItemView(imageModel: item)
+                            .onTapGesture {
                                 modelSelected = item
                                 isShowDetailVC.toggle()
                             }
-                        }
-                    }
-                    Spacer()
-                    VStack {
-                        // MARK: -- show list 7
-                        ForEach(listImage, id: \.id) { item in
-                            LeaderBoardItemView(imageModel: item)
-                                .onTapGesture {
-                                    modelSelected = item
-                                    isShowDetailVC.toggle()
-                                }
-                        }
                     }
                 }
-                .padding(.top, 30)
-                .onAppear(perform: {
-                    self.listImage = Array(FireStoreDatabase.shared.listPositionRanking[3..<10])
-                    self.listImageTop3 = Array(FireStoreDatabase.shared.listPositionRanking.prefix(upTo: 3))
-                })
             }
-            .refreshable {
-                Task {
-                    await FireStoreDatabase.shared.fetchDataFromFirestore()
-                    self.listImage = Array(FireStoreDatabase.shared.listPositionRanking[3..<10])
-                    self.listImageTop3 = Array(FireStoreDatabase.shared.listPositionRanking.prefix(upTo: 3))
-                }
-                
+            .padding(.top, 30)
+            .onAppear(perform: {
+                self.listImage = Array(FireStoreDatabase.shared.listPositionRanking[3..<10])
+                self.listImageTop3 = Array(FireStoreDatabase.shared.listPositionRanking.prefix(upTo: 3))
+            })
+        }
+        .refreshable {
+            Task {
+                await FireStoreDatabase.shared.fetchDataFromFirestore()
+                self.listImage = Array(FireStoreDatabase.shared.listPositionRanking[3..<10])
+                self.listImageTop3 = Array(FireStoreDatabase.shared.listPositionRanking.prefix(upTo: 3))
             }
-        }.navigationDestination(isPresented: $isShowDetailVC) {
-            ShowDetailImageView(dismissModal: {
-                isShowDetailVC.toggle()
-            }, model: $modelSelected,
-                                models: $listImage)
-            .navigationBarBackButtonHidden()
         }
         
     }

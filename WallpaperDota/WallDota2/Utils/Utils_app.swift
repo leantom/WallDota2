@@ -215,3 +215,19 @@ func getCurrentLanguage() -> String {
 }
 
 var adSizeGlobal : GADAdSize = GADAdSize(size: CGSize(width: UIScreen.main.bounds.width, height: 60), flags: 1)
+
+extension Float {
+    static func randomRating() -> String {
+       
+
+        // Step 1: Generate a random floating-point number between 0 and 10
+        let randomFloat = Float.random(in: 03...10)
+
+        // Step 2: Format the float to one decimal place
+        let formattedString = String(format: "%.1f", randomFloat)
+
+        // Step 3: Print or use the formatted string
+        print(formattedString)
+        return formattedString
+    }
+}

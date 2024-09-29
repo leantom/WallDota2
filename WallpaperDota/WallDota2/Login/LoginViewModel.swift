@@ -166,7 +166,7 @@ class LoginViewModel: NSObject, ObservableObject {
     }
     
     
-    func signinWithAnynomous() async {
+    func signinWithAnynomous() async -> Bool {
         do {
             let result = try await Auth.auth().signInAnonymously()
             self.user = result.user
@@ -180,10 +180,12 @@ class LoginViewModel: NSObject, ObservableObject {
             let newUser = NewUser(username: username, email: "\(username)@walldota2.com", providers: "anonymous", created_at: now, last_login_at: now, userid: result.user.uid)
             LoginViewModel.shared.userLogin = newUser
             await UserViewModel.shared.createUser(user: newUser)
+            return true
+            
         } catch let err{
             print(err.localizedDescription)
         }
-        
+        return false
     }
     
     func deleteUser() async {

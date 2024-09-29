@@ -100,6 +100,9 @@
 		F975B4902BD41165008FA052 /* Test_Animation1.swift in Sources */ = {isa = PBXBuildFile; fileRef = F975B48F2BD41165008FA052 /* Test_Animation1.swift */; };
 		F975B4922BD418F3008FA052 /* Test_Animation2.swift in Sources */ = {isa = PBXBuildFile; fileRef = F975B4912BD418F3008FA052 /* Test_Animation2.swift */; };
 		F978E1C52B36DE03008F422A /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F978E1C42B36DE03008F422A /* CommentView.swift */; };
+		F97C145F2CA823E200EF72BB /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97C145E2CA823DD00EF72BB /* WebView.swift */; };
+		F97C14612CA82ADE00EF72BB /* TestContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97C14602CA82ADE00EF72BB /* TestContent.swift */; };
+		F97C14632CA8863300EF72BB /* SpinningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97C14622CA8863300EF72BB /* SpinningView.swift */; };
 		F97F6BFE2B3EA4DD0065F918 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97F6BFD2B3EA4DD0065F918 /* NotificationView.swift */; };
 		F97F6C002B3EA4F30065F918 /* NotificationStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97F6BFF2B3EA4F30065F918 /* NotificationStruct.swift */; };
 		F97F6C032B3EA85C0065F918 /* FirebaseRealtime.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97F6C022B3EA85C0065F918 /* FirebaseRealtime.swift */; };
@@ -128,8 +131,20 @@
 		F9C035C62B284CE40049D4B6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F9C035C52B284CE40049D4B6 /* GoogleService-Info.plist */; };
 		F9C035D12B2851340049D4B6 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C035D02B2851340049D4B6 /* LoginView.swift */; };
 		F9C035D42B286A530049D4B6 /* TestTabview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C035D32B286A530049D4B6 /* TestTabview.swift */; };
+		F9CA843B2CA3F0B600720C23 /* Tabbar+Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CA843A2CA3F0AC00720C23 /* Tabbar+Extention.swift */; };
 		F9CFC99E2C920C8800632E76 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = F9CFC99D2C920C8800632E76 /* GoogleMobileAds */; };
 		F9CFC9A02C920E7F00632E76 /* AdMobBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CFC99F2C920E7F00632E76 /* AdMobBannerView.swift */; };
+		F9D2A6872CA6BB1A009905C7 /* LowerCapsuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D2A6812CA6BB1A009905C7 /* LowerCapsuleView.swift */; };
+		F9D2A6882CA6BB1A009905C7 /* CapusuleGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D2A67E2CA6BB1A009905C7 /* CapusuleGroupView.swift */; };
+		F9D2A6892CA6BB1A009905C7 /* HeartImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D2A6802CA6BB1A009905C7 /* HeartImageView.swift */; };
+		F9D2A68A2CA6BB1A009905C7 /* ShrinkingCapsule.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D2A6822CA6BB1A009905C7 /* ShrinkingCapsule.swift */; };
+		F9D2A68C2CA6BB1A009905C7 /* LikeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D2A6852CA6BB1A009905C7 /* LikeView.swift */; };
+		F9D2A68D2CA6BB1A009905C7 /* FloatingLike.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D2A67F2CA6BB1A009905C7 /* FloatingLike.swift */; };
+		F9D2A68F2CA6BBD2009905C7 /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D2A68E2CA6BBCE009905C7 /* Color+Extension.swift */; };
+		F9D9907C2CA51D2200375601 /* ComicBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D9907B2CA51D2200375601 /* ComicBookView.swift */; };
+		F9D9907E2CA51DE000375601 /* ComicPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D9907D2CA51DE000375601 /* ComicPage.swift */; };
+		F9D9908A2CA553BB00375601 /* ComicListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D990892CA553B500375601 /* ComicListView.swift */; };
+		F9D9908E2CA5655500375601 /* ComicReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D9908D2CA5654F00375601 /* ComicReviewView.swift */; };
 		F9DA1D9A2B3CA05000B66616 /* PixelEnginePackage in Frameworks */ = {isa = PBXBuildFile; productRef = F9DA1D992B3CA05000B66616 /* PixelEnginePackage */; };
 		F9DAE1102B2AD808002BAF3D /* TopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DAE10F2B2AD808002BAF3D /* TopView.swift */; };
 		F9DAE1122B2AE314002BAF3D /* FirstSectionHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DAE1112B2AE314002BAF3D /* FirstSectionHomeView.swift */; };
@@ -262,6 +277,9 @@
 		F975B48F2BD41165008FA052 /* Test_Animation1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test_Animation1.swift; sourceTree = "<group>"; };
 		F975B4912BD418F3008FA052 /* Test_Animation2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test_Animation2.swift; sourceTree = "<group>"; };
 		F978E1C42B36DE03008F422A /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
+		F97C145E2CA823DD00EF72BB /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		F97C14602CA82ADE00EF72BB /* TestContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestContent.swift; sourceTree = "<group>"; };
+		F97C14622CA8863300EF72BB /* SpinningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinningView.swift; sourceTree = "<group>"; };
 		F97F6BFD2B3EA4DD0065F918 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		F97F6BFF2B3EA4F30065F918 /* NotificationStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NotificationStruct.swift; path = /Users/quangho/Documents/WallDota2/WallpaperDota/WallDota2/NotificationStruct.swift; sourceTree = "<absolute>"; };
 		F97F6C022B3EA85C0065F918 /* FirebaseRealtime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseRealtime.swift; sourceTree = "<group>"; };
@@ -291,7 +309,19 @@
 		F9C035D02B2851340049D4B6 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		F9C035D22B28607A0049D4B6 /* WallDota2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WallDota2.entitlements; sourceTree = "<group>"; };
 		F9C035D32B286A530049D4B6 /* TestTabview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTabview.swift; sourceTree = "<group>"; };
+		F9CA843A2CA3F0AC00720C23 /* Tabbar+Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tabbar+Extention.swift"; sourceTree = "<group>"; };
 		F9CFC99F2C920E7F00632E76 /* AdMobBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdMobBannerView.swift; sourceTree = "<group>"; };
+		F9D2A67E2CA6BB1A009905C7 /* CapusuleGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapusuleGroupView.swift; sourceTree = "<group>"; };
+		F9D2A67F2CA6BB1A009905C7 /* FloatingLike.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingLike.swift; sourceTree = "<group>"; };
+		F9D2A6802CA6BB1A009905C7 /* HeartImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartImageView.swift; sourceTree = "<group>"; };
+		F9D2A6812CA6BB1A009905C7 /* LowerCapsuleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LowerCapsuleView.swift; sourceTree = "<group>"; };
+		F9D2A6822CA6BB1A009905C7 /* ShrinkingCapsule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShrinkingCapsule.swift; sourceTree = "<group>"; };
+		F9D2A6852CA6BB1A009905C7 /* LikeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeView.swift; sourceTree = "<group>"; };
+		F9D2A68E2CA6BBCE009905C7 /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
+		F9D9907B2CA51D2200375601 /* ComicBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicBookView.swift; sourceTree = "<group>"; };
+		F9D9907D2CA51DE000375601 /* ComicPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicPage.swift; sourceTree = "<group>"; };
+		F9D990892CA553B500375601 /* ComicListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicListView.swift; sourceTree = "<group>"; };
+		F9D9908D2CA5654F00375601 /* ComicReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicReviewView.swift; sourceTree = "<group>"; };
 		F9DAE10F2B2AD808002BAF3D /* TopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopView.swift; sourceTree = "<group>"; };
 		F9DAE1112B2AE314002BAF3D /* FirstSectionHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstSectionHomeView.swift; sourceTree = "<group>"; };
 		F9DAE1132B2AEA84002BAF3D /* FireStoreDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStoreDatabase.swift; sourceTree = "<group>"; };
@@ -460,6 +490,8 @@
 		F96082C72B3DDD7E00A724D4 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				F97C14622CA8863300EF72BB /* SpinningView.swift */,
+				F9D2A6862CA6BB1A009905C7 /* Like */,
 				F9BAA5E42B30199B0077BD5B /* ShowToast.swift */,
 				F9BAA5E62B3021CB0077BD5B /* ProgressBarView.swift */,
 				F9DC3FB12C9BDEA900E59DEB /* Utils_app.swift */,
@@ -671,8 +703,10 @@
 		F98806762B996205008EB540 /* Story */ = {
 			isa = PBXGroup;
 			children = (
+				F97C145E2CA823DD00EF72BB /* WebView.swift */,
 				F9F485262B45C8A900F600BF /* StoryModel.swift */,
 				F9F485242B45AEC600F600BF /* StoryView.swift */,
+				F97C14602CA82ADE00EF72BB /* TestContent.swift */,
 				F9DC3FB52C9C175A00E59DEB /* LanguageSwitchView.swift */,
 				F9DC3FAF2C9BD1BC00E59DEB /* StoryListView.swift */,
 				F98806772B9965FF008EB540 /* VideoView.swift */,
@@ -721,6 +755,7 @@
 				F96082C52B3DDD4900A724D4 /* UserProfile */,
 				F9DAE1152B2AED7D002BAF3D /* Home */,
 				F9DAE1132B2AEA84002BAF3D /* FireStoreDatabase.swift */,
+				F9D9907A2CA51D0D00375601 /* ComicBook */,
 				F97F6C022B3EA85C0065F918 /* FirebaseRealtime.swift */,
 				F9FE399A2B3346F300E4BBA0 /* UserViewModel.swift */,
 				F9F6E07E2B348F480048B957 /* ImageModifier.swift */,
@@ -766,6 +801,39 @@
 			path = WallDota2UITests;
 			sourceTree = "<group>";
 		};
+		F9D2A6832CA6BB1A009905C7 /* Support Shapes */ = {
+			isa = PBXGroup;
+			children = (
+				F9D2A67E2CA6BB1A009905C7 /* CapusuleGroupView.swift */,
+				F9D2A67F2CA6BB1A009905C7 /* FloatingLike.swift */,
+				F9D2A6802CA6BB1A009905C7 /* HeartImageView.swift */,
+				F9D2A6812CA6BB1A009905C7 /* LowerCapsuleView.swift */,
+				F9D2A6822CA6BB1A009905C7 /* ShrinkingCapsule.swift */,
+			);
+			path = "Support Shapes";
+			sourceTree = "<group>";
+		};
+		F9D2A6862CA6BB1A009905C7 /* Like */ = {
+			isa = PBXGroup;
+			children = (
+				F9D2A68E2CA6BBCE009905C7 /* Color+Extension.swift */,
+				F9D2A6832CA6BB1A009905C7 /* Support Shapes */,
+				F9D2A6852CA6BB1A009905C7 /* LikeView.swift */,
+			);
+			path = Like;
+			sourceTree = "<group>";
+		};
+		F9D9907A2CA51D0D00375601 /* ComicBook */ = {
+			isa = PBXGroup;
+			children = (
+				F9D9908D2CA5654F00375601 /* ComicReviewView.swift */,
+				F9D990892CA553B500375601 /* ComicListView.swift */,
+				F9D9907B2CA51D2200375601 /* ComicBookView.swift */,
+				F9D9907D2CA51DE000375601 /* ComicPage.swift */,
+			);
+			path = ComicBook;
+			sourceTree = "<group>";
+		};
 		F9DAE1152B2AED7D002BAF3D /* Home */ = {
 			isa = PBXGroup;
 			children = (
@@ -777,6 +845,7 @@
 				F9DAE1112B2AE314002BAF3D /* FirstSectionHomeView.swift */,
 				F9B69CE02B2AA308004A2D71 /* ImageModel.swift */,
 				F9DAE1162B2AF554002BAF3D /* TabbarCustomView.swift */,
+				F9CA843A2CA3F0AC00720C23 /* Tabbar+Extention.swift */,
 				F9DD044B2B2C376500B95097 /* HomeMasterView.swift */,
 				F95A916D2B303AFD00AAAE57 /* CollectionView.swift */,
 				F92805182B32BCA1000D53E9 /* CollectionHeroView.swift */,
@@ -1041,8 +1110,15 @@
 				F928051F2B32EA23000D53E9 /* AppSetting.swift in Sources */,
 				F9F6E07F2B348F480048B957 /* ImageModifier.swift in Sources */,
 				F96195DC2B3C9DF5000109E1 /* LutsController.swift in Sources */,
+				F9D2A6872CA6BB1A009905C7 /* LowerCapsuleView.swift in Sources */,
+				F9D2A6882CA6BB1A009905C7 /* CapusuleGroupView.swift in Sources */,
+				F9D2A6892CA6BB1A009905C7 /* HeartImageView.swift in Sources */,
+				F9D2A68A2CA6BB1A009905C7 /* ShrinkingCapsule.swift in Sources */,
+				F9D2A68C2CA6BB1A009905C7 /* LikeView.swift in Sources */,
+				F9D2A68D2CA6BB1A009905C7 /* FloatingLike.swift in Sources */,
 				F9DD044C2B2C376500B95097 /* HomeMasterView.swift in Sources */,
 				F975B4902BD41165008FA052 /* Test_Animation1.swift in Sources */,
+				F97C145F2CA823E200EF72BB /* WebView.swift in Sources */,
 				F96195E52B3C9DF5000109E1 /* CollectionButton.swift in Sources */,
 				F9C035D42B286A530049D4B6 /* TestTabview.swift in Sources */,
 				F9DC3FB02C9BD1BC00E59DEB /* StoryListView.swift in Sources */,
@@ -1052,12 +1128,14 @@
 				F96195EC2B3C9DF5000109E1 /* ColorCubeControl.swift in Sources */,
 				F96195F52B3C9DF5000109E1 /* ContrastControl.swift in Sources */,
 				F96195CF2B3C9DF5000109E1 /* Collection.swift in Sources */,
+				F9D2A68F2CA6BBD2009905C7 /* Color+Extension.swift in Sources */,
 				F974C0422B309B5B0079EABD /* MenuView.swift in Sources */,
 				F96195D72B3C9DF5000109E1 /* MyWebView.swift in Sources */,
 				F96195F22B3C9DF5000109E1 /* HLSControl.swift in Sources */,
 				F978E1C52B36DE03008F422A /* CommentView.swift in Sources */,
 				F96195C82B3C9DF5000109E1 /* Persistence.swift in Sources */,
 				F96195C72B3C9DF5000109E1 /* ListTitle.swift in Sources */,
+				F9D9908A2CA553BB00375601 /* ComicListView.swift in Sources */,
 				F96195D42B3C9DF5000109E1 /* ImagePicker.swift in Sources */,
 				F9FE39992B3329ED00E4BBA0 /* SpotlightView.swift in Sources */,
 				F96195E22B3C9DF5000109E1 /* LUTButton.swift in Sources */,
@@ -1074,6 +1152,7 @@
 				F96195FB2B3C9DF5000109E1 /* EditMenuView.swift in Sources */,
 				F93387482B6F891A004F6048 /* ContextModifier.swift in Sources */,
 				F96195FE2B3C9DF5000109E1 /* PhotoEdittor.swift in Sources */,
+				F9CA843B2CA3F0B600720C23 /* Tabbar+Extention.swift in Sources */,
 				F96195F92B3C9DF5000109E1 /* ColorControl.swift in Sources */,
 				F96195DD2B3C9DF5000109E1 /* ExportController.swift in Sources */,
 				F95A60882B28E59C00D96377 /* HomeView.swift in Sources */,
@@ -1087,6 +1166,7 @@
 				F96195F62B3C9DF5000109E1 /* ShadowsControl.swift in Sources */,
 				F96195C52B3C9DF5000109E1 /* RaiseButton.swift in Sources */,
 				F9F6E0812B34AD690048B957 /* UINavigationViewController+Extension.swift in Sources */,
+				F97C14612CA82ADE00EF72BB /* TestContent.swift in Sources */,
 				F96195E12B3C9DF5000109E1 /* CustomSlider.swift in Sources */,
 				F928051D2B32E55A000D53E9 /* FileManager.swift in Sources */,
 				F9BAA5E72B3021CB0077BD5B /* ProgressBarView.swift in Sources */,
@@ -1105,13 +1185,16 @@
 				F96195C62B3C9DF5000109E1 /* ImageBorder.swift in Sources */,
 				F97F6C032B3EA85C0065F918 /* FirebaseRealtime.swift in Sources */,
 				F96195FA2B3C9DF5000109E1 /* FilterMenuUI.swift in Sources */,
+				F97C14632CA8863300EF72BB /* SpinningView.swift in Sources */,
 				F95A916E2B303AFD00AAAE57 /* CollectionView.swift in Sources */,
 				F96195EA2B3C9DF5000109E1 /* SharpenControl.swift in Sources */,
 				F96196042B3C9DF5000109E1 /* AppTheme.swift in Sources */,
 				F92EDC4D2CA1B4920019A054 /* GoogleMobileAdsConsentManager.swift in Sources */,
 				F96195CB2B3C9DF5000109E1 /* colorful_room.xcdatamodeld in Sources */,
+				F9D9907C2CA51D2200375601 /* ComicBookView.swift in Sources */,
 				F9C035982B2846A60049D4B6 /* WallDota2App.swift in Sources */,
 				F96195E82B3C9DF5000109E1 /* LutMenuUI.swift in Sources */,
+				F9D9907E2CA51DE000375601 /* ComicPage.swift in Sources */,
 				F96195D92B3C9DF5000109E1 /* ImagePreviewView.swift in Sources */,
 				F96195F72B3C9DF5000109E1 /* FadeControl.swift in Sources */,
 				F96195F82B3C9DF5000109E1 /* WhiteBalanceControl.swift in Sources */,
@@ -1140,6 +1223,7 @@
 				F9DC3FB62C9C175A00E59DEB /* LanguageSwitchView.swift in Sources */,
 				F96196052B3C9DF5000109E1 /* Utils.swift in Sources */,
 				F97F6C052B3EB9610065F918 /* NotificationStruct.swift in Sources */,
+				F9D9908E2CA5655500375601 /* ComicReviewView.swift in Sources */,
 				F96195FD2B3C9DF5000109E1 /* FilterModel.swift in Sources */,
 				F96195E72B3C9DF5000109E1 /* RecipeMenuUI.swift in Sources */,
 				F91FF7782B4C563F00E5F110 /* DetailHeroViewModel.swift in Sources */,
@@ -1330,7 +1414,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.7;
+				MARKETING_VERSION = 1.0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = vn.cyme.WallDota2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1338,7 +1422,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1370,7 +1454,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.7;
+				MARKETING_VERSION = 1.0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = vn.cyme.WallDota2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1378,7 +1462,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -1509,7 +1593,7 @@
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 10.28.0;
+				minimumVersion = 11.2.0;
 			};
 		};
 		F91FF77A2B4C5A1500E5F110 /* XCRemoteSwiftPackageReference "swiftui-navigation-transitions" */ = {

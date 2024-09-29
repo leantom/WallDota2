@@ -113,7 +113,7 @@ struct LoginView: View {
     
     let backgroundImage = Image("image4")
     let gradient: LinearGradient = LinearGradient(
-        colors: [Color.black.opacity(0.7), Color.clear],
+        colors: [Color.black.opacity(0.5), Color.clear],
         startPoint: .bottom, endPoint: .top
     )
     var loginViewModel = LoginViewModel.shared
@@ -124,109 +124,138 @@ struct LoginView: View {
     @State var appleLoginTitle: String = "Continue with Apple"
     @State var appleIcon: String = "apple.logo"
     
+    @State var skipLoginTitle: String = "Skip"
+    @State var skipIcon: String = "rectangle.portrait.and.arrow.forward"
+    
     @State private var showSignInWithAppleSheet = false
-    @State private var isLogined = false
+   
+    @State private var isLoading = false
     @State var currentNonce: String = ""
     
     let appleSignInHandler = AppleSignInHandler()
+    @Binding var path: NavigationPath
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                
-                backgroundImage
-                                    .resizable()
-                                    .scaledToFill()
-                                    .ignoresSafeArea()
-                
+        ZStack {
+            
+            backgroundImage
+                                .resizable()
+                                .scaledToFill()
+                                .overlay {
+                                    gradient
+                                }
+                                .ignoresSafeArea()
+            
+            VStack(spacing: 40) {
+                Spacer(minLength: 160)
+                VStack(spacing: 20,content: {
+                    Spacer()
+                    
+                    Image("logo-black")
+                        .resizable()
+                        .frame(width: 60, height: 60)
+                        .clipShape(Circle())
+                        .overlay(Circle().stroke(style: StrokeStyle(lineWidth: .infinity, lineCap: .round, dash: [10, 10])))
+                        .shadow(radius: 10)
+                    Text("Because your view deserves to be epic.")
+                        .font(.subheadline)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.white)
+                    
+                })
                 VStack(spacing: 40) {
-                    Spacer(minLength: 160)
-                    VStack(spacing: 20,content: {
-                        Spacer()
-                        Text("Because your view deserves to be epic.")
-                            .font(.subheadline)
-                            .fontWeight(.bold)
-                            .foregroundStyle(.white)
-                    })
-                    VStack(spacing: 40) {
-                        Spacer()
-                        VStack(spacing: 24) {
-//                            ShareCodeButton(title: $email, icon: $emailIcon, action: {
-//                                
-//                            })
-//                                .background(Color(red: 0.324, green: 0.448, blue: 0.7))
-//                                .cornerRadius(10)
-                            
-                            ShareCodeButton(title: $googleLoginTitle, icon: $googleIcon, action: {
-                                Task {
-                                    isLogined = await loginViewModel.signInWithGoogle()
-                                }
-                                
-                            })
-                                .background(Color(red: 0.167, green: 0.246, blue: 0.386))
-                                .cornerRadius(10)
-                            
-                            ShareCodeButton(title: $appleLoginTitle, icon: $appleIcon, action: {
-                                let nonce = AppleSignInHandler.randomNonceString()
-                                currentNonce = nonce
-                                appleSignInHandler.currentNonce = currentNonce
-                                let appleIDProvider = ASAuthorizationAppleIDProvider()
-                                let request = appleIDProvider.createRequest()
-                                request.nonce = AppleSignInHandler.sha256(nonce)
-                                request.requestedScopes = [.fullName, .email]
-                                
-                                let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-                                authorizationController.delegate = appleSignInHandler
-                                authorizationController.presentationContextProvider = appleSignInHandler
-                                authorizationController.performRequests()
-                                
-                                appleSignInHandler.actionLoginSuccessfully = {
-                                    isLogined = true
-                                }
-                            })
-                            .background(Color(hue: 0.607, saturation: 0.601, brightness: 0.159))
-                            .cornerRadius(10)
-                        }
+                    Spacer()
+                    VStack(spacing: 24) {
                         
-                        HStack(spacing: 0) {
-                            
-                            Button(action: {
-                                // MARK: --skip
-                                Task {
-                                    await loginViewModel.signinWithAnynomous()
-                                    isLogined = true
-                                }
-                            }, label: {
-                                Text("Skip")
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                    .foregroundStyle(.white)
-                            })
-                            .padding()
-                            .frame(height: 48)
-                            .background(
-                              RoundedRectangle(cornerRadius: 10)
-                                .fill(.accent)
-                                .shadow(color: .black, radius: 5) // Shadow applied to background shape
-                            )
+                        ShareCodeButton(title: $googleLoginTitle, icon: $googleIcon, action: {
                            
                             
-                        }
-                        Spacer()
+                            withAnimation {
+                                isLoading.toggle()
+                            }
+                            
+                            Task {
+                                let isSuccess = await loginViewModel.signInWithGoogle()
+                                isLoading.toggle()
+                                path.append(Screen.home.rawValue)
+                            }
+                            
+                            
+                        })
+                            .background(Color(red: 0.167, green: 0.246, blue: 0.386))
+                            .cornerRadius(10)
+                        
+                        ShareCodeButton(title: $appleLoginTitle, icon: $appleIcon, action: {
+                            let nonce = AppleSignInHandler.randomNonceString()
+                            currentNonce = nonce
+                            appleSignInHandler.currentNonce = currentNonce
+                            let appleIDProvider = ASAuthorizationAppleIDProvider()
+                            let request = appleIDProvider.createRequest()
+                            request.nonce = AppleSignInHandler.sha256(nonce)
+                            request.requestedScopes = [.fullName, .email]
+                            
+                            let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+                            authorizationController.delegate = appleSignInHandler
+                            authorizationController.presentationContextProvider = appleSignInHandler
+                            authorizationController.performRequests()
+                            
+                            appleSignInHandler.actionLoginSuccessfully = {
+                                withAnimation {
+                                    isLoading.toggle()
+                                }
+                                
+                                Task {
+                                    isLoading.toggle()
+                                    path.append(Screen.home.rawValue)
+                                }
+                            }
+                        })
+                        .background(Color(hue: 0.607, saturation: 0.601, brightness: 0.159))
+                        .cornerRadius(10)
+                        ShareCodeButton(title: $skipLoginTitle, icon: $skipIcon, action: {
+                            withAnimation {
+                                isLoading.toggle()
+                            }
+                            
+                            Task {
+                                let isSuccess = await loginViewModel.signinWithAnynomous()
+                                
+                               
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                    path.append(Screen.home.rawValue)
+                                    self.isLoading.toggle()
+                                }
+                            }
+                            
+
+                        })
+                            .background(Color(red: 0.167, green: 0.246, blue: 0.386))
+                            .cornerRadius(10)
                     }
-                    
-                    
+                    Spacer()
                 }
                 
-                if isLogined {
-                    TabbarCustomView()
-                        .frame(width: UIScreen.main.bounds.width)
-                        .navigationBarBackButtonHidden()
-                        .background(.white)
+                
+            }
+
+            if isLoading {
+                SpinningView()
+            }
+        }
+        .onAppear {
+            
+            if AppSetting.checkLogined() {
+                isLoading = true
+                Task {
+                    _ = await loginViewModel.signinWithAnynomous()
+                    path.append(Screen.home.rawValue)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        self.isLoading.toggle()
+                    }
+                    
                 }
             }
-        }.navigationDestination(isPresented: $isLogined) {
-            TabbarCustomView().navigationBarBackButtonHidden()
         }
     }
 }
@@ -262,6 +291,14 @@ struct ScreenWidthModifier: ViewModifier {
     }
 }
 
+struct WrapperHomeView: View {
+    @State var path = NavigationPath()
+    
+    var body: some View {
+        LoginView(path: $path)
+    }
+}
+
 #Preview {
-    LoginView()
+    WrapperHomeView()
 }

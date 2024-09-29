@@ -77,13 +77,7 @@ struct SpotlightView: View {
                 jsonModel.setCompositionalLayout(images: listImage)
             }
         }
-        .navigationDestination(isPresented: $isShowDetailVC) {
-            ShowDetailImageView(dismissModal: {
-                isShowDetailVC = false
-            }, model: $modelSelected,
-                                models: $listImage)
-            .navigationBarBackButtonHidden()
-        }
+        
     }
 }
 

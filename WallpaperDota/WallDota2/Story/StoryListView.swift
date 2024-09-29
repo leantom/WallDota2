@@ -92,6 +92,8 @@ struct StoryCardView: View {
                 Spacer()
                 
                 HStack(spacing: 5) {
+                    
+                   
                     Image(systemName: isLike ? "heart.fill" : "heart")
                         .foregroundColor(isLike ? .red : .gray)
                         .onTapGesture {

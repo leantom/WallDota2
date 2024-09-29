@@ -38,6 +38,7 @@ struct SpotlightViewV2: View {
     var size: CGSize {
             return GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(width).size
         }
+    let imageHeight = UIScreen.main.bounds.height * 0.35
     var body: some View {
         VStack {
             HStack {
@@ -74,17 +75,28 @@ struct SpotlightViewV2: View {
                     .contentMargins(.horizontal, 20)
                     .scrollTargetBehavior(.paging)
                     .scrollIndicators(.hidden)
-                    .onAppear(perform: {
-                        loadImaged()
-                    })
                     
                 } else {
-                    ProgressView()
+                    ScrollView(.horizontal) {
+                        LazyHStack(spacing: 22
+                        ) {
+                            
+                            ForEach(itemsSpotlight) { item in
+                                
+                                CardView(item: item)
+                                    .onTapGesture {
+                                        self.actionShowDetailSpotlight(item, itemsSpotlight)
+                                    }
+                            }
+                        }
+                    }
+                    .scrollIndicators(.hidden)
+                    
                 }
                 
                 
             }
-            .frame(height: 300)
+            .frame(height: imageHeight)
         }
         .onAppear(perform: {
             self.itemsSpotlight = StoryViewModel.shared.topStory
@@ -103,27 +115,6 @@ struct SpotlightViewV2: View {
                }
            }
        }
-    
-    func loadImaged() {
-        Task {
-            let firebaseData = FireStoreDatabase.shared
-            
-//            if itemsSpotlight.isLoadedAllThumbnail == false {
-//                for item in itemsSpotlight {
-//                    if item.imageUrlFull.isEmpty,
-//                       let thumbnail = await firebaseData.getURL(path: item.thumbnail) {
-//                        item.thumbnailFull = thumbnail.absoluteString
-//                        item.isLoadedThumbnail.toggle()
-//                    } else {
-//                        print("not loaded")
-//                    }
-//                }
-//                isLoadedImages = itemsSpotlight.isLoadedAllThumbnail
-//            }
-            
-        }
-    }
-
     
 }
 

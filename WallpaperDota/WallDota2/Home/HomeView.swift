@@ -15,7 +15,7 @@ struct HomeView: View {
     
     @Binding var isMenuOpen: Bool
     @Binding var items: [ImageModel]
-    @Binding var itemsSpotlight: [ImageModel]
+    @Binding var itemsSpotlight: [StoryModel]
     var actionTapDetail: ((ImageModel) -> Void)
     @State var itemSelected: ImageModel?
     
@@ -33,6 +33,9 @@ struct HomeView: View {
         startPoint: .top, endPoint: .bottom
     )
     @State var isShowPopupComment = false
+    @State var trendingManga:[ComicModel] = []
+    @State private var path: [ComicModel] = []
+    var actionChooseShowComic: (ComicModel) -> Void
     
     var body: some View {
         ZStack {
@@ -50,12 +53,22 @@ struct HomeView: View {
                     }
                 }
                 
+                VStack(alignment: .leading) {
+                    Text("Trending comic")
+                        .font(.headline)
+                        .padding(.horizontal)
+                    
+                    TrendingMangaView(trendingManga: trendingManga, actionChoose: {comic in
+                        actionChooseShowComic(comic)
+                    })
+                }
+                .padding(.top)
+                
                 LazyVStack {
                     HStack {
-                        Text("Trending")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .padding()
+                        Text("Trending themes")
+                            .font(.headline)
+                            .padding(.horizontal)
                         Spacer()
                     }
                     LazyVGrid(columns: columns, spacing: 5) {
@@ -78,6 +91,12 @@ struct HomeView: View {
             }
             .frame(width: UIScreen.main.bounds.width * 0.98)
             .disabled(isMenuOpen)
+        }
+        .onAppear {
+            Task {
+                trendingManga = await ComicViewModel().fetchMostViewComics()
+                
+            }
         }
         
     }

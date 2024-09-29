@@ -38,78 +38,88 @@ struct ShowItemView: View {
             VStack {
                 Spacer()
                 HStack {
-                    VStack(spacing: 10) {
-                        VStack {
-                            Button(action: {
-                                Task {
-                                    await InterstitialViewModel.shared.loadAd()
-                                    await saveImage()
-                                }
-                                
-                            }, label: {
-                                Image(systemName: "arrow.down.square")
-                                    .foregroundColor(.white)
-                                    .font(.title2)
-                                
-                            }).opacity(opacityImage)
-                                
-                        }
-                        // MARK: --
-                        VStack (spacing: 5) {
-                            VStack(spacing: 3){
+                    ZStack {
+                        VStack(spacing: 10) {
+                            VStack {
                                 Button(action: {
                                     Task {
-                                        await FireStoreDatabase.likeImage(image: show)
-                                        show.likeCount += 1
-                                        self.likeCount += 1
+                                        await InterstitialViewModel.shared.loadAd()
+                                        await saveImage()
                                     }
-                                    if FireStoreDatabase.shared.checkUserLikedExistID(id: show.id) == false {
-                                        FireStoreDatabase.shared.listImageLiked.append(show)
-                                    }
-                                    self.isLike.toggle()
+                                    
                                 }, label: {
-                                    Image(systemName:"heart.fill")
-                                        .foregroundColor(isLike ? .red : .white)
+                                    Image(systemName: "arrow.down.square")
+                                        .foregroundColor(.white)
                                         .font(.title2)
+                                    
                                 }).opacity(opacityImage)
-                                
-                                Text("\(self.likeCount)").font(.caption).foregroundStyle(.white)
                                 
                             }
-                            // MARK: Comment View
-                            VStack(spacing: 3){
-                                Button(action: {
-                                    Task {
-                                        
-                                    }
-                                    showComment.toggle()
-                                    actionComment(show)
-                                }, label: {
-                                    Image("icons8-comment-50")
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 24, height: 24)
-                                        .clipped()
-                                }).opacity(opacityImage)
-                                    .fullScreenCover(isPresented: $showComment) {
-                                        withAnimation {
-                                            CommentsView(imageModel: show)
+                            // MARK: --
+                            Spacer()
+                            VStack (spacing: 5) {
+                                VStack(spacing: 3){
+                                   
+                                    
+                                    
+                                    //                                Button(action: {
+                                    //                                    Task {
+                                    //                                        await FireStoreDatabase.likeImage(image: show)
+                                    //                                        show.likeCount += 1
+                                    //                                        self.likeCount += 1
+                                    //                                    }
+                                    //                                    if FireStoreDatabase.shared.checkUserLikedExistID(id: show.id) == false {
+                                    //                                        FireStoreDatabase.shared.listImageLiked.append(show)
+                                    //                                    }
+                                    //                                    self.isLike.toggle()
+                                    //                                }, label: {
+                                    //                                    Image(systemName:"heart.fill")
+                                    //                                        .foregroundColor(isLike ? .red : .white)
+                                    //                                        .font(.title2)
+                                    //                                }).opacity(opacityImage)
+                                    
+                                  //  Text("\(self.likeCount)").font(.caption).foregroundStyle(.white)
+                                    
+                                }
+                                // MARK: Comment View
+                                VStack(spacing: 3){
+                                    Button(action: {
+                                        Task {
+                                            
                                         }
-                                    }
-                                
-                                Text("\(self.show.commentCount)").font(.caption).foregroundStyle(.white)
-                                
+                                        showComment.toggle()
+                                        actionComment(show)
+                                    }, label: {
+                                        Image("icons8-comment-50")
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 24, height: 24)
+                                            .clipped()
+                                    }).opacity(opacityImage)
+                                        .fullScreenCover(isPresented: $showComment) {
+                                            withAnimation {
+                                                CommentsView(imageModel: show)
+                                            }
+                                        }
+                                    
+                                    Text("\(self.show.commentCount)").font(.caption).foregroundStyle(.white)
+                                    
+                                }
                             }
                         }
                         
-                       
+                        LikeView(actionLike: {
+                            Task {
+                                await FireStoreDatabase.likeImage(image: show)
+                            }
+                            
+                        })
                     }
                     .fixedSize(horizontal: true, vertical: false)
                     .frame(width: 45, height: 150)
                     .background(.black.opacity(0.3))
                     .cornerRadius(10)
                     .padding(.leading, 10)
-                    
                     Spacer()
                 }
             }

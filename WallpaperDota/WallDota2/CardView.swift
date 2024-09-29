@@ -11,7 +11,10 @@ import SDWebImageSwiftUI
 struct CardView: View {
     @StateObject private var viewModel = CardViewModel()
     let item: StoryModel
-
+    var isIpad: Bool { UIDevice.current.userInterfaceIdiom == .pad }
+    
+    let imageHeight = UIScreen.main.bounds.height * 0.35
+    
     var body: some View {
         ZStack(alignment: .topLeading) {
             if viewModel.url == nil {
@@ -25,7 +28,7 @@ struct CardView: View {
                     .indicator(.activity)
                     .transition(.fade(duration: 0.5))
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: UIScreen.main.bounds.width - 60, height: 300)
+                    .frame(width: UIScreen.main.bounds.width - 60, height: imageHeight) // Adjust the height here
                     .cornerRadius(20)
                     .clipped()
             }
@@ -38,7 +41,7 @@ struct CardView: View {
                         .padding([], 20)
                         .frame(width:60, height: 35)
                         .background(Color.white.opacity(0.7))
-                    .cornerRadius(5)
+                        .cornerRadius(5)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(20)
@@ -57,9 +60,9 @@ struct CardView: View {
                         endPoint: .trailing
                     )
                 )
-                    
+                
             }
-            .frame(width: UIScreen.main.bounds.width - 60, height: 300)
+            .frame(width: UIScreen.main.bounds.width - 60, height: imageHeight)
             .overlay(
                 Rectangle()
                     .fill(Color.black.opacity(0.1))

@@ -16,16 +16,19 @@ struct SplashScreenView: View {
     @State private var scrollOffset: CGFloat = 0.0
     
     @State private var isLastTab = false
+   
     let gradient: LinearGradient = LinearGradient(
         colors: [Color.black.opacity(0.6), Color.clear],
         startPoint: .bottom, endPoint: .top
     )
     var listText = ["Tired of your phone looking like everyone else's?", "Are you a Dota 2 fan?", "Looking for a way to impress your friends?", "Are you a Dota 2 fan who also loves art?"]
+    @Binding var path: NavigationPath
+    
     var body: some View {
-        NavigationStack {
+        ZStack {
             GeometryReader { geometry in
                 ZStack {
-                   
+                    
                     Image("image1").resizable()
                         .scaledToFill()
                         .opacity(0.1)
@@ -60,7 +63,7 @@ struct SplashScreenView: View {
                                         .padding()
                                         .background(.gray.opacity(0.5))
                                         .cornerRadius(10)
-                                        
+                                    
                                 }
                                 .padding(.bottom, 150)
                             }
@@ -72,23 +75,23 @@ struct SplashScreenView: View {
                     }
                     .edgesIgnoringSafeArea(.all)
                     .tabViewStyle(.page)
-                        .onChange(of: currentIndex) { newIndex in
-                            print(newIndex)
-                            if newIndex == images.count - 1 && !reachedEnd {
-                                reachedEnd = true
-                                // Handle reaching the end
-                                AppSetting.setFirstLogined(value: false)
-                            } else {
-                                reachedEnd = false
-                            }
+                    .onChange(of: currentIndex) { newIndex in
+                        print(newIndex)
+                        if newIndex == images.count - 1 && !reachedEnd {
+                            reachedEnd = true
+                            // Handle reaching the end
+                            AppSetting.setFirstLogined(value: false)
+                        } else {
+                            reachedEnd = false
                         }
+                    }
                     
                     VStack(alignment:.trailing) {
                         Spacer()
                         Button(action: {
                             withAnimation(.easeInOut) {
                                 
-                                isLastTab.toggle()
+                                path.append("login")
                                 Task {
                                     await notificationManager.request()
                                 }
@@ -98,32 +101,28 @@ struct SplashScreenView: View {
                         }) {
                             HStack {
                                 Text("Get Started")
-                                    .font(.caption)
+                                    .font(.system(size: 15, weight: .bold))
                                     .fontWeight(.regular)
                                     .foregroundStyle(Color.white)
                             }
                             .padding()
-                            .background(Color(red: 0.254, green: 0.279, blue: 0.326).opacity(0.5))
+                            .background(.black.opacity(0.5))
+                            .shadow(color: .gray, radius: 5, x: 2, y: 2)
                             .cornerRadius(20)
-
+                            
                         }
                     }
                     .opacity(reachedEnd ? 1 : 0)
                     .animation(.easeInOut, value: reachedEnd)
                     .padding(.bottom, 70)
                     
-                    if isLastTab == true {
-                        LoginView()
-                            .frame(width: UIScreen.main.bounds.width)
-                    }
                 }
                 .edgesIgnoringSafeArea(.all)
             }
             .onAppear {
                 loadImages()
             }
-            
-        }.navigationBarBackButtonHidden()
+        }
         
         
     }
@@ -151,6 +150,13 @@ struct NavigationDestination: View {
     }
 }
 
+struct WrapperSplashScreen: View {
+    @State var path = NavigationPath()
+    var body: some View {
+        SplashScreenView(path: $path)
+    }
+}
+
 #Preview {
-    SplashScreenView()
+    WrapperSplashScreen()
 }

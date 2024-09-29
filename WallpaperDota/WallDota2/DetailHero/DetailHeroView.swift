@@ -11,10 +11,10 @@ import NavigationTransitions
 
 struct DetailHeroView: View {
     
-    @Binding var items: [ImageModel]
+    @State var items: [ImageModel]?
     let columns = [GridItem(.flexible(minimum: 120, maximum: 180)), GridItem(.flexible(minimum: 120, maximum: 180)), GridItem(.flexible(minimum: 120, maximum: 180))]
     @State var heroName: String = ""
-    var actionBack:(()-> Void)
+    
     @State var isShowDetail: Bool = false
     @State var isShowPreviewImage: Bool = false
     @State var isStoryHero: Bool = false
@@ -31,68 +31,69 @@ struct DetailHeroView: View {
     @State  var isChangeLanguage: Bool = false
     
     private let viewAdsModel = InterstitialViewModel.shared
+    @Binding var path: NavigationPath
     
     var body: some View {
         
-        NavigationStack {
-            ZStack {
-                VStack(spacing: 15) {
-                    ZStack {
-                        VStack {
-                            if toastIsVisible {
-                                ToastView(message: "Image saved to Photos successfully!", isVisible: $toastIsVisible)
-                                    .clipped()
-                                    .cornerRadius(5)
-                            }
-                            if isLoading {
-                                VStack {
-                                    ProgressBarView(progress: progressBarValue)
-                                        .frame(height: 1)
-                                        
-                                }
-                            }
-                            Spacer()
+        ZStack {
+            VStack(spacing: 15) {
+                ZStack {
+                    VStack {
+                        if toastIsVisible {
+                            ToastView(message: "Image saved to Photos successfully!", isVisible: $toastIsVisible)
+                                .clipped()
+                                .cornerRadius(5)
                         }
-                        .frame(height: 50)
-                        HStack {
-                            Button {
-                                self.actionBack()
-                            } label: {
-                                Image(systemName: "arrow.backward")
-                                    .foregroundColor(.black)
-                                    .font(.title2)
-                                    .padding()
+                        if isLoading {
+                            VStack {
+                                ProgressBarView(progress: progressBarValue)
+                                    .frame(height: 1)
+                                    
                             }
-                            Spacer()
-                            
                         }
+                        Spacer()
                     }
-                    if listStoryModel.count > 0{
-                        HStack {
-                            Text(heroName + "'s story")
-                                .font(.title)
-                                .fontWeight(.bold)
-                                .padding(.leading, 10)
-                            Spacer()
+                    .frame(height: 50)
+                    HStack {
+                        Button {
+                            path.removeLast()
+                        } label: {
+                            Image(systemName: "arrow.backward")
+                                .foregroundColor(.black)
+                                .font(.title2)
+                                .padding()
                         }
-                    }
-                    
-                    
-                    ScrollView(.vertical) {
-                        if listStoryModel.count > 0 {
-                            listStoryView.padding(.leading, 10)
-                        }
+                        Spacer()
                         
-                        HStack {
-                            Text("Themes")
-                                .font(.title)
-                                .fontWeight(.bold)
-                                .padding(.leading, 10)
-                            Spacer()
-                        }
-                        LazyVStack {
-                            
-                            LazyVGrid(columns: columns, spacing: 5, content: {
+                    }
+                }
+                if listStoryModel.count > 0{
+                    HStack {
+                        Text(heroName + "'s story")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .padding(.leading, 10)
+                        Spacer()
+                    }
+                }
+                
+                
+                ScrollView(.vertical) {
+                    if listStoryModel.count > 0 {
+                        listStoryView.padding(.leading, 10)
+                    }
+                    
+                    HStack {
+                        Text("Themes")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .padding(.leading, 10)
+                        Spacer()
+                    }
+                    LazyVStack {
+                        
+                        LazyVGrid(columns: columns, spacing: 5, content: {
+                            if let items = self.items {
                                 ForEach(items) { show in
                                     ShowItemView(show: show,
                                                  actionDownload: {
@@ -107,54 +108,40 @@ struct DetailHeroView: View {
                                     }, actionComment: { model in
                                         
                                     }).onTapGesture {
-                                        modelSelected = show
-                                        isShowDetail.toggle()
+                                        AppSetting.shared.imagesHero = items
+                                        AppSetting.shared.imageDetail = show
+                                        path.append(Screen.detailImage.rawValue)
+                                        
                                     }
                                 }
-                            })
-                        }.clipped()
-                    }.onAppear(perform: {
-                        self.heroName = items.first?.heroID ?? ""
-                    }).frame(width: UIScreen.main.bounds.width * 0.98)
-                        .refreshable {
-                            Task {
-                                guard let viewModel = self.viewModel else{return}
-                                await viewModel.fetchDataFromFirestore(id: self.heroName)
-                                items = viewModel.heroesImages
                             }
+                            
+                        })
+                    }.clipped()
+                }.onAppear(perform: {
+                    self.heroName = items?.first?.heroID ?? ""
+                }).frame(width: UIScreen.main.bounds.width * 0.98)
+                    .refreshable {
+                        Task {
+                            guard let viewModel = self.viewModel else{return}
+                            await viewModel.fetchDataFromFirestore(id: self.heroName)
+                            items = viewModel.heroesImages
                         }
-                        
-                }
+                    }
+                    
             }
-            .onAppear(perform: {
-                viewModel = DetailHeroViewModel(id: heroName)
-                if listStoryModel.count > 0 {return}
-                listStoryModel.removeAll()
-                Task {
-                    let items = await StoryViewModel.shared.getStoryByHeroID(by: heroName, language: "vn")
-                    listStoryModel.append(contentsOf: items)
-                }
-                isChangeLanguage = getCurrentLanguage() == "vi"
-            })
         }
-        .navigationTransition(
-            .fade(.in).combined(with: .slide)
-        )
-        .navigationDestination(isPresented:$isShowDetail) {
-            ShowDetailImageView(dismissModal: {
-                isShowDetail = false
-            }, model: $modelSelected, 
-                                models: $items)
-            .navigationBarBackButtonHidden()
-        }
-        .navigationDestination(isPresented:$isStoryHero) {
-            StoryView(dismissModal: {
-                isStoryHero = false
-            }, model: $storyModel, actionChooseStory: { item in
-                isStoryHero = true
-            })
-            .navigationBarBackButtonHidden()
-        }
+        .onAppear(perform: {
+            viewModel = DetailHeroViewModel(id: heroName)
+            if listStoryModel.count > 0 {return}
+            listStoryModel.removeAll()
+            Task {
+                let items = await StoryViewModel.shared.getStoryByHeroID(by: heroName, language: "vn")
+                listStoryModel.append(contentsOf: items)
+            }
+            isChangeLanguage = getCurrentLanguage() == "vi"
+            items = AppSetting.shared.imagesHero
+        })
     }
     
     
@@ -165,8 +152,8 @@ struct DetailHeroView: View {
                 ForEach(listStoryModel) { model in
                     ListStoryView(model: model)
                     .onTapGesture {
-                        storyModel = model
-                        isStoryHero.toggle()
+                        AppSetting.shared.storySelected = model
+                        path.append(Screen.story.rawValue)
                     }
                     
                 }
@@ -225,8 +212,9 @@ struct ScrollOffsetPreferenceKey: PreferenceKey {
 
 struct WrapperDetailHeroView: View {
     @State var items: [ImageModel] = [ImageModel(), ImageModel()]
+    @State var path =  NavigationPath()
     var body: some View {
-        DetailHeroView(items: $items, actionBack: {})
+        DetailHeroView(items: items, path: $path)
     }
 }
 #Preview {

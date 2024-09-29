@@ -202,7 +202,8 @@ class StoryViewModel {
     func getStoryByHeroID(by heroID: String, language: String) async -> [StoryModel] {
         let db = Firestore.firestore()
         let collectionRef = db.collection("stories").whereField("heroid", isEqualTo: heroID)
-        
+        let date = Date().timeIntervalSince1970
+        print("total time fetchDataFromFirestore :\(Date().timeIntervalSince1970 - date)")
         do {
             let documentsnap = try await collectionRef.getDocuments()
             
@@ -263,7 +264,7 @@ class StoryViewModel {
         let collectionRef = db.collection("stories")
             .order(by: "likeCount", descending: true) // Order by likeCount in descending order
             .limit(to: 10)
-        
+        let date = Date().timeIntervalSince1970
         do {
             let documentsnap = try await collectionRef.getDocuments()
             
@@ -286,6 +287,7 @@ class StoryViewModel {
                 return true
             }
             topStory.append(contentsOf: _items)
+            print("total time  getTop5StoriesByHeroID :\(Date().timeIntervalSince1970 - date)")
             return _items
         } catch let err {
             print(err.localizedDescription)

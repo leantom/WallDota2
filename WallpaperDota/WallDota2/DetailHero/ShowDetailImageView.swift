@@ -10,10 +10,10 @@ import SDWebImageSwiftUI
 import Photos
 
 struct ShowDetailImageView: View {
-    let dismissModal: () -> Void
+    @Environment(\.dismiss) private var dismiss
     
-    @Binding var model: ImageModel
-    @Binding var models: [ImageModel] // list hinh
+    @State var model = ImageModel()
+    @State var models = [ImageModel]() // list hinh
     
     @State var imageURL: String = ""
     let gradient: LinearGradient = LinearGradient(
@@ -33,88 +33,39 @@ struct ShowDetailImageView: View {
     @State var currentOffset: CGFloat = 0
     @State  var imageData: Data?
     let columns = [
-            GridItem(.fixed(UIScreen.main.bounds.height)),
-        ]
-    
+        GridItem(.fixed(UIScreen.main.bounds.height)),
+    ]
+    @Binding var path: NavigationPath
     var body: some View {
-        NavigationStack {
-            ZStack {
-                ScrollViewReader { proxy in
-                    ScrollView(.vertical) {
-                        LazyVGrid(columns: columns, spacing: 0) {
-                            ForEach(models, id: \.id) { model in
-                                if self.imageURL.isEmpty == false {
-                                    if let index = models.firstIndex(where: { image in
-                                        return image.id == model.id
-                                    }) {
-                                        WebImage(url: URL(string: model.imageUrlFull))
-                                            .resizable()
-                                            .placeholder(content: {
-                                                ProgressView()
-                                            })
-                                            .onSuccess(perform: { image, data, type in
-                                                ratioImage = image.size.width/image.size.height
-                                                imageDetail = image
-                                                imageData = data
-                                            })
-                                            .aspectRatio(contentMode: ratioImage >= 1 ? .fit : .fill)
-                                            .ignoresSafeArea()
-                                            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-                                            .edgesIgnoringSafeArea(.all)
-                                            .transition(.opacity) // Use opacity transition for fade-in effect
-                                            .animation(.easeInOut, value: imageData)
-                                            .onAppear {
-                                                Task
-                                                {
-                                                    let firebaseData = FireStoreDatabase.shared
-                                                    if model.imageUrlFull.isEmpty, let url = await firebaseData.getURL(path: model.imageUrl) {
-                                                        model.imageUrlFull = url.absoluteString
-                                                        imageURL = url.absoluteString
-                                                        model.isLoadedImageOriginal.toggle()
-                                                        print(imageURL)
-                                                    }
-                                                    
-                                                }
-                                            }
-                                            .id(index)
-                                            .onTapGesture {
-                                                isShowOnlyImage.toggle()
-                                            }
-                                    }
-                                    
-                                } else {
-                                    ProgressView()
-                                        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-                                        .onAppear {
-                                            Task
-                                            {
-                                                let firebaseData = FireStoreDatabase.shared
-                                                if model.imageUrlFull.isEmpty, let url = await firebaseData.getURL(path: model.imageUrl) {
-                                                    model.imageUrlFull = url.absoluteString
-                                                    imageURL = url.absoluteString
-                                                    model.isLoadedImageOriginal.toggle()
-                                                    print(imageURL)
-                                                }
-                                            }
-                                        }
-                                }
-                            }
-                            
-                        }
-                    }
-                    .ignoresSafeArea()
-                    .introspect(.scrollView, on: .iOS(.v15, .v16, .v17)) { sv in
-                        sv.isPagingEnabled = true
-                    }
-                    .onChange(of: currentIndex) { targetIndex in
-                        
-                        proxy.scrollTo(targetIndex, anchor: .top) 
-                    }
+        
+        ZStack {
+            WebImage(url: URL(string: imageURL))
+                .resizable()
+                .placeholder(content: {
+                    ProgressView()
+                })
+                .onSuccess(perform: { image, data, type in
+                    ratioImage = image.size.width/image.size.height
+                    imageDetail = image
+                    imageData = data
+                })
+                .aspectRatio(contentMode: ratioImage >= 1 ? .fit : .fill)
+                .ignoresSafeArea()
+                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                .edgesIgnoringSafeArea(.all)
+                .transition(.opacity) // Use opacity transition for fade-in effect
+                .animation(.easeInOut, value: imageData)
+                .onTapGesture {
+                    isShowOnlyImage.toggle()
                 }
                 .onAppear {
-                    // Example: Scroll to the 50th item when the view appears
                     Task
                     {
+                        
+                        if let model = AppSetting.shared.imageDetail {
+                            self.model = model
+                        }
+                        
                         let firebaseData = FireStoreDatabase.shared
                         if model.imageUrlFull.isEmpty, let url = await firebaseData.getURL(path: model.imageUrl) {
                             model.imageUrlFull = url.absoluteString
@@ -125,137 +76,126 @@ struct ShowDetailImageView: View {
                             imageURL = model.imageUrlFull
                         }
                         
-                        if let index = models.firstIndex(where: { image in
-                            return image.id == model.id
-                        }) {
-                            currentIndex = index
-                        }
                         await InterstitialViewModel.shared.loadAd()
                     }
                 }
-
-                VStack {
-                    HStack {
-                        Button(action: {
-                            withAnimation {
-                                dismissModal()
-                            }
-                            
-                        }, label: {
-                            Image(systemName: "arrow.backward")
-                                .foregroundColor(.white)
-                                .font(.title2)
-                        })
-                        .frame(width: 40, height: 40)
-                        .background(Color("kC6C2D8").opacity(isShowOnlyImage ? 0.4 : 0.8))
-                        .cornerRadius(10)
-                        Spacer()
-                        if isShowOnlyImage == false {
-                            HStack {
-                                Spacer()
-                                HStack {
-                                    Button(action: {
-                                        Task {
-                                            await saveImage()
-                                        }
-                                        
-                                    }, label: {
-                                        Image(systemName: "arrow.down.square")
-                                            .foregroundColor(.white)
-                                            .font(.title2)
-                                        
-                                    })
-                                    
-                                    Button(action: {
-                                        // Report this image
-                                        showAlert.toggle()
-                                    }, label: {
-                                        Image(systemName: "exclamationmark.triangle")
-                                            .foregroundColor(.white)
-                                            .font(.title2)
-                                    })
-                                    .alert(isPresented: $showAlert) {
-                                        Alert(
-                                                    title: Text("Warning"),
-                                                    message: Text("Do you really want to report this photo?"),
-                                                    primaryButton: .default(
-                                                        Text("OK"),
-                                                        action: {
-                                                            model.isReport = true
-                                                            toastIsVisible.toggle()
-                                                            Task {
-                                                                await FireStoreDatabase.reportImage(image: model)
-                                                            }
-                                                            
-                                                        }
-                                                    ),
-                                                    secondaryButton: .destructive(
-                                                        Text("Cancel"),
-                                                        action: {
-                                                            
-                                                        }
-                                                    )
-                                                )
-                                    }
-                                    .frame(width: 40, height: 40)
-                                    .cornerRadius(10)
-                                }
-                                .padding([.leading, .trailing], 10)
-                                .background(.black.opacity(0.3))
-                                .cornerRadius(10)
-                                
-                               
-                               
-                            }
-                           
+            
+            VStack {
+                HStack {
+                    Button(action: {
+                        withAnimation {
+                            path.removeLast()
                         }
-                    }.padding()
-                        .frame(width: UIScreen.main.bounds.width)
                         
-                        Spacer()
-                    
+                    }, label: {
+                        Image(systemName: "arrow.backward")
+                            .foregroundColor(.white)
+                            .font(.title2)
+                    })
+                    .frame(width: 40, height: 40)
+                    .background(Color("kC6C2D8").opacity(isShowOnlyImage ? 0.4 : 0.8))
+                    .cornerRadius(10)
+                    Spacer()
                     if isShowOnlyImage == false {
                         HStack {
-                            Button(action: {
-                                // MARK: Show preview
-                                isShowPreviewImage.toggle()
-                            }, label: {
-                                Text("Preview")
-                                    .font(.title3)
-                                    .fontWeight(.semibold)
-                                    .foregroundStyle(.white)
-                            }).padding()
-                                .frame(width: UIScreen.main.bounds.width - 48, height: 48)
-                                .background(Color("kC6C2D8").opacity(0.5))
+                            Spacer()
+                            HStack {
+                                Button(action: {
+                                    Task {
+                                        await saveImage()
+                                    }
+                                    
+                                }, label: {
+                                    Image(systemName: "arrow.down.square")
+                                        .foregroundColor(.white)
+                                        .font(.title2)
+                                    
+                                })
+                                
+                                Button(action: {
+                                    // Report this image
+                                    showAlert.toggle()
+                                }, label: {
+                                    Image(systemName: "exclamationmark.triangle")
+                                        .foregroundColor(.white)
+                                        .font(.title2)
+                                })
+                                .alert(isPresented: $showAlert) {
+                                    Alert(
+                                        title: Text("Warning"),
+                                        message: Text("Do you really want to report this photo?"),
+                                        primaryButton: .default(
+                                            Text("OK"),
+                                            action: {
+                                                model.isReport = true
+                                                toastIsVisible.toggle()
+                                                Task {
+                                                    await FireStoreDatabase.reportImage(image: model)
+                                                }
+                                                
+                                            }
+                                        ),
+                                        secondaryButton: .destructive(
+                                            Text("Cancel"),
+                                            action: {
+                                                
+                                            }
+                                        )
+                                    )
+                                }
+                                .frame(width: 40, height: 40)
                                 .cornerRadius(10)
+                            }
+                            .padding([.leading, .trailing], 10)
+                            .background(.black.opacity(0.3))
+                            .cornerRadius(10)
+                            
+                            
+                            
                         }
-                        .padding()
+                        
                     }
-                }
-                VStack {
-                    ToastView(message: "Thank you for reporting this issue to us, we will handle it immediately!", isVisible: $toastIsVisible)
-                        .clipped()
-                        .cornerRadius(5)
-                    Spacer()
-                }
+                }.padding()
+                .frame(width: UIScreen.main.bounds.width)
+                .padding(.top, 10)
                 
-                if toastIsDownloadSuccess {
-                    ToastView(message: "Image saved to Photos successfully!", isVisible: $toastIsDownloadSuccess)
-                        .clipped()
-                        .cornerRadius(5)
-                    Spacer()
-                }
+                Spacer()
                 
-            }.background(.black.opacity(0.5))
+                if isShowOnlyImage == false {
+                    HStack {
+                        Button(action: {
+                            // MARK: Show preview
+                            isShowPreviewImage.toggle()
+                        }, label: {
+                            Text("Preview")
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.white)
+                        }).padding()
+                            .frame(width: UIScreen.main.bounds.width - 48, height: 48)
+                            .background(Color("kC6C2D8").opacity(0.5))
+                            .cornerRadius(10)
+                    }
+                    .padding()
+                    .padding(.bottom, 20)
+                }
+            }
+            .padding()
+            VStack {
+                ToastView(message: "Thank you for reporting this issue to us, we will handle it immediately!", isVisible: $toastIsVisible)
+                    .clipped()
+                    .cornerRadius(5)
+                Spacer()
+            }
             
-        }
-        .navigationDestination(isPresented:$isShowPreviewImage) {
-            PhotoEdittor(inputImage: imageDetail,
-                         actionBack: {
-                isShowPreviewImage.toggle()
-            })
-        .navigationBarBackButtonHidden()
-        }
+            if toastIsDownloadSuccess {
+                ToastView(message: "Image saved to Photos successfully!", isVisible: $toastIsDownloadSuccess)
+                    .clipped()
+                    .cornerRadius(5)
+                Spacer()
+            }
+            
+        }.background(.black.opacity(0.5))
         
     }
     
@@ -307,9 +247,8 @@ struct WrapperShowDetailImageView: View {
     @State var models: [ImageModel] = [ImageModel(),ImageModel(),ImageModel(),ImageModel()]
     
     var body: some View {
-        ShowDetailImageView(dismissModal: {
-            
-        }, model: $model, models: $models)
+        @State var path =  NavigationPath()
+        ShowDetailImageView(model: model, models: models, path: $path)
     }
 }
 

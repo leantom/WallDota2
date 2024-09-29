@@ -9,6 +9,8 @@ import SwiftUI
 import Firebase
 import FirebaseMessaging
 import GoogleMobileAds
+import FirebaseAuth
+
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
     
     func application(_ application: UIApplication,
@@ -30,9 +32,11 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         }
         
         Task {
+            if let user = Auth.auth().currentUser {
+                LoginViewModel.shared.user = user
+                let _ = await LoginViewModel.shared.getUserDetail()
+            }
             
-            LoginViewModel.shared.user = Auth.auth().currentUser
-            let _ = await LoginViewModel.shared.getUserDetail()
         }
         
         

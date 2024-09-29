@@ -11,6 +11,12 @@ import FirebaseAuth
 class AppSetting {
     static let shared = AppSetting()
     var fcmToken: String = ""
+    var comicSelected: ComicModel?
+    var storySelected: StoryModel?
+    var imagesHero: [ImageModel]?
+    var listStoryModel: [StoryModel] = []
+    var imageDetail: ImageModel?
+    var listImages: [ImageModel]? // list hinh
     
     var isLogined: Bool = false {
         didSet {

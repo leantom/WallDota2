@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>919903502935-h6q4gj30qfm63ouf2bd2nmv5t7djt3ik.apps.googleusercontent.com</string>
+	<string>919903502935-94b98tpno784moqlomn531ngjq17elu0.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.919903502935-h6q4gj30qfm63ouf2bd2nmv5t7djt3ik</string>
+	<string>com.googleusercontent.apps.919903502935-94b98tpno784moqlomn531ngjq17elu0</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAZXyqIUeo-kKqseAsvazmFcalYKBCsByI</string>
 	<key>GCM_SENDER_ID</key>
@@ -19,18 +19,18 @@
 	<key>STORAGE_BUCKET</key>
 	<string>dotadressup.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<true/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:919903502935:ios:0a14643369bbf17c82d912</string>
-	<key>FirebaseAppDelegateProxyEnabled</key>
-	<true/>
+	<key>ADMOB_APP_ID</key>
+	<string>ca-app-pub-7153595903380471~6411935145</string>
 </dict>
 </plist>

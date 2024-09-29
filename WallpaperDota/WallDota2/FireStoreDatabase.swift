@@ -33,7 +33,6 @@ class FireStoreDatabase {
         let collectionRef = db.collection("heroes")
         let date = Date().timeIntervalSince1970
         
-        await self.getSpotlightImages()
         do {
             let snapshot = try await collectionRef.getDocuments()
             let _items = snapshot.documents.compactMap { document in
@@ -56,8 +55,6 @@ class FireStoreDatabase {
             self.getTrendingImages()
             self.getHeroesID()
             self.getListPositionRanking()
-            await getImagesLiked()
-            await self.fetchVideoFromFirestore()
         } catch {
             print("Error getting documents: \(error.localizedDescription)")
         }
