@@ -107,20 +107,29 @@ extension StoryViewModel {
         
         let author = LoginViewModel.shared.userLogin?.username ?? "Anonymous"
         let userId = LoginViewModel.shared.userLogin?.userid ?? "Anonymous"
-        let commentID = UUID().uuidString
+        
         let commentData: [String: Any] = [
-            "id": commentID,
             "author": author,
             "userId": userId,
             "content": comment.content,
             "date": Timestamp(date: Date())
         ]
         
-        print("Comment Data: \(commentData)")
+        print("Comment Data (before adding): \(commentData)")
         
         do {
-            try await commentRef.addDocument(data: commentData)
-            print("Comment added successfully")
+            // Add the comment and get the reference to the newly added document
+            let newCommentRef = try await commentRef.addDocument(data: commentData)
+            
+            // Get the auto-generated document ID
+            let commentID = newCommentRef.documentID
+            
+            // Update the comment with the generated ID
+            try await newCommentRef.updateData([
+                "id": commentID
+            ])
+            
+            print("Comment added successfully with ID: \(commentID)")
         } catch let err {
             print("Failed to add comment: \(err.localizedDescription)")
         }

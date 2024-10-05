@@ -121,7 +121,6 @@ enum RotationDegrees {
             return .degrees(375)
         case .middleSmallCircle:
             return .degrees(825)
-            
         case .last:
             return .degrees(990)
         }

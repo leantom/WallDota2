@@ -42,7 +42,7 @@ struct ShowDetailImageView: View {
             WebImage(url: URL(string: imageURL))
                 .resizable()
                 .placeholder(content: {
-                    ProgressView()
+                    LoadingView()
                 })
                 .onSuccess(perform: { image, data, type in
                     ratioImage = image.size.width/image.size.height
@@ -55,9 +55,7 @@ struct ShowDetailImageView: View {
                 .edgesIgnoringSafeArea(.all)
                 .transition(.opacity) // Use opacity transition for fade-in effect
                 .animation(.easeInOut, value: imageData)
-                .onTapGesture {
-                    isShowOnlyImage.toggle()
-                }
+                
                 .onAppear {
                     Task
                     {
@@ -89,6 +87,7 @@ struct ShowDetailImageView: View {
                         
                     }, label: {
                         Image(systemName: "arrow.backward")
+                            .font(.system(size: 25))
                             .foregroundColor(.white)
                             .font(.title2)
                     })
@@ -242,7 +241,7 @@ struct ShowDetailImageView: View {
     
 }
 struct WrapperShowDetailImageView: View {
-    @State var url: String = "https://firebasestorage.googleapis.com/v0/b/dotadressup.appspot.com/o/images%2FPhantom%20assassin%2FPhantom%20assassin58931?alt=media&token=33fc2537-481e-42bd-9bd7-4266442c5faa"
+    @State var url: String = "https://firebasestorage.googleapis.com:443/v0/b/dotadressup.appspot.com/o/images%2FQOP%2FQOP54007?alt=media&token=2532aef3-1e88-4ded-bc37-14defbc1fd27"
     @State var model: ImageModel = ImageModel()
     @State var models: [ImageModel] = [ImageModel(),ImageModel(),ImageModel(),ImageModel()]
     

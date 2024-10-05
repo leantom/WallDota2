@@ -19,53 +19,92 @@ struct ComentStoryView: View {
     
     @State private var comments: [CommentModel] = []
     @State private var newCommentText: String = ""
-    
+    @State var isSubmitComment: Bool = false
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         VStack {
-            Text("Comments")
-                .font(.headline)
-                .padding(.top)
             
-            ScrollViewReader { proxy in
-                ScrollView(showsIndicators: false) {
-                    ForEach(comments, id: \.id) { comment in
-                        CommentRowView(comment: comment,
-                                       viewmodel: viewModel,
-                                       storyId: storyId)
-                            .id(comment.id)
-                        Divider()
+            if UIDevice.current.userInterfaceIdiom != .pad {
+                HStack {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .frame(width: 35, height: 35)
+                            .foregroundColor(.white)
+                            .background(Color(red: 0.104, green: 0.082, blue: 0.243))
+                            .clipShape(Circle())
+                            .shadow(color: .gray, radius: 5, x: 2, y: 2)
+                    }
+                    
+                    Spacer()
+                    HStack {
+                        Text("Comments")
+                            .font(.headline)
+                            .padding(.leading,(UIScreen.main.bounds.width - 150 ) / 2)
+                        Spacer()
                     }
                 }
-                .onChange(of: comments.count) { _ in
-                    if let lastComment = comments.last {
-                        withAnimation {
-                            proxy.scrollTo(lastComment.id, anchor: .bottom)
+            } else {
+                Text("Comments")
+                    .font(.headline)
+                    .padding(.top)
+            }
+            
+            
+            
+            
+            if comments.count == 0 {
+                EmptyViewScreen()
+            } else {
+                ScrollViewReader { proxy in
+                    ScrollView(showsIndicators: false) {
+                        ForEach(comments, id: \.id) { comment in
+                            CommentRowView(comment: comment,
+                                           viewmodel: viewModel,
+                                           storyId: storyId)
+                                .id(comment.id)
+                            Divider()
+                        }
+                    }
+                    .onChange(of: comments.count) { _ in
+                        if let lastComment = comments.last {
+                            withAnimation {
+                                proxy.scrollTo(lastComment.id, anchor: .bottom)
+                            }
                         }
                     }
                 }
             }
-            
+           
             Spacer()
             
             HStack {
                 
-                TextField("Add a comment...", text: $newCommentText, axis: .vertical)
+                TextField("Come on, say something cool!...", text: $newCommentText, axis: .vertical)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .frame(maxHeight: 100)
                 
-                Button(action: {
-                    addComment()
-                    
-                }) {
-                    Text("Post")
-                        .padding(.horizontal)
-                        .padding(.vertical, 8)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
+                if isSubmitComment {
+                    LoadingView()
+                        .frame(width: 60, height: 30)
+                } else {
+                    Button(action: {
+                        isSubmitComment.toggle()
+                        addComment()
+                        isSubmitComment.toggle()
+                    }) {
+                        Text("Post")
+                            .padding(.horizontal)
+                            .padding(.vertical, 8)
+                            .background(newCommentText.trimmingCharacters(in: .whitespaces).isEmpty ? Color.gray : Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                    }
+                    .disabled(newCommentText.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
-                .disabled(newCommentText.trimmingCharacters(in: .whitespaces).isEmpty)
+                
             }
             .padding(.bottom, 8)
         }
@@ -138,11 +177,14 @@ struct ComentStoryView: View {
 struct CommentRowView: View {
     let comment: CommentModel
     @State var content: LocalizedStringKey = ""
-    @State  var isLike: Bool = false
+    @State var isLike: Bool = false
     @State var likes: Int = 0
     var viewmodel: StoryViewModel
     var storyId: String
     
+    // Animation state for scaling
+    @State private var scaleEffect: CGFloat = 1.0
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
@@ -171,7 +213,9 @@ struct CommentRowView: View {
             HStack {
                 // Likes and replies
                 Image(systemName: isLike ? "hand.thumbsup.fill" : "hand.thumbsup")
-                    .foregroundColor(.gray)
+                    .foregroundColor(isLike ? .blue : .gray) // Change color based on like state
+                    .scaleEffect(scaleEffect) // Apply scale effect
+                    .animation(.easeInOut(duration: 0.3), value: scaleEffect) // Smooth animation for scaling
                 
                 Text("\(likes)") // Replace with actual like count
             }
@@ -179,14 +223,20 @@ struct CommentRowView: View {
             .onTapGesture {
                 withAnimation {
                     isLike.toggle()
+                    scaleEffect = 1.4 // Increase size on tap
+                    
+                    // Revert the size back to normal after a short delay
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        scaleEffect = 1.0
+                    }
+                    
+                    // Uncomment when async task for liking is added
                     Task {
                         let isSuccess = await viewmodel.likeComment(by: storyId, commentID: comment.id)
                         if isSuccess {
                             likes += 1
                         }
-                            
                     }
-                   
                 }
             }
         }

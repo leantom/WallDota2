@@ -25,11 +25,14 @@ struct StoryView: View {
                             // image
                             ZStack {
                                 if isGetDoneAPI {
+                                    let deviceHeight = UIScreen.main.bounds.height
+                                    let imageHeight = deviceHeight * 0.35 // 60% of device width
+                                    
                                     AnimatedImage(url: URL(string: model.thumbnail))
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
                                         .scaledToFill()
-                                        .frame(height: 250)
+                                        .frame(height: imageHeight)
                                         .clipped()
                                         .clipShape(
                                             .rect(
@@ -117,8 +120,8 @@ struct StoryView: View {
                     Button {
                         dismiss()
                     } label: {
-                        Image(systemName: "x.circle.fill")
-                            .foregroundColor(.black.opacity(alphaButtonClose))
+                        Image(systemName: "xmark")
+                            .frame(width: 35, height: 35)
                             .foregroundColor(.white)
                             .background(Color(red: 0.104, green: 0.082, blue: 0.243))
                             .clipShape(Circle())

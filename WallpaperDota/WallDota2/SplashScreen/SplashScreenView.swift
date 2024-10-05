@@ -22,6 +22,9 @@ struct SplashScreenView: View {
         startPoint: .bottom, endPoint: .top
     )
     var listText = ["Tired of your phone looking like everyone else's?", "Are you a Dota 2 fan?", "Looking for a way to impress your friends?", "Are you a Dota 2 fan who also loves art?"]
+    
+    var listTextTitle = ["Comic", "Story", "Art Gallery", "Lore"]
+    
     @Binding var path: NavigationPath
     
     var body: some View {
@@ -34,7 +37,6 @@ struct SplashScreenView: View {
                         .opacity(0.1)
                         .ignoresSafeArea()
                         .frame(width: UIScreen.main.bounds.width)
-                    
                     
                     TabView(selection: $currentIndex) {
                         
@@ -55,17 +57,73 @@ struct SplashScreenView: View {
                                 
                                 VStack {
                                     Spacer()
-                                    Text(listText[index])
-                                        .font(.title2)
-                                        .fontWeight(.bold)
-                                        .foregroundStyle(.white)
-                                        .multilineTextAlignment(.center)
+                                    HStack {
+                                        VStack (alignment: .leading){
+                                            Spacer()
+                                            VStack (spacing: 25){
+                                                Text(listTextTitle[index])
+                                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                                    .font(.system(size: 24, weight: .bold))
+                                                    .fontWeight(.bold)
+                                                    .foregroundStyle(.white)
+                                                    .multilineTextAlignment(.leading)
+                                                Text(listText[index])
+                                                    .font(.system(.caption))
+                                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                                    .fontWeight(.bold)
+                                                    .foregroundStyle(.white)
+                                                    .multilineTextAlignment(.leading)
+                                                
+                                            }
+                                            .padding()
+                                            .cornerRadius(10)
+                                            
+                                        }
+                                        
+                                        ZStack {
+                                            // Background circle with stroke (progress indicator)
+                                            Circle()
+                                                .stroke(lineWidth: 4)
+                                                .foregroundColor(Color.gray.opacity(0.5)) // Outer circle color
+                                                .frame(width: 60, height: 60)
+                                            
+                                            // Arrow inside the button
+                                            Image(systemName: "chevron.right.circle.fill")
+                                                .font(.system(size: 40, weight: .bold))
+                                                .foregroundColor(.white)
+                                            
+                                            // Circular progress indicator (Optional)
+                                            Circle()
+                                                .trim(from: 0, to: CGFloat(index) * 0.25 + 0.25) // Adjust the 'to' value for progress
+                                                .stroke(
+                                                    LinearGradient(gradient: Gradient(colors: [Color.white.opacity(0.5), Color.white]),
+                                                                   startPoint: .trailing,
+                                                                   endPoint: .leading),
+                                                    style: StrokeStyle(lineWidth: 3, lineCap: .round)
+                                                )
+                                                .frame(width: 60, height: 60)
+                                                .rotationEffect(.degrees(-90)) // Rotate the progress
+                                        }
                                         .padding()
-                                        .background(.gray.opacity(0.5))
-                                        .cornerRadius(10)
-                                    
+                                        .onTapGesture {
+                                            // Handle button tap
+                                            withAnimation(.easeInOut) {
+                                                
+                                                path.append("login")
+                                                Task {
+                                                    await notificationManager.request()
+                                                }
+                                                
+                                            }
+                                            print("Button tapped")
+                                        }
+                                        
+                                    }
+                                    .frame(height: 150)
+                                    .padding(.bottom, 150)
                                 }
-                                .padding(.bottom, 150)
+                                
+                                
                             }
                             .backgroundStyle(.blue)
                             .edgesIgnoringSafeArea(.all)
@@ -85,36 +143,7 @@ struct SplashScreenView: View {
                             reachedEnd = false
                         }
                     }
-                    
-                    VStack(alignment:.trailing) {
-                        Spacer()
-                        Button(action: {
-                            withAnimation(.easeInOut) {
-                                
-                                path.append("login")
-                                Task {
-                                    await notificationManager.request()
-                                }
-                                
-                            }
-                            
-                        }) {
-                            HStack {
-                                Text("Get Started")
-                                    .font(.system(size: 15, weight: .bold))
-                                    .fontWeight(.regular)
-                                    .foregroundStyle(Color.white)
-                            }
-                            .padding()
-                            .background(.black.opacity(0.5))
-                            .shadow(color: .gray, radius: 5, x: 2, y: 2)
-                            .cornerRadius(20)
-                            
-                        }
-                    }
-                    .opacity(reachedEnd ? 1 : 0)
-                    .animation(.easeInOut, value: reachedEnd)
-                    .padding(.bottom, 70)
+
                     
                 }
                 .edgesIgnoringSafeArea(.all)

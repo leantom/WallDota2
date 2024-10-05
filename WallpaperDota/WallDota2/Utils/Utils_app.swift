@@ -264,3 +264,29 @@ extension Date {
         }
     }
 }
+
+func generateRandomUsername() -> String {
+    // Arrays of Dota 2 heroes, meme phrases, and gaming terms
+    let dota2Heroes = [
+        "Pudge", "Invoker", "Juggernaut", "WraithKing", "Earthshaker", "CrystalMaiden", "Slark", "Lina", "Sniper", "Tiny", "Tinker"
+    ]
+    
+    let memePhrases = [
+        "Noob", "Pro", "Killer", "Feeder", "Carry", "Support", "GG", "EZ", "OP", "NerfPls", "SpamClick"
+    ]
+    
+    let gamingTerms = [
+        "420", "1337", "Rofl", "XD", "Godlike", "Rampage", "Boom", "Tilted", "Rekt", "PushMid"
+    ]
+    
+    // Randomly selecting elements from the arrays
+    let hero = dota2Heroes.randomElement() ?? "Pudge"
+    let meme = memePhrases.randomElement() ?? "Noob"
+    let term = gamingTerms.randomElement() ?? "420"
+    
+    // Combine them to form a unique username
+    let randomUsername = "\(hero)\(meme)\(term)"
+    
+    return randomUsername
+}
+

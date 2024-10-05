@@ -173,13 +173,17 @@ class LoginViewModel: NSObject, ObservableObject {
             print(user?.uid ?? "")
             AppSetting.setLogined(value: true)
             
-            let now = Date().timeIntervalSince1970
-            let suffix = "\(now)".suffix(6)
-            let username = "anonymous\(suffix)"
+            let user = await getUserDetail()
+            if user == nil {
+                let now = Date().timeIntervalSince1970
+                let username = generateRandomUsername()
+                
+                let newUser = NewUser(username: username, email: "\(username)@walldota2.com", providers: "anonymous", created_at: now, last_login_at: now, userid: result.user.uid)
+                LoginViewModel.shared.userLogin = newUser
+                await UserViewModel.shared.createUser(user: newUser)
+                return true
+            }
             
-            let newUser = NewUser(username: username, email: "\(username)@walldota2.com", providers: "anonymous", created_at: now, last_login_at: now, userid: result.user.uid)
-            LoginViewModel.shared.userLogin = newUser
-            await UserViewModel.shared.createUser(user: newUser)
             return true
             
         } catch let err{

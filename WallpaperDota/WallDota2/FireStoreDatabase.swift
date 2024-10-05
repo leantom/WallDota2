@@ -195,32 +195,39 @@ class FireStoreDatabase {
     }
     
     static public func addComment(imageModel: ImageModel,
-                                  newCommentText: String) async -> Bool{
+                                  newCommentText: String) async -> Bool {
         let db = Firestore.firestore()
-        
+
         do {
-            
             let collectionDocumentRef = db.collection("heroes").document(imageModel.id)
             try await collectionDocumentRef.updateData(["commentCount": imageModel.commentCount + 1])
-            
-        } catch let err{
+        } catch let err {
             print(err.localizedDescription)
         }
-        
+
         let commentRef = db.collection("posts").document(imageModel.id).collection("comments")
         do {
-            try await commentRef.addDocument(data: [
-                "id": UUID().uuidString,
+            // Add a document without an `id` field, Firestore will generate one
+            let newCommentRef = try await commentRef.addDocument(data: [
                 "author": LoginViewModel.shared.userLogin?.username ?? "Anonymous", // Replace with actual author information
                 "userid": LoginViewModel.shared.userLogin?.userid ?? "Anonymous",
                 "content": newCommentText,
                 "date": Date()
             ])
-            print("addComment susscess")
+
+            // After the document is added, get its auto-generated ID
+            let newCommentID = newCommentRef.documentID
+
+            // Update the document with the generated ID
+            try await newCommentRef.updateData([
+                "id": newCommentID
+            ])
+
+            print("addComment success with ID: \(newCommentID)")
             return true
-        } catch let err{
+        } catch let err {
             print(err.localizedDescription)
-            print("addComment fail")
+            print("addComment failed")
             return false
         }
     }

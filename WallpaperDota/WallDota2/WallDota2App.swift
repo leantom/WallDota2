@@ -17,6 +17,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         FirebaseApp.configure()
         GADMobileAds.sharedInstance().start(completionHandler: nil)
+        GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = [ "f61be38b1c6068712686f646025ec605" ]
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
         
@@ -34,7 +35,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         Task {
             if let user = Auth.auth().currentUser {
                 LoginViewModel.shared.user = user
-                let _ = await LoginViewModel.shared.getUserDetail()
+                //let _ = await LoginViewModel.shared.getUserDetail()
             }
             
         }

@@ -59,7 +59,7 @@ struct CommentsView: View {
                         .font(.title2)
                         .fontWeight(.bold)
                     Spacer()
-                    Button {
+                    Button {	
                         dismiss()
                     } label: {
                         Image(systemName: "x.circle.fill")

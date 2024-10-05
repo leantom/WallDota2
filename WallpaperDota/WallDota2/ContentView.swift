@@ -10,6 +10,7 @@ import FirebaseAuth
 import AlertToast
 import Network
 import NavigationTransitions
+import FirebaseRemoteConfig
 
 enum Screen: String {
     case home = "home"
@@ -24,25 +25,25 @@ enum Screen: String {
     case unknown
     
     init(rawValue: String) {
-            switch rawValue {
+        switch rawValue {
             
-            case "Login": self = .login
-            case "comic": self = .comic
-            case "detailCollection": self = .detailCollection
-            case "detailImage": self = .detailImage
-            case "story": self = .story
-            case "detailHero": self = .detailHero
-            case "home": self = .home
-            case "splashScreen": self = .splashScreen
-            case "commentScreen": self = .commentScreen
-            default: self = .unknown
-            }
+        case "Login": self = .login
+        case "comic": self = .comic
+        case "detailCollection": self = .detailCollection
+        case "detailImage": self = .detailImage
+        case "story": self = .story
+        case "detailHero": self = .detailHero
+        case "home": self = .home
+        case "splashScreen": self = .splashScreen
+        case "commentScreen": self = .commentScreen
+        default: self = .unknown
         }
+    }
 }
 
 struct ContentView: View {
     
-
+    
     let monitor = NWPathMonitor()
     
     @StateObject var notificationManager = NotificationManager()
@@ -53,9 +54,49 @@ struct ContentView: View {
     @State var items: [ImageModel] = []
     @State var imagesByID: [ImageModel] = []
     @State var storySelected: StoryModel?
+    let remoteConfig = RemoteConfig.remoteConfig()
+    
     init() {
-       
+        print("ContentView")
+        
     }
+    
+    private func setupRemoteConfig() {
+        let settings = RemoteConfigSettings()
+        settings.minimumFetchInterval = 3600 // Fetch every hour
+        remoteConfig.configSettings = settings
+        remoteConfig.setDefaults(["min_required_version": "1.4" as NSObject])
+    }
+    
+    func fetchRemoteConfig() {
+        remoteConfig.fetch {  status, error in
+            if status == .success {
+                self.remoteConfig.activate { _, _ in
+                    self.checkAppVersion()
+                }
+            } else if let error = error {
+                print("Error fetching remote config: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func checkAppVersion() {
+        let minRequiredVersion = remoteConfig["min_required_version"].stringValue
+        if let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+            if currentVersion.compare(minRequiredVersion, options: .numeric) == .orderedAscending {
+                // Trigger the force update process
+                forceUpdateApp()
+            }
+        }
+    }
+    
+    private func forceUpdateApp() {
+        // Implement the logic to show an alert or modal that forces the user to update the app
+        print("App requires an update to version \(remoteConfig["min_required_version"].stringValue)")
+        forceUpdate = true
+        
+    }
+    @State var forceUpdate: Bool = false
     @State private var path = NavigationPath()
     var body: some View {
         NavigationStack(path: $path){
@@ -71,20 +112,20 @@ struct ContentView: View {
                     LoginView(path: $path).navigationBarBackButtonHidden()
                 case .detailCollection:
                     DetailHeroView(path: $path)
-                    .navigationBarBackButtonHidden()
+                        .navigationBarBackButtonHidden()
                 case .detailImage:
                     ShowDetailImageView(path: $path)
-                    .navigationBarBackButtonHidden()
+                        .navigationBarBackButtonHidden()
                 case .detailHero:
                     DetailHeroView(path: $path)
-                    .navigationBarBackButtonHidden()
+                        .navigationBarBackButtonHidden()
                 case .home:
                     TabbarCustomView(path: $path)
                         .navigationBarBackButtonHidden()
                 case .comic:
                     if let comic = AppSetting.shared.comicSelected {
                         ComicReviewView(comic: comic)
-                        .navigationBarBackButtonHidden()
+                            .navigationBarBackButtonHidden()
                     }
                 case .story:
                     if let story = AppSetting.shared.storySelected {
@@ -99,8 +140,25 @@ struct ContentView: View {
                     LoginView(path: $path).navigationBarBackButtonHidden()
                 }
             }
+            .alert(isPresented: $forceUpdate) {
+                Alert(
+                    title: Text("Update Required"),
+                    message: Text("A newer version of the app is required. Please update to continue."),
+                    primaryButton: .default(Text("Update"), action: {
+                        // Redirect to the App Store or update page
+                        
+                        if let url = URL(string: "itms-apps://apple.com/app/id6474777263") {
+                            UIApplication.shared.open(url)
+                        }
+                    }),
+                    secondaryButton: .cancel(Text("Close App"), action: {
+                        // Optionally close the app if an update is required
+                        exit(0)
+                    })
+                )
+            }
             
-           
+            
         }.toast(isPresenting: $ismissingInternet){
             //AlertToast(displayMode: .banner(.slide), type: .regular, title: "No internet connection")
             AlertToast(displayMode: .hud, type: .regular, title: "No internet connection")
@@ -120,9 +178,11 @@ struct ContentView: View {
                     // Perform actions when internet is not available
                 }
             }
+            setupRemoteConfig()
+            fetchRemoteConfig()
         })
     }
-
+    
     private func loadImages() {
         // Replace with your actual image loading logic
         images.append(Image("image1"))
